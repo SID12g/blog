@@ -125,7 +125,7 @@
 
 @keyframes dynamic_to_static_1180 {
   0% {
-    width: calc(100% - 136px);
+    width: calc(100% - 160px);
     margin-top: 64px;
   }
   100% {
@@ -140,7 +140,7 @@
     margin-top: 0px;
   }
   100% {
-    width: calc(100% - 136px);
+    width: calc(100% - 160px);
     margin-top: 64px;
   }
 }
@@ -149,7 +149,7 @@
 
 @media (max-width: 1180px) {
   .navbar_dynamic {
-    width: calc(100% - 136px);
+    width: calc(100% - 160px);
     animation-name: static_to_dynamic_1180;
     animation-duration: 0.3s;
   }

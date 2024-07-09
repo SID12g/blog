@@ -253,6 +253,13 @@
 @media (max-width: 900px) {
   .article {
     max-width: none;
+    margin: 60px 40px 0 40px;
+  }
+}
+
+@media (max-width: 550px) {
+  .article {
+    max-width: none;
     margin: 60px 28px 0 28px;
   }
 }
