@@ -9,6 +9,7 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypePrettyCode from "rehype-pretty-code";
 import Comments from "@/components/comments/comments";
 import rehypeCodeTitles from "rehype-code-titles";
+import Share from "@/components/share/share";
 
 const options: any = {
   mdxOptions: {
@@ -69,6 +70,7 @@ export default function Article({
       <div className={styles.content}>
         <MDXRemote source={props.content} options={options} />
       </div>
+      <Share />
       <Comments />
     </article>
   );
