@@ -1,4 +1,5 @@
-import { articleContents, techContents } from "@/utils/getPosts";
+import { articleContents } from "@/utils/article/getPosts";
+import { techContents } from "@/utils/tech/getPosts";
 import RSS from "rss";
 
 async function getTechData() {

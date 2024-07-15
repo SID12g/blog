@@ -1,4 +1,5 @@
-import { articleContents, techContents } from "@/utils/getPosts";
+import { articleContents } from "@/utils/article/getPosts";
+import { techContents } from "@/utils/tech/getPosts";
 import { MetadataRoute } from "next";
 
 const URL = "https://post.sid12g.dev";
