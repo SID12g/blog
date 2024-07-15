@@ -1,6 +1,10 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function NotFound() {
+  const pathname = usePathname().split("/")[1];
   return (
     <div
       style={{
@@ -29,7 +33,7 @@ export default function NotFound() {
           padding: 12,
           borderRadius: 8,
         }}
-        href={"/"}
+        href={pathname === "article" ? "/article" : "/tech"}
       >
         🏠 Home
       </Link>
