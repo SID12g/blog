@@ -39,5 +39,5 @@ export async function generateMetadata({ params }: any) {
 
 export default function Post({ params }: { params: { slug: string } }) {
   const props = getPost(params);
-  return <Article props={props} />;
+  return <Article props={props} location="tech" />;
 }

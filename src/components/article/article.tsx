@@ -2,7 +2,6 @@ import styles from "@/components/article/article.module.css";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import Image from "next/image";
 import Link from "next/link";
-import { techTags } from "@/utils/getTags";
 import rehypeSlug from "rehype-slug";
 import remarkToc from "remark-toc";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
@@ -10,6 +9,8 @@ import rehypePrettyCode from "rehype-pretty-code";
 import Comments from "@/components/comments/comments";
 import rehypeCodeTitles from "rehype-code-titles";
 import Share from "@/components/share/share";
+import { techTags } from "@/utils/tech/getTags";
+import { articleTags } from "@/utils/article/getTags";
 
 const options: any = {
   mdxOptions: {
@@ -38,6 +39,7 @@ const options: any = {
 
 export default function Article({
   props,
+  location,
 }: {
   props: {
     frontMatter: {
@@ -46,19 +48,21 @@ export default function Article({
     slug: string;
     content: string;
   };
+  location: string;
 }) {
+  const tags = location === "article" ? articleTags : techTags;
   function getLink() {
-    return techTags.find((tags) => tags.tag == props.frontMatter.tag)?.link;
+    return tags.find((tags) => tags.tag == props.frontMatter.tag)?.link;
   }
   return (
     <article className={styles.article}>
-      {/* <Image
+      <Image
         src={props.frontMatter.image}
         className={styles.image}
         alt="preview"
         width={1920}
         height={1080}
-      /> */}
+      />
       <h1 className={styles.title}>{props.frontMatter.title}</h1>
       <div className={styles.information_wrap}>
         <Link className={styles.tag} href={"/tech/" + getLink()}>

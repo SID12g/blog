@@ -2,7 +2,8 @@ import styles from "@/app/article/[tag]/page.module.css";
 import Background from "@/components/background/background";
 import Posts from "@/components/posts/posts";
 import Tags from "@/components/tags/tags";
-import { articleTags } from "@/utils/getTags";
+import { articleTags } from "@/utils/article/getTags";
+
 import { redirect } from "next/navigation";
 
 export default function Tech({ params }: { params: { tag: string } }) {

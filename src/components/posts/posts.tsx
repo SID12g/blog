@@ -1,6 +1,9 @@
 import styles from "@/components/posts/posts.module.css";
-import { articleContents, techContents } from "@/utils/getPosts";
-import { articleTags, techTags } from "@/utils/getTags";
+import { articleContents } from "@/utils/article/getPosts";
+import { articleTags } from "@/utils/article/getTags";
+import { techContents } from "@/utils/tech/getPosts";
+import { techTags } from "@/utils/tech/getTags";
+
 import Image from "next/image";
 import Link from "next/link";
 

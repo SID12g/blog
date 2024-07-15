@@ -1,5 +1,7 @@
 import styles from "@/components/tags/tags.module.css";
-import { articleTags, techTags } from "@/utils/getTags";
+import { articleTags } from "@/utils/article/getTags";
+import { techTags } from "@/utils/tech/getTags";
+
 import Link from "next/link";
 
 export default function Tags({
