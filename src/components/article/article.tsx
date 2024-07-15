@@ -52,13 +52,13 @@ export default function Article({
   }
   return (
     <article className={styles.article}>
-      <Image
+      {/* <Image
         src={props.frontMatter.image}
         className={styles.image}
         alt="preview"
         width={1920}
         height={1080}
-      />
+      /> */}
       <h1 className={styles.title}>{props.frontMatter.title}</h1>
       <div className={styles.information_wrap}>
         <Link className={styles.tag} href={"/tech/" + getLink()}>
