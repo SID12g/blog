@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        <Navbar />
+        {/* <Navbar /> */}
         <div id="area" />
         {children}
         <Footer />
