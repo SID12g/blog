@@ -4,8 +4,6 @@ import techBackground from "@/../public/backgrounds/tech_background.jpg";
 import articleBackground from "@/../public/backgrounds/article_background.jpg";
 
 export default function Background({ location }: { location: string }) {
-  const randomNum = new Date().getSeconds();
-
   return (
     <div className={styles.background}>
       <Image

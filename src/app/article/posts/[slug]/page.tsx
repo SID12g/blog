@@ -2,6 +2,13 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import Article from "@/components/article/article";
+import { articleContents } from "@/utils/article/getPosts";
+
+export async function generateStaticParams() {
+  return articleContents.map((post) => ({
+    slug: post.slug,
+  }));
+}
 
 function getPost({ slug }: { slug: string }) {
   const markdownFile = fs.readFileSync(

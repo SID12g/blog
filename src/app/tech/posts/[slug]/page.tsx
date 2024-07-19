@@ -2,8 +2,16 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import Article from "@/components/article/article";
+import { techContents } from "@/utils/tech/getPosts";
+
+export async function generateStaticParams() {
+  return techContents.map((post) => ({
+    slug: post.slug,
+  }));
+}
 
 function getPost({ slug }: { slug: string }) {
+  console.log(techContents);
   const markdownFile = fs.readFileSync(
     path.join("contents/tech", slug + ".mdx"),
     "utf-8"
