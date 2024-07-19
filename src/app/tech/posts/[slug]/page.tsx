@@ -11,7 +11,6 @@ export async function generateStaticParams() {
 }
 
 function getPost({ slug }: { slug: string }) {
-  console.log(techContents);
   const markdownFile = fs.readFileSync(
     path.join("contents/tech", slug + ".mdx"),
     "utf-8"
