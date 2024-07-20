@@ -26,7 +26,7 @@ function generateTagInfo(tags: string[]): TagInfo[] {
   tagInfoList.push({
     tag: "All Posts",
     count: allArticleTags.length,
-    link: "",
+    link: "all-posts",
   });
 
   tags.forEach((tag: string) => {

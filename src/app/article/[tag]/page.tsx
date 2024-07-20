@@ -3,8 +3,13 @@ import Background from "@/components/background/background";
 import Posts from "@/components/posts/posts";
 import Tags from "@/components/tags/tags";
 import { articleTags } from "@/utils/article/getTags";
-
 import { redirect } from "next/navigation";
+
+export async function generateStaticParams() {
+  return articleTags.map((tag) => ({
+    tag: tag.link,
+  }));
+}
 
 export default function Tech({ params }: { params: { tag: string } }) {
   function findNullTag() {

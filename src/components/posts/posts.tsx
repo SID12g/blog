@@ -16,14 +16,14 @@ export default function Posts({
 }) {
   const contents =
     location === "tech"
-      ? nowTag === ""
+      ? nowTag === "all-posts"
         ? techContents
         : techContents.filter(
             (content) =>
               content.meta.tag ===
               techTags.filter((tag) => tag.link === nowTag)[0].tag
           )
-      : nowTag === ""
+      : nowTag === "all-posts"
       ? articleContents
       : articleContents.filter(
           (content) =>
