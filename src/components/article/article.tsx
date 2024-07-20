@@ -59,7 +59,7 @@ export default function Article({
       <Image
         src={props.frontMatter.image}
         className={styles.image}
-        alt="preview"
+        alt="thumbnail"
         width={1920}
         height={1080}
       />

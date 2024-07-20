@@ -33,7 +33,7 @@ export default function NotFound() {
           padding: 12,
           borderRadius: 8,
         }}
-        href={pathname === "article" ? "/article" : "/tech"}
+        href={pathname === "article" ? "/article/all-posts" : "/tech/all-posts"}
       >
         🏠 Home
       </Link>

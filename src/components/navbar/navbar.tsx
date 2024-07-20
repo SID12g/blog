@@ -37,7 +37,9 @@ export default function Navbar() {
     <nav className={navStyle}>
       <div className={styles.logo_menu_wrap}>
         <Link
-          href={pathname === "article" ? "/article" : "/tech"}
+          href={
+            pathname === "article" ? "/article/all-posts" : "/tech/all-posts"
+          }
           className={styles.logo}
         >
           <Image className={styles.logo_image} src={logo} alt="logo" />
@@ -56,13 +58,13 @@ export default function Navbar() {
         className={checkedMenu ? styles.button_menu : styles.button_menu_none}
       >
         <Button href="https://sid12g.dev" content="about" />
-        <Button href="/tech" content="tech" />
-        <Button href="/article" content="article" />
+        <Button href="/tech/all-posts" content="tech" />
+        <Button href="/article/all-posts" content="article" />
       </div>
       <div className={styles.button_wrap}>
         <Button href="https://sid12g.dev" content="about" />
-        <Button href="/tech" content="tech" />
-        <Button href="/article" content="article" />
+        <Button href="/tech/all-posts" content="tech" />
+        <Button href="/article/all-posts" content="article" />
       </div>
     </nav>
   );
