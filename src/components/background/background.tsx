@@ -14,10 +14,8 @@ export default function Background({ location }: { location: string }) {
         alt="background"
       />
       <div className={styles.message_wrap}>
-        <p className={styles.message}>
-          인생의 정답이 없다는 말이 오답을 적어도 된다는 뜻은 아닐테니
-        </p>
-        <p className={styles.message_author}>아리안 시로네</p>
+        <p className={styles.message}>기록 증명</p>
+        <p className={styles.message_author}>sid12g</p>
       </div>
     </div>
   );
