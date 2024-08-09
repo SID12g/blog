@@ -13,6 +13,8 @@ export default function Navbar() {
   const [scroll, setScroll] = useState(0);
   const [navStyle, setNavstyle] = useState(styles.navbar_dynamic);
   const [checkedMenu, setCheckedMenu] = useState(false);
+  const [menuStyle, setMenuStyle] = useState(styles.menu);
+
   const handleScroll = () => {
     if (window.innerWidth > 550) {
       if (scroll >= 120) {
@@ -48,10 +50,13 @@ export default function Navbar() {
         <Image
           onClick={() => {
             setCheckedMenu(!checkedMenu);
+            menuStyle === styles.menu
+              ? setMenuStyle(styles.menu_rotated)
+              : setMenuStyle(styles.menu);
           }}
           src={menu}
           alt="menu"
-          className={styles.menu}
+          className={menuStyle}
         />
       </div>
       <div
