@@ -67,7 +67,7 @@
 }
 
 .content img + em {
-  font-size: 14px;
+  font-size: 16px;
   text-align: center;
   color: var(--text-grey-color);
   display: block;
