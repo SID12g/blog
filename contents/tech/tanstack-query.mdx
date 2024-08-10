@@ -1,0 +1,91 @@
+---
+title: TanStack Query 알아보기
+date: "2024-08-06"
+description: TanStack Query의 특징과 사용하는 법을 알아봅니다.
+image: /contents/tech/tanstack-query/thumbnail.png
+tag: React
+---
+
+> 이 글은 TanStack Query v5를 기준으로 작성되었습니다.
+
+## TanStack Query란?
+
+TanStack Query는 data fetching, caching, synchronizing, updating server state 등을 지원하는 라이브러리입니다.
+
+## TanStack Query 설치하기
+
+React 프로젝트를 생성한 뒤 아래의 명령어를 입력하여 TanStack Query를 설치합니다.
+
+```bash
+yarn add @tanstack/react-query
+```
+
+React가 아닌 다른 프레임워크에서 사용하려면 [공식 문서](https://tanstack.com/query/latest/docs/framework/react/installation)를 참고해주세요.
+
+## Fetch
+
+Fetch는 서버로 요청을 보내고 응답을 받을 수 있는 API입니다. 원래 Fetch API를 사용하려면 아래와 같은 코드를 작성해야 합니다.
+
+```js
+async function fetchData() {
+  const response = await fetch("http://example.com/movies.json");
+  const data = await response.json();
+  console.log(data);
+}
+```
+
+하지만 TanStack Query를 사용할 때 코드는 조금 다릅니다. 우선 TanStack Query를 사용하기 위해서는 아래와 같이 QueryClientProvider로 감싸주어야 합니다.
+
+```tsx
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
+
+export default function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Example />
+    </QueryClientProvider>
+  );
+}
+
+function Example() {
+  const { isPending, error, data } = useQuery({
+    queryKey: ["repoData"],
+    queryFn: () =>
+      fetch("https://api.github.com/repos/TanStack/query").then((res) =>
+        res.json()
+      ),
+  });
+
+  if (isPending) return "Loading...";
+
+  if (error) return "An error has occurred: " + error.message;
+
+  return (
+    <div>
+      <h1>{data.name}</h1>
+      <p>{data.description}</p>
+      <strong>👀 {data.subscribers_count}</strong>{" "}
+      <strong>✨ {data.stargazers_count}</strong>{" "}
+      <strong>🍴 {data.forks_count}</strong>
+    </div>
+  );
+}
+```
+
+![useQuery 사용](/contents/tech/tanstack-query/isPending.gif) _useQuery 사용 시 isPending으로 로딩 중인지 확인_
+
+TanStack Query의 경우에는 useQuery (GET), useMutation (POST, PUT, UPDATE, DELETE) 등을 사용하여 fetch를 하게 됩니다. useQuery의 경우 기본적으로 queryKey에 Caching에 필요한 쿼리 키를 입력받고, queryFn에 기본 fetch 함수를 입력받습니다.
+
+또한 결과 값으로 isPending, error, data 등 여러가지 옵션을 가져올 수 있는데, isPending의 경우 data가 불러와 지고 있는지 (로딩 중인지)를 알 수 있고, error는 data를 가져오는 과정에서 발생한 error를 확인할 수 있습니다.
+
+만약 fetch에 대해 더 알아보고 싶다면 [mdn web docs](https://developer.mozilla.org/ko/docs/Web/API/Fetch_API/Using_Fetch)를 useQuery의 여러 입력, 결과 값들을 확인하고 싶다면 [useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery#usequery)를 확인해주세요. 이외에도 [useMutation](https://tanstack.com/query/latest/docs/framework/react/reference/useMutation#usemutation)과 요청을 여러개 보낼 수 있는 [useQueries](https://tanstack.com/query/latest/docs/framework/react/reference/useQueries), Suspense를 사용할 수 있는 [useSuspenseQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useSuspenseQuery) 등 수많은 쿼리 함수들이 있으니 꼭 공식문서를 확인해 주시길 바랍니다.
+
+## Caching
+
+Caching이란 데이터를
