@@ -11,9 +11,8 @@
   "dependencies": {
     "@giscus/react": "^3.0.0",
     "@types/rss": "^0.0.32",
-    "axios": "^1.7.2",
     "gray-matter": "^4.0.3",
-    "next": "14.1.0",
+    "next": "^14.2.5",
     "next-mdx-remote": "^5.0.0",
     "react": "^18",
     "react-dom": "^18",
@@ -22,7 +21,8 @@
     "rehype-pretty-code": "^0.13.2",
     "rehype-slug": "^6.0.0",
     "remark-toc": "^9.0.0",
-    "rss": "^1.2.2"
+    "rss": "^1.2.2",
+    "sharp": "^0.33.5"
   },
   "devDependencies": {
     "@shikijs/rehype": "^1.10.1",
