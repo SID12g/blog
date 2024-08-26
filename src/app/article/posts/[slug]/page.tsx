@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: any) {
       url: `https://post.sid12g.dev/article/posts/${post.slug}`,
       images: [
         {
-          url: `https://post.sid12g.dev/contents/article/${post.slug}/Thumbnail.png`,
+          url: `https://post.sid12g.dev/contents/article/${post.slug}/thumbnail.png`,
         },
       ],
       locale: "ko_KR",
