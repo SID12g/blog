@@ -2,6 +2,13 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Footer from "@/components/footer/footer";
 import Navbar from "@/components/navbar/navbar";
+import localFont from "next/font/local";
+
+const wantedSans = localFont({
+  src: "./fonts/WantedSansVariable.ttf",
+  variable: "--font-wanted-sans",
+  weight: "400 500 600",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://post.sid12g.dev"),
@@ -19,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body>
+      <body className={wantedSans.variable}>
         <Navbar />
         <div id="area" />
         {children}
