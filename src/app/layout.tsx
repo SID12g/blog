@@ -5,9 +5,11 @@ import Navbar from "@/components/navbar/navbar";
 import localFont from "next/font/local";
 
 const wantedSans = localFont({
-  src: "./fonts/WantedSansVariable.ttf",
+  src: "./fonts/WantedSansVariable.woff2",
   variable: "--font-wanted-sans",
-  weight: "400 500 600",
+  weight: "100 900",
+  style: "normal",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
