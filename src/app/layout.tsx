@@ -12,6 +12,16 @@ const wantedSans = localFont({
   display: "swap",
 });
 
+const tossFace = localFont({
+  src: "./fonts/TossFaceFontMac.ttf",
+  variable: "--font-toss-face",
+});
+
+const menlo = localFont({
+  src: "./fonts/Menlo-Regular.ttf",
+  variable: "--font-menlo",
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://post.sid12g.dev"),
   title: "sead post",
@@ -28,7 +38,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={wantedSans.variable}>
+      <body
+        className={`${wantedSans.variable} ${tossFace.variable} ${menlo.variable}`}
+      >
         <Navbar />
         <div id="area" />
         {children}

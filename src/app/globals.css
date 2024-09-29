@@ -1,8 +1,5 @@
-@import url("https://cdn.jsdelivr.net/gh/toss/tossface/dist/tossface.css");
-@import url("https://fonts.cdnfonts.com/css/menlo");
-
 * {
-  font-family: var(--font-wanted-sans), "tossface";
+  font-family: var(--font-wanted-sans), var(--font-toss-face);
   color: var(--text-black-color);
   text-decoration: none;
 }

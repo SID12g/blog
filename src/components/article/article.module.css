@@ -213,13 +213,13 @@
 
 .content code span {
   font-size: 14px;
-  font-family: Menlo;
+  font-family: var(--font-menlo);
   color: var(--text-black-color);
 }
 
 .content code span span {
   font-size: 14px;
-  font-family: Menlo;
+  font-family: var(--font-menlo);
   color: var(--text-black-color);
 }
 
@@ -229,7 +229,7 @@
 
 .content div {
   font-size: 14px;
-  font-family: "Menlo";
+  font-family: var(--font-menlo);
   color: #666666;
   background-color: #fafafa;
   padding: 16px 20px;
