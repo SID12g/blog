@@ -65,7 +65,7 @@ export default function Article({
       />
       <h1 className={styles.title}>{props.frontMatter.title}</h1>
       <div className={styles.information_wrap}>
-        <Link className={styles.tag} href={"/tech/" + getLink()}>
+        <Link className={styles.tag} href={`/${location}/` + getLink()}>
           {props.frontMatter.tag}
         </Link>
         <p className={styles.date}>{props.frontMatter.date}</p>
