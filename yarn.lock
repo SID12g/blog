@@ -680,6 +680,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/which-pm-runs@npm:^1":
+  version: 1.0.2
+  resolution: "@types/which-pm-runs@npm:1.0.2"
+  checksum: 10c0/5ab6f194db9e9501ca07153534e709a52c92ea46932b42a7f996a1f9acfdc03fdc5259740b9991e071f5410cce1ae9a5e682cad4bd8cee6f7185a56779d95c2f
+  languageName: node
+  linkType: hard
+
 "@typescript-eslint/parser@npm:^5.4.2 || ^6.0.0":
   version: 6.21.0
   resolution: "@typescript-eslint/parser@npm:6.21.0"
@@ -4013,6 +4020,7 @@ __metadata:
     "@types/react": "npm:^18"
     "@types/react-dom": "npm:^18"
     "@types/rss": "npm:^0.0.32"
+    "@types/which-pm-runs": "npm:^1"
     eslint: "npm:^8"
     eslint-config-next: "npm:14.1.0"
     gray-matter: "npm:^4.0.3"
@@ -4029,6 +4037,7 @@ __metadata:
     sharp: "npm:^0.33.5"
     shiki: "npm:^1.10.1"
     typescript: "npm:^5"
+    which-pm-runs: "npm:^1.1.0"
   languageName: unknown
   linkType: soft
 
@@ -4400,16 +4409,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:^7.5.4":
-  version: 7.6.2
-  resolution: "semver@npm:7.6.2"
-  bin:
-    semver: bin/semver.js
-  checksum: 10c0/97d3441e97ace8be4b1976433d1c32658f6afaff09f143e52c593bae7eef33de19e3e369c88bd985ce1042c6f441c80c6803078d1de2a9988080b66684cbb30c
-  languageName: node
-  linkType: hard
-
-"semver@npm:^7.6.3":
+"semver@npm:^7.5.4, semver@npm:^7.6.3":
   version: 7.6.3
   resolution: "semver@npm:7.6.3"
   bin:
@@ -5205,6 +5205,13 @@ __metadata:
     is-weakmap: "npm:^2.0.2"
     is-weakset: "npm:^2.0.3"
   checksum: 10c0/3345fde20964525a04cdf7c4a96821f85f0cc198f1b2ecb4576e08096746d129eb133571998fe121c77782ac8f21cbd67745a3d35ce100d26d4e684c142ea1f2
+  languageName: node
+  linkType: hard
+
+"which-pm-runs@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "which-pm-runs@npm:1.1.0"
+  checksum: 10c0/b8f2f230aa49babe21cb93f169f5da13937f940b8cc7a47d2078d9d200950c0dba5ac5659bc01bdbe401e6db3adec6a97b6115215a4ca8e87fd714aebd0cabc6
   languageName: node
   linkType: hard
 
