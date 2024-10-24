@@ -66,6 +66,10 @@
   margin-bottom: 12px;
 }
 
+.content iframe {
+  border-radius: 16px;
+}
+
 .content img + em {
   font-size: 16px;
   text-align: center;
