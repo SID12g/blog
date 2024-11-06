@@ -3,6 +3,7 @@ import "./globals.css";
 import Footer from "@/components/footer/footer";
 import Navbar from "@/components/navbar/navbar";
 import localFont from "next/font/local";
+import Script from "next/script";
 
 const wantedSans = localFont({
   src: "./fonts/WantedSansVariable.woff2",
@@ -38,6 +39,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
+      <head>
+        <Script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-R3FR04H7H3"
+        ></Script>
+        <Script id="google-tag-management">{`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-R3FR04H7H3');
+        `}</Script>
+      </head>
       <body
         className={`${wantedSans.variable} ${tossFace.variable} ${menlo.variable}`}
       >
