@@ -45,7 +45,7 @@ export default function Background({ location }: { location: string }) {
       />
       <div className={styles.message_wrap}>
         <p className={styles.message}>저 넓은 세상에서 큰 꿈을 펼쳐라</p>
-        <p className={styles.message_author}>D-{timeLeft.days}</p>
+        <p className={styles.message_author}>D-{timeLeft.days + 1}</p>
       </div>
     </div>
   );
