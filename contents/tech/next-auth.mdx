@@ -212,8 +212,7 @@ export { handler as GET, handler as POST };
 
 NEXTAUTH_SECRET은 env에 설정되어야 하며 내용은 어떠한 문자열이 들어가도 괜찮습니다.
 
-```ts
-// src/next-auth.d.ts
+```ts:src/next-auth.d.ts
 import { DefaultSession } from "next-auth";
 
 declare module "next-auth" {
