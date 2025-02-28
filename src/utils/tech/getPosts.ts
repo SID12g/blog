@@ -13,6 +13,9 @@ const allTechContents = techFiles
       meta: frontMatter,
       slug: filename.replace(".mdx", ""),
       content: fileContent,
+      url: `https://post.sid12g.dev/tech/posts/${filename
+        .replace(".mdx", "")
+        .toString()}`,
     };
   })
   .filter((post) => post.meta.tag);

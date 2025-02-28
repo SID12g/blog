@@ -17,6 +17,9 @@ const allArticleContents = articleFiles
       meta: frontMatter,
       slug: filename.replace(".mdx", ""),
       content: fileContent,
+      url: `https://post.sid12g.dev/article/posts/${filename
+        .replace(".mdx", "")
+        .toString()}`,
     };
   })
   .filter((post) => post.meta.tag);

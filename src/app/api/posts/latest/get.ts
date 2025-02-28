@@ -11,5 +11,7 @@ export default function GET() {
     return dateB.localeCompare(dateA);
   });
 
-  return NextResponse.json(sortedContents);
+  const sanitizedContents = sortedContents.map(({ content, ...rest }) => rest);
+
+  return NextResponse.json(sanitizedContents);
 }

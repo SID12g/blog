@@ -7,26 +7,28 @@ const URL = "https://post.sid12g.dev";
 export default function sitemap(): MetadataRoute.Sitemap {
   const techContentsList = techContents.map((postName) => ({
     name: postName.meta.title,
+    url: postName.url,
     slug: postName.slug,
     date: postName.meta.date,
   }));
 
   const articleContentsList = articleContents.map((postName) => ({
     name: postName.meta.title,
+    url: postName.url,
     slug: postName.slug,
     date: postName.meta.date,
   }));
 
-  const techContentsRoute = techContentsList.map(({ slug, date }) => {
+  const techContentsRoute = techContentsList.map(({ url, date }) => {
     return {
-      url: `${URL}/tech/posts/${slug}`,
+      url: url,
       lastModified: date,
     };
   });
 
-  const articleContentsRoute = articleContentsList.map(({ slug, date }) => {
+  const articleContentsRoute = articleContentsList.map(({ url, date }) => {
     return {
-      url: `${URL}/article/posts/${slug}`,
+      url: url,
       lastModified: date,
     };
   });
