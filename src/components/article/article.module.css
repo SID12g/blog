@@ -262,6 +262,40 @@
   border: 1.6px solid var(--border-grey-color);
 }
 
+/** TOC 스타일링 **/
+.content h2[id="contents"] {
+  margin-top: 40px;
+  margin-bottom: 16px;
+  font-size: 28px;
+}
+
+.content h2[id="contents"] + ul {
+  background-color: var(--background-grey-color);
+  border-radius: 16px;
+  padding: 20px 40px;
+  margin-bottom: 40px;
+}
+
+.content h2[id="contents"] + ul li {
+  margin: 8px 0;
+}
+
+.content h2[id="contents"] + ul a {
+  color: var(--text-grey-color);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.content h2[id="contents"] + ul a:hover {
+  color: #007bff;
+  text-decoration: underline;
+}
+
+.content h2[id="contents"] + ul ul {
+  margin-top: 8px;
+  padding-left: 20px;
+}
+
 @media (max-width: 900px) {
   .article {
     max-width: none;
