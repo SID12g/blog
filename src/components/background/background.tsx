@@ -42,6 +42,7 @@ export default function Background({ location }: { location: string }) {
         width={1100}
         height={400}
         alt="background"
+        placeholder="blur"
       />
       <div className={styles.message_wrap}>
         <p className={styles.message}>저 넓은 세상에서 큰 꿈을 펼쳐라</p>

@@ -11,6 +11,7 @@ import rehypeCodeTitles from "rehype-code-titles";
 import Share from "@/components/share/share";
 import { techTags } from "@/utils/tech/getTags";
 import { articleTags } from "@/utils/article/getTags";
+import getBlurImg from "@/utils/getBlurImg";
 
 const options: any = {
   mdxOptions: {
@@ -37,7 +38,7 @@ const options: any = {
   },
 };
 
-export default function Article({
+export default async function Article({
   props,
   location,
 }: {
@@ -54,6 +55,7 @@ export default function Article({
   function getLink() {
     return tags.find((tags) => tags.tag == props.frontMatter.tag)?.link;
   }
+  const blurImg = await getBlurImg(props.frontMatter.image);
   return (
     <article className={styles.article}>
       <Image
@@ -62,6 +64,8 @@ export default function Article({
         alt="thumbnail"
         width={1920}
         height={1080}
+        placeholder="blur"
+        blurDataURL={blurImg}
       />
       <h1 className={styles.title}>{props.frontMatter.title}</h1>
       <div className={styles.information_wrap}>

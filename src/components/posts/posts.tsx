@@ -1,6 +1,7 @@
 import styles from "@/components/posts/posts.module.css";
 import { articleContents } from "@/utils/article/getPosts";
 import { articleTags } from "@/utils/article/getTags";
+import getBlurImg from "@/utils/getBlurImg";
 import { techContents } from "@/utils/tech/getPosts";
 import { techTags } from "@/utils/tech/getTags";
 
@@ -49,7 +50,7 @@ export default function Posts({
   );
 }
 
-function Post({
+async function Post({
   image,
   title,
   description,
@@ -66,6 +67,7 @@ function Post({
   slug: string;
   location: string;
 }) {
+  const blurImg = await getBlurImg(image);
   return (
     <div className={styles.post}>
       <Link className={styles.link} href={"/" + location + "/posts/" + slug}>
@@ -76,6 +78,8 @@ function Post({
             alt="thumbnail"
             width={1080}
             height={720}
+            placeholder="blur"
+            blurDataURL={blurImg}
           />
         </div>
         <h3 className={styles.title}>{title}</h3>

@@ -14,6 +14,7 @@
     "gray-matter": "^4.0.3",
     "next": "^14.2.5",
     "next-mdx-remote": "^5.0.0",
+    "plaiceholder": "^3.0.0",
     "react": "^18",
     "react-dom": "^18",
     "react-hot-toast": "^2.5.1",
@@ -23,7 +24,7 @@
     "rehype-slug": "^6.0.0",
     "remark-toc": "^9.0.0",
     "rss": "^1.2.2",
-    "sharp": "^0.33.5",
+    "sharp": "^0.34.1",
     "which-pm-runs": "^1.1.0"
   },
   "devDependencies": {
