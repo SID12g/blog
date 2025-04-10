@@ -5,6 +5,7 @@ import styles from "@/components/background/background.module.css";
 import Image from "next/image";
 import techBackground from "@/../public/backgrounds/tech_background.jpg";
 import articleBackground from "@/../public/backgrounds/article_background.jpg";
+import Balancer from "react-wrap-balancer";
 
 interface TimeLeft {
   days: number;

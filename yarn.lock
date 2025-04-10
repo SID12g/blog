@@ -4055,6 +4055,7 @@ __metadata:
     react: "npm:^18"
     react-dom: "npm:^18"
     react-hot-toast: "npm:^2.5.1"
+    react-wrap-balancer: "npm:^1.1.1"
     rehype-autolink-headings: "npm:^7.1.0"
     rehype-code-titles: "npm:^1.2.0"
     rehype-pretty-code: "npm:^0.13.2"
@@ -4147,6 +4148,15 @@ __metadata:
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
   checksum: 10c0/33977da7a5f1a287936a0c85639fec6ca74f4f15ef1e59a6bc20338fc73dc69555381e211f7a3529b8150a1f71e4225525b41b60b52965bda53ce7d47377ada1
+  languageName: node
+  linkType: hard
+
+"react-wrap-balancer@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "react-wrap-balancer@npm:1.1.1"
+  peerDependencies:
+    react: ">=16.8.0 || ^17.0.0 || ^18"
+  checksum: 10c0/2045625cef0095eae9af9363052a0259a15e292d07e36ce8b085924ad65627a5807f986aeaf91068a9d384c6d2266787edb5d0eaba3ac021f8789437464e245d
   languageName: node
   linkType: hard
 

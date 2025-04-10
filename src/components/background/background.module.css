@@ -30,6 +30,7 @@
   margin: 0;
   margin-bottom: 20px;
   text-align: center;
+  text-wrap: balance;
 }
 
 .message_author {
