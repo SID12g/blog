@@ -11,14 +11,17 @@ export async function generateStaticParams() {
   }));
 }
 
-export default function Tech({ params }: { params: { tag: string } }) {
+export default async function Tech({
+  params,
+}: {
+  params: Promise<{ tag: string }>;
+}) {
+  const tag = (await params).tag;
   function findNullTag() {
-    if (
-      articleTags.find((tags) => tags.link == params.tag)?.tag === undefined
-    ) {
+    if (articleTags.find((tags) => tags.link == tag)?.tag === undefined) {
       redirect("/article/page/not-found");
     } else {
-      return articleTags.find((tags) => tags.link == params.tag)?.tag;
+      return articleTags.find((tags) => tags.link == tag)?.tag;
     }
   }
 
@@ -26,8 +29,8 @@ export default function Tech({ params }: { params: { tag: string } }) {
   return (
     <main className={styles.main}>
       <Background location="article" />
-      <Tags location="article" nowTag={params.tag} />
-      <Posts location="article" nowTag={params.tag} />
+      <Tags location="article" nowTag={tag} />
+      <Posts location="article" nowTag={tag} />
     </main>
   );
 }

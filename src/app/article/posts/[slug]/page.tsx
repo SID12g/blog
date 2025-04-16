@@ -23,8 +23,12 @@ function getPost({ slug }: { slug: string }) {
   };
 }
 
-export async function generateMetadata({ params }: any) {
-  const post = getPost(params);
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const post = getPost(await params);
 
   return {
     title: post.frontMatter.title,
@@ -44,7 +48,11 @@ export async function generateMetadata({ params }: any) {
   };
 }
 
-export default function Post({ params }: { params: { slug: string } }) {
-  const props = getPost(params);
+export default async function Post({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const props = getPost(await params);
   return <Article props={props} location="article" />;
 }
