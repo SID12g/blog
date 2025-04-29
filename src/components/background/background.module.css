@@ -47,7 +47,7 @@
   }
 }
 
-@media (max-width: 550px) {
+@media (max-width: 768px) {
   .message {
     font-size: 24px;
   }
@@ -56,6 +56,12 @@
     font-size: 16px;
   }
 
+  .message_wrap {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 550px) {
   .background {
     margin-top: 0;
   }
@@ -63,9 +69,5 @@
   .background_image {
     width: 100%;
     border-radius: 0;
-  }
-
-  .message_wrap {
-    padding: 20px;
   }
 }
