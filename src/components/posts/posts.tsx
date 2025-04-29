@@ -76,8 +76,8 @@ async function Post({
             className={styles.image}
             src={image}
             alt="thumbnail"
-            width={1080}
-            height={720}
+            width={528}
+            height={297}
             placeholder="blur"
             blurDataURL={blurImg}
           />

@@ -62,8 +62,8 @@ export default async function Article({
         src={props.frontMatter.image}
         className={styles.image}
         alt="thumbnail"
-        width={1920}
-        height={1080}
+        width={800}
+        height={450}
         placeholder="blur"
         blurDataURL={blurImg}
       />
