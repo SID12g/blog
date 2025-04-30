@@ -66,6 +66,7 @@ export default async function Article({
         height={450}
         placeholder="blur"
         blurDataURL={blurImg}
+        priority={true}
       />
       <h1 className={styles.title}>{props.frontMatter.title}</h1>
       <div className={styles.information_wrap}>
