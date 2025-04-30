@@ -42,8 +42,10 @@ export default function Background({ location }: { location: string }) {
         width={1100}
         height={400}
         alt="background"
+        priority={true}
         placeholder="blur"
-        loading="lazy"
+        sizes="(max-width: 768px) 100vw, 1100px"
+        quality={80}
       />
       <div className={styles.message_wrap}>
         <p className={styles.message}>저 넓은 세상에서 큰 꿈을 펼쳐라</p>
@@ -52,7 +54,6 @@ export default function Background({ location }: { location: string }) {
     </div>
   );
 }
-
 // import styles from "@/components/background/background.module.css";
 // import Image from "next/image";
 // import techBackground from "@/../public/backgrounds/tech_background.jpg";
