@@ -17,6 +17,7 @@ export default function Tags({
       <Link
         href={"/" + location + "/" + link}
         className={nowTag === link ? styles.tag_selected : styles.tag}
+        scroll={false}
       >
         {tag}
       </Link>
