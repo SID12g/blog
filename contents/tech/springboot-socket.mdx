@@ -257,4 +257,84 @@ export default defineConfig({
 
 ![Supabase Register Response Ok](/contents/tech/springboot-socket/fe-signinok.png) _Frontend Login Reponse Ok_
 
-## Socket 기능 만들기
+## Chat 기능 만들기
+
+Socket을 적용하기 전에, 우선 사용자가 메세지를 보내면 상대방이 확인할 수 있도록 간단한 로직을 만들어보도록 하겠습니다.
+
+### Socket 적용 전
+
+```java:ChatController.java
+package com.pickle.socket.chat;
+
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+@Controller
+@RequestMapping("chat")
+@RequiredArgsConstructor
+public class ChatController {
+    private final ChatRepository chatRepository;
+
+    @GetMapping("{room}")
+    @ResponseBody
+    public List<Chat> getChatsByRoom(@PathVariable Long room) {
+        return chatRepository.findByRoomOrderByTimestampDesc(room);
+    }
+
+    @PostMapping("post")
+    @ResponseBody
+    public Chat NewChat(@RequestBody Chat chat) {
+        return chatRepository.save(chat);
+    }
+}
+```
+
+위 코드는 `/chat/[방 ID]`에 요청하면 방 ID에 해당하는 채팅을 List로 반환해주고, `/chat/post`에 요청하면 사용자가 보낸 채팅을 DB에 저장하고 있습니다. 아래는 `/chat/post`로 POST 요청을 보내는 client 코드입니다.
+
+```tsx
+ try {
+      const username = getCookie("username");
+
+      if (!username) {
+        alert("You must be logged in to send messages");
+        return;
+      }
+
+      const time = new Date().toISOString();
+
+      const response = await fetch("/api/chat/post", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          room: id,
+          username,
+          content,
+          timestamp: time,
+        }),
+      });
+
+      if (response.ok) {
+        setContent("");
+        fetchMessages();
+      } else {
+        alert("Failed to send message");
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+      alert("An error occurred while sending your message");
+    }
+  };
+```
+
+이런식으로 코드를 작성할 경우 채팅에서 가장 중요한 실시간 소통이 불가능합니다.
+
+![not socket](/contents/tech/springboot-socket/not-socket.gif) _Socket을 적용하지 않은 경우_
