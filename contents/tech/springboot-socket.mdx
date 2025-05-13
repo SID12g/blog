@@ -8,8 +8,6 @@ tag: Spring Boot
 
 > 해당 포스트는 한국디지털미디어고등학교 공업일반 프로젝트 수행평가를 목적으로 작성되었습니다. [자기계발계획서 확인하기](/contents/tech/springboot-socket/자기계발계획서.pdf)
 
-> 아직 작성 중입니다.
-
 ## Contents
 
 ## Spring Boot 프로젝트 생성하기
@@ -36,7 +34,7 @@ Database를 생성했으니, Spring Boot 프로젝트에서 연결할 수 있도
 
 ```java:build.gradle
 implementation 'org.springframework.session:spring-session-jdbc'
-runtimeOnly 'org.postgresql:postgresql'
+implementation 'org.postgresql:postgresql'
 implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 implementation 'org.springframework.boot:spring-boot-starter-security'
 ```
@@ -338,3 +336,474 @@ public class ChatController {
 이런식으로 코드를 작성할 경우 채팅에서 가장 중요한 실시간 소통이 불가능합니다.
 
 ![not socket](/contents/tech/springboot-socket/not-socket.gif) _Socket을 적용하지 않은 경우_
+
+### Socket 적용
+
+위의 문제를 해결하기 위해서 Socket을 사용해보도록 하겠습니다. 우선 build.gradle에 Socket을 추가한 뒤 설치합니다.
+
+```java
+implementation 'org.springframework.boot:spring-boot-starter-websocket'
+```
+
+그리고 채팅 메세지 DTO를 만들어줍니다.
+
+```java:ChatMessage.java
+package com.pickle.socket.chat;
+
+import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
+public class ChatMessage {
+    private String username;
+    private Long room;
+    private String content;
+    private LocalDateTime timestamp;
+
+    public Chat toEntity() {
+        Chat chat = new Chat();
+        chat.setUsername(this.username);
+        chat.setRoom(this.room);
+        chat.setContent(this.content);
+        chat.setTimestamp(this.timestamp != null ? this.timestamp : LocalDateTime.now());
+        return chat;
+    }
+}
+```
+
+그리고 Socket Controller를 만들어 Socket으로 메세지를 처리할 수 있도록 합니다.
+
+```java:ChatWebSocketController.javapackage
+com.pickle.socket.chat;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.stereotype.Controller;
+
+import java.time.LocalDateTime;
+
+@Slf4j
+@Controller
+@RequiredArgsConstructor
+public class ChatWebSocketController {
+
+    private final SimpMessageSendingOperations messagingTemplate;
+    private final ChatRepository chatRepository;
+
+    @MessageMapping("/chat.sendMessage")
+    public void sendMessage(@Payload ChatMessage chatMessage) {
+        log.info("Received message: {}", chatMessage);
+
+        if (chatMessage.getTimestamp() == null) {
+            chatMessage.setTimestamp(LocalDateTime.now());
+        }
+
+        Chat savedChat = chatRepository.save(chatMessage.toEntity());
+
+        messagingTemplate.convertAndSend(
+            "/topic/chat." + chatMessage.getRoom(),
+            savedChat
+        );
+    }
+}
+```
+
+이후 WebSocketConfig를 설정하여 클라이언트와 실시간 통신을 가능하도록 합니다.
+
+```java:WebSocketConfig.java
+package com.pickle.socket.config;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
+import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
+import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+
+@Configuration
+@EnableWebSocketMessageBroker
+public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry config) {
+        config.enableSimpleBroker("/topic");
+
+        config.setApplicationDestinationPrefixes("/app");
+    }
+
+    @Override
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/ws")
+                .setAllowedOriginPatterns("*")
+                .withSockJS();
+    }
+}
+```
+
+추가로 SessionConfig를 추가하여 PostgreSQL에서 발생할 수 있는 문제를 예방합니다.
+
+```java:SessionConfig.java
+package com.pickle.socket.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.support.lob.DefaultLobHandler;
+import org.springframework.jdbc.support.lob.LobHandler;
+import org.springframework.session.jdbc.config.annotation.web.http.EnableJdbcHttpSession;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+@Configuration
+@EnableJdbcHttpSession
+@EnableTransactionManagement
+public class SessionConfig {
+
+    @Bean
+    public LobHandler lobHandler() {
+        return new DefaultLobHandler();
+    }
+}
+```
+
+이제 프론트엔드 코드를 수정해주겠습니다. 우선 Stomp.js와 Sock.js를 설치하여 WebSocket 연동을 준비합니다.
+
+```bash
+pnpm add @stomp/stompjs sockjs-client
+```
+
+그리고 vite.config.js에 WebSocket과 관련된 프록시를 설정해줍니다.
+
+```js:vite.config.js
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react-swc";
+import { fileURLToPath, URL } from "node:url";
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
+    },
+  },
+  define: {
+    global: "window",
+  },
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+      "/ws": {
+        target: "http://localhost:8080",
+        ws: true,
+      },
+    },
+  },
+});
+```
+
+그리고 global 객체를 사용하기 위해 아래의 코드를 추가해줍니다.
+
+```ts:polyfills.ts
+window.global = window;
+```
+
+```ts:global.d.ts
+interface Window {
+  global: Window;
+}
+```
+
+이후 Socket 사용을 위해 WebSocketService를 추가해줍니다.
+
+```ts:WebSocketService.ts
+import { Client, IMessage } from "@stomp/stompjs";
+import SockJS from "sockjs-client";
+
+export type MessageHandler<T = unknown> = (message: T) => void;
+
+class WebSocketService {
+  private client: Client | null = null;
+  private handlers: Map<string, MessageHandler<unknown>[]> = new Map();
+
+  connect(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.client = new Client({
+        webSocketFactory: () => new SockJS("/ws"),
+        onConnect: () => {
+          console.log("WebSocket 연결 성공!");
+          resolve();
+        },
+        onStompError: (frame) => {
+          console.error("WebSocket 에러: ", frame);
+          reject(frame);
+        },
+        onDisconnect: () => {
+          console.log("WebSocket 연결 종료");
+        },
+      });
+
+      this.client.activate();
+    });
+  }
+
+  disconnect() {
+    if (this.client && this.client.connected) {
+      this.client.deactivate();
+    }
+  }
+
+  subscribe<T = unknown>(topic: string, callback: MessageHandler<T>) {
+    if (!this.client || !this.client.connected) {
+      console.error("WebSocket이 연결되지 않았습니다.");
+      return;
+    }
+
+    if (!this.handlers.has(topic)) {
+      this.handlers.set(topic, []);
+      this.client.subscribe(topic, (message: IMessage) => {
+        try {
+          const parsedBody = JSON.parse(message.body);
+          const handlers = this.handlers.get(topic) || [];
+          handlers.forEach((handler) => handler(parsedBody));
+        } catch (error) {
+          console.error("메시지 처리 중 오류 발생:", error);
+        }
+      });
+    }
+
+    const handlers = this.handlers.get(topic) || [];
+    handlers.push(callback as MessageHandler<unknown>);
+    this.handlers.set(topic, handlers);
+  }
+
+  unsubscribe(topic: string, callback?: MessageHandler<unknown>) {
+    if (!this.handlers.has(topic)) {
+      return;
+    }
+
+    if (callback) {
+      const handlers = this.handlers.get(topic) || [];
+      const updatedHandlers = handlers.filter(
+        (handler) => handler !== callback
+      );
+      this.handlers.set(topic, updatedHandlers);
+    } else {
+      this.handlers.delete(topic);
+    }
+  }
+
+  send(destination: string, body: Record<string, unknown>) {
+    if (!this.client || !this.client.connected) {
+      console.error("WebSocket이 연결되지 않았습니다.");
+      return;
+    }
+
+    this.client.publish({
+      destination,
+      body: JSON.stringify(body),
+    });
+  }
+}
+
+export default new WebSocketService();
+```
+
+이후 WebSocket을 사용한 요청으로 코드를 변경합니다.
+
+```tsx:Chat.tsx
+import { Box, Button, Flex, Heading, Text, TextArea } from "@radix-ui/themes";
+import { useParams } from "react-router";
+import { useEffect, useState } from "react";
+import WebSocketService from "../services/WebSocketService";
+
+interface ChatMessage {
+  id: number;
+  username: string;
+  content: string;
+  room: number;
+  timestamp: string;
+}
+
+export default function Chat() {
+  const { id } = useParams();
+  const [content, setContent] = useState("");
+  const [username, setUsername] = useState("");
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [connected, setConnected] = useState(false);
+
+  const getCookie = (name: string) => {
+    const cookieValue = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith(`${name}=`))
+      ?.split("=")[1];
+
+    return cookieValue || "";
+  };
+
+  const fetchMessages = async () => {
+    try {
+      const response = await fetch(`/api/chat/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Fetched messages:", data);
+        setMessages(data);
+      } else {
+        console.error("Failed to fetch messages:", response.status);
+      }
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
+  };
+
+  const setupWebSocket = async () => {
+    try {
+      await WebSocketService.connect();
+      setConnected(true);
+
+      WebSocketService.subscribe(
+        `/topic/chat.${id}`,
+        (message: ChatMessage) => {
+          setMessages((prevMessages) => [message, ...prevMessages]);
+        }
+      );
+    } catch (error) {
+      console.error("WebSocket 연결 실패:", error);
+    }
+  };
+
+  useEffect(() => {
+    const usernameFromCookie = getCookie("username");
+    if (usernameFromCookie) {
+      setUsername(usernameFromCookie);
+    }
+
+    fetchMessages();
+
+    setupWebSocket();
+
+    return () => {
+      WebSocketService.disconnect();
+    };
+  }, [id]);
+
+  const handleSendMessage = async () => {
+    if (!username || !content.trim()) {
+      return;
+    }
+
+    if (!connected) {
+      alert("서버에 연결되지 않았습니다. 페이지를 새로고침해 주세요.");
+      return;
+    }
+
+    const chatMessage = {
+      username,
+      content,
+      room: Number(id),
+      timestamp: new Date().toISOString(),
+    };
+
+    WebSocketService.send("/app/chat.sendMessage", chatMessage);
+
+    setContent("");
+  };
+
+  return (
+    <Flex height="100vh" direction="column" align="center" justify="center">
+      <Flex width="300px" direction="column" align="center" justify="center">
+        <Heading size="7">Chatting {id}</Heading>
+        <Box height="16px" />
+        <Text>{username}로 로그인 됨</Text>
+        <Box height="16px" />
+        <Flex
+          width="100%"
+          height="400px"
+          direction="column-reverse"
+          overflowY="scroll"
+          style={{
+            borderRadius: "12px",
+            padding: "12px",
+            border: "1px solid #d4d4d4",
+          }}
+        >
+          {messages.length > 0 ? (
+            messages.map((msg, index) => (
+              <Box
+                key={index}
+                style={{
+                  marginBottom: "8px",
+                  alignSelf:
+                    msg.username === username ? "flex-end" : "flex-start",
+                  backgroundColor:
+                    msg.username === username ? "#e3f2fd" : "#f5f5f5",
+                  padding: "8px 12px",
+                  borderRadius: "12px",
+                  maxWidth: "80%",
+                }}
+              >
+                <Text size="2" weight="bold">
+                  {msg.username + " "}
+                </Text>
+                <Text>{msg.content}</Text>
+              </Box>
+            ))
+          ) : (
+            <Text>No messages yet</Text>
+          )}
+        </Flex>
+        <Box height="16px" />
+        <TextArea
+          style={{ width: "100%" }}
+          placeholder="메세지를 입력하세요."
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              handleSendMessage();
+            }
+          }}
+        />
+        <Box height="16px" />
+        <Button
+          style={{ width: "100%" }}
+          color="purple"
+          onClick={handleSendMessage}
+        >
+          전송
+        </Button>
+      </Flex>
+    </Flex>
+  );
+}
+```
+
+그리고 서버를 재실행합니다.
+
+![apply socket](/contents/tech/springboot-socket/apply-socket.gif) _Socket을 적용한 경우_
+
+그렇다면 위와 같이 실시간 소통이 가능한 것을 볼 수 있습니다. 더 자세한 코드는 GitHub를 확인해주세요.
+
+감사합니다.
+
+- [GitHub - pickle-team/chat-socket](https://github.com/pickle-team/chat-socket)
+- [GitHub - pickle-team/front-socket](https://github.com/pickle-team/front-socket)
