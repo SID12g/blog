@@ -50,6 +50,10 @@ export default function RootLayout({
           gtag('js', new Date());
           gtag('config', 'G-R3FR04H7H3');
         `}</Script>
+        <meta
+          name="naver-site-verification"
+          content="64a062d6249bccc8a191d99ee7deb1dcfd4904b0"
+        />
       </head>
       <body
         className={`${wantedSans.variable} ${tossFace.variable} ${menlo.variable}`}
