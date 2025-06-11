@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer className={styles.footer}>
       Copyright ⓒ {year}{" "}
-      <Link className={styles.link} href="mailto:ad@sid12g.dev">
+      <Link className={styles.link} href="mailto:i@sid12g.dev">
         sid12g
       </Link>{" "}
       All rights reserved.
