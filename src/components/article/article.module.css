@@ -305,6 +305,10 @@
   padding-left: 20px;
 }
 
+.content del {
+  text-decoration: line-through;
+}
+
 @media (max-width: 900px) {
   .article {
     max-width: none;
