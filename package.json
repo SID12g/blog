@@ -6,10 +6,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
   },
   "dependencies": {
     "@giscus/react": "^3.0.0",
+    "@opennextjs/cloudflare": "^1.3.1",
     "@types/rss": "^0.0.32",
     "gray-matter": "^4.0.3",
     "next": "^15.2.5",
@@ -36,7 +40,8 @@
     "eslint": "^8",
     "eslint-config-next": "14.1.0",
     "shiki": "^1.10.1",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "^4.21.2"
   },
   "packageManager": "yarn@4.4.1+sha512.f825273d0689cc9ead3259c14998037662f1dcd06912637b21a450e8da7cfeb4b1965bbee73d16927baa1201054126bc385c6f43ff4aa705c8631d26e12460f1"
 }
