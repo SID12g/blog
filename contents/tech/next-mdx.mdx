@@ -2,7 +2,7 @@
 title: Next.JS에서 MDX 사용하기
 date: "2024-05-07"
 description: next-mdx-remote를 사용하여 MDX파일을 불러와 목록과 내용을 추출하고, gray-matter를 사용해 파일의 속성을 가져옵니다.
-image: /contents/tech/next-mdx/thumbnail.png
+image: /contents/tech/next-mdx/thumbnail.webp
 tag: Next
 ---
 
@@ -25,7 +25,7 @@ next-mdx-remote를 이용하여 MDX를 컴포넌트화 하고, gray-matter를 �
 
 MDX 파일을 가져오기 위해 예시 파일을 contents 폴더 내에 test.mdx 라는 이름으로 만들어 줍니다.
 
-![파일 디렉토리](/contents/tech/next-mdx/directory.png) _파일 디렉토리_
+![파일 디렉토리](/contents/tech/next-mdx/directory.webp) _파일 디렉토리_
 
 그리고 test.mdx에 아래와 같은 내용을 넣어주겠습니다.
 
@@ -125,7 +125,7 @@ export default function Post({ params }: any) {
 
 MDXRemote에 대한 스타일링의 경우 겉에 div를 둘러 해당 div를 스타일링하여 대신할 수 있습니다.
 
-![content](/contents/tech/next-mdx/first-mdx.png) _MDXRemote를 통해 가져온 MDX 파일_
+![content](/contents/tech/next-mdx/first-mdx.webp) _MDXRemote를 통해 가져온 MDX 파일_
 
 ## MDX 파일 목록을 가져오기 위한 함수 만들기
 
@@ -226,7 +226,7 @@ export default function Home() {
 }
 ```
 
-![contents 리스트](/contents/tech/next-mdx/mdx-list.png) _MDX 파일 목록_
+![contents 리스트](/contents/tech/next-mdx/mdx-list.webp) _MDX 파일 목록_
 
 위 사진 처럼 contents 폴더 내에 있는 MDX 파일들이 모두 있는걸 볼 수 있습니다.
 
@@ -234,7 +234,7 @@ MDX 파일을 불러왔다면 여러 라이브러리를 통해서 더 편리한 
 
 ## h 태그에 링크 걸기
 
-![title-link](/contents/tech/next-mdx/title-link.png)
+![title-link](/contents/tech/next-mdx/title-link.webp)
 
 위와 같이 # 이 들어가는 h 태그들을 누르면 위처럼 해당 내용으로 이동할 수 있도록 하는 rehypePlugins를 알려드리겠습니다.
 
@@ -275,7 +275,7 @@ const options: any = {
 
 ## 코드블럭 스타일링하기
 
-![codeblock-style-last](/contents/tech/next-mdx/code-last.png) _스타일링 된 코드블럭_
+![codeblock-style-last](/contents/tech/next-mdx/code-last.webp) _스타일링 된 코드블럭_
 
 코드블럭을 위 처럼 스타일링 하는 법을 알아보겠습니다.
 
@@ -315,7 +315,7 @@ const options: any = {
 };
 ```
 
-![codeblock-style-first](/contents/tech/next-mdx/code-first.png) _스타일링 된 코드블럭_
+![codeblock-style-first](/contents/tech/next-mdx/code-first.webp) _스타일링 된 코드블럭_
 
 추가하면 위와 같이 코드블럭이 스타일링 됩니다.
 
@@ -327,7 +327,7 @@ const options: any = {
 
 위와 같은 라이브러리 외에도 많은 라이브러리 들이 있으니 이를 참고해서 자신이 원하는 방향으로 활용하시길 바랍니다.
 
-![contents-list-tag](/contents/tech/next-mdx/mdx-list-tag.png)
+![contents-list-tag](/contents/tech/next-mdx/mdx-list-tag.webp)
 
 저는 태그 별로 contents를 불러오는 기능을 추가해 보기도 했습니다. 해당 활용법이 궁금하시다면 [Github](https://github.com/SID12g/mdx-content/) 를 참고해주세요.
 

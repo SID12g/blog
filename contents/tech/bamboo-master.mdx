@@ -2,7 +2,7 @@
 title: 죽림고수 만들기
 date: "2024-10-13"
 description: p5.js를 통해 죽림고수를 재현하고, 배포합니다.
-image: /contents/tech/bamboo-master/thumbnail.png
+image: /contents/tech/bamboo-master/thumbnail.webp
 tag: P5
 ---
 
@@ -99,7 +99,7 @@ module.exports = {
 
 [p5.JS](https://p5js.org/ko)는 canvas를 더욱 쉽게 사용할 수 있도록 도와주는 라이브러리입니다. p5.JS에 있는 예제들을 통해서도 canvas에 도형 등을 쉽게 표현할 수 있는 것을 알 수 있습니다.
 
-![p5.JS](/contents/tech/bamboo-master/p5.js.png) _p5.JS 페이지에 제시되어있는 예제들_
+![p5.JS](/contents/tech/bamboo-master/p5.js.webp) _p5.JS 페이지에 제시되어있는 예제들_
 
 ### p5.JS 기본 설정
 
@@ -169,7 +169,7 @@ let isMovingLeft, isMovingRight, isMovingUp, isMovingDown;
 그리고 캐릭터를 preload()를 통해 불러오고, setup()에 위치와 키 입력을 설정한 뒤, draw()를 통해 canvas에 그려줍니다.
 
 ```js
-import catImage from "./assets/cat.png";
+import catImage from "./assets/cat.webp";
 
 const sketch = (p) => {
   p.preload = () => {
@@ -255,7 +255,7 @@ const sketch = (p) => {
 
 ```js:src/index.js
 import p5 from "p5";
-import catImage from "./assets/cat.png";
+import catImage from "./assets/cat.webp";
 
 let cat;
 let catScalar = 0.05;
@@ -503,7 +503,7 @@ const sketch = (p) => {
 
 ```js:src/index.js
 import p5 from "p5";
-import catImage from "./assets/cat.png";
+import catImage from "./assets/cat.webp";
 
 let cat;
 let catScalar = 0.05;

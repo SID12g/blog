@@ -39,7 +39,7 @@ export async function generateMetadata({
       url: `https://post.sid12g.dev/article/posts/${post.slug}`,
       images: [
         {
-          url: `https://post.sid12g.dev/contents/article/${post.slug}/thumbnail.png`,
+          url: `https://post.sid12g.dev/contents/article/${post.slug}/thumbnail.webp`,
         },
       ],
       locale: "ko_KR",

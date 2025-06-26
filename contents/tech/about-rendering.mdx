@@ -2,7 +2,7 @@
 title: 렌더링 방식 알아보기 (Next.JS 블로그 속도 개선기)
 date: "2024-07-20"
 description: 대표적인 렌더링 방식 CSR, SSR, SSG를 알아보고, SSG로 블로그 속도를 개선한 과정을 소개합니다.
-image: /contents/tech/about-rendering/thumbnail.png
+image: /contents/tech/about-rendering/thumbnail.webp
 tag: Next
 ---
 
@@ -42,7 +42,7 @@ SSR과 비교해보면, SSR의 경우는 Client가 페이지를 요청을 하면
 
 ## 해결하려고 했던 시도들
 
-Next.JS로 블로그를 처음 만들 때 Next.JS와 Gatsby.JS를 비교하거나 Next.JS에서 Gatsby.JS로 블로그를 마이그레이션하는 경우를 보았습니다. 속도를 고민하던 중 이 경우가 떠올랐고 Gatsby.JS를 알아보았습니다. Gatsby.JS는 정적 사이트 생성기였습니다. 포트폴리오나 블로그 같은 데이터가 변하지 않는 정적 페이지를 생성하기에 최적화 된 프레임워크였습니다. 그래서 우선 Gatsby.JS로 제가 작성해놓았던 MDX 파일들을 올려 배포해보았습니다. (Vercel, Cloudflare로 배포 테스트)
+Next.JS로 블로그를 처음 만들 때 Next.JS와 Gatsby.JS를 비교하거나 Next.JS에서 Gatsby.JS로 블로그를 마이그레이션하는 경우를 보았습니다. 속도를 고민하던 중 이 경우가 떠올랐고 Gatsby.JS를 알아보았습니다. Gatsby.JS는 정적 사이트 생성기였습니다. 포트폴리오나 블로그 같은 데이터가 변하지 않는 정적 페이지를 생성하기에 최적화 된 프레임워크였습니다. 그래서 우선 Gatsby.JS로 저가 작성해놓았던 MDX 파일들을 올려 배포해보았습니다. (Vercel, Cloudflare로 배포 테스트)
 
 배포된 페이지들은 기존 블로그보다 훨씬 빨랐습니다. 그래서 저는 Gatsby.JS로 블로그를 마이그레이션 하기로 결정했습니다. 하지만 Next.JS에서도 SSG를 지원합니다. 그러면 저는 왜 Gatsby.JS로 마이그레이션 하려고 했덜걸까요? 사실 저는 Next.JS에서 SSG를 지원한다는 사실을 잊고 있었습니다. (Pages Router에서 SSG를 사용하는 공식문서를 본 적이 있으나 App Router에서는 관련 문서를 본 적이 없어 지원하지 않는다고 착각하고 있었습니다.) 심지어 Next.JS로 만들어진 전 블로그에도 글들이 SSG 방식으로 렌더링 되고 있어서 빨랐던 것이었습니다. 저는 이 부분을 놓치고 무작정 Gatsby.JS로 마이그레이션을 시작했습니다.
 

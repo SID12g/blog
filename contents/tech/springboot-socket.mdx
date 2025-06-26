@@ -2,7 +2,7 @@
 title: Spring Boot를 사용하여 채팅 서비스 만들기
 date: "2025-03-17"
 description: Spring Boot와 Socket을 사용하여 간단한 채팅 예제를 구현해봅니다.
-image: /contents/tech/springboot-socket/thumbnail.png
+image: /contents/tech/springboot-socket/thumbnail.webp
 tag: Spring Boot
 ---
 
@@ -14,21 +14,21 @@ tag: Spring Boot
 
 Spring Boot 프로젝트를 생성하기 위해선 [spring initializr](https://start.spring.io/)에 접속하여 프로젝트를 생성해야 합니다. 본 프로젝트는 Java 17 기반으로 생성하였으며, Spring Boot는 3.4.3 버전을 사용하였습니다. 옆에 Dependencies에서 개발에 사용할 dependency를 추가할 수 있는데, 저는 Lombok, Spring Boot DevTools, Spring Web 이렇게 3개를 추가하였습니다. 프로젝트 설정이 완료되었다면, 아래 Generate 버튼을 눌러 다운로드 후 InteliJ로 열어주세요.
 
-![spring initializr](/contents/tech/springboot-socket/init.png) _spring initializr_
+![spring initializr](/contents/tech/springboot-socket/init.webp) _spring initializr_
 
 ## Supabase Database 연결하기
 
 채팅 앱에서 회원 식별과 채팅 내용 저장 등의 기능을 위해 데이터베이스를 생성한 후 연결해줘야 합니다. 우선 Supbase에 접속합니다.
 
-![Supabase Dashboard](/contents/tech/springboot-socket/db-dash.png) _Supabase Dashboard_
+![Supabase Dashboard](/contents/tech/springboot-socket/db-dash.webp) _Supabase Dashboard_
 
 그리고 새 프로젝트를 생성합니다. 서버를 가까운 곳으로 선택하고, 비밀번호는 기억해놓아야 합니다.
 
-![Supabase New Project](/contents/tech/springboot-socket/db-set.png) _Supabase New Project_
+![Supabase New Project](/contents/tech/springboot-socket/db-set.webp) _Supabase New Project_
 
 그리고 프로젝트가 생성되면 아래와 같은 페이지로 이동합니다. 이 페이지가 방금 만든 프로젝트의 대시보드입니다.
 
-![Supabase Dashboard](/contents/tech/springboot-socket/db-home.png) _Supabase Project Dashboard_
+![Supabase Dashboard](/contents/tech/springboot-socket/db-home.webp) _Supabase Project Dashboard_
 
 Database를 생성했으니, Spring Boot 프로젝트에서 연결할 수 있도록 설정해줍니다.
 
@@ -47,13 +47,13 @@ implementation 'org.springframework.boot:spring-boot-starter-security'
 
 네 번째는 Spring Security 라이브러리입니다. Spring Security를 사용하여 인증, 권한 부여, 보안 설정 등을 쉽게 처리할 수 있습니다.
 
-![build gradle](/contents/tech/springboot-socket/intelij-dependencies.png) _build.gradle_
+![build gradle](/contents/tech/springboot-socket/intelij-dependencies.webp) _build.gradle_
 
 이 처럼 build.gradle에 위 세 가지 라이브러리를 추가해줍니다. 그리고 설치해줍니다.
 
 <p>
   <img
-    src="/contents/tech/springboot-socket/gradle-download.png"
+    src="/contents/tech/springboot-socket/gradle-download.webp"
     alt="gradle download"
     width="200px"
   />
@@ -62,7 +62,7 @@ implementation 'org.springframework.boot:spring-boot-starter-security'
 
 라이브러리를 설치했다면, 이제 Spring Boot 프로젝트와 연결해줘야 합니다. 연결을 위해 우선 Supabase로 돌아가 상단의 Connect 버튼을 눌러줍니다.
 
-![Supabase Connect](/contents/tech/springboot-socket/db-connect.png) _Supabase Connect_
+![Supabase Connect](/contents/tech/springboot-socket/db-connect.webp) _Supabase Connect_
 
 Connect 버튼을 누르면 위와 같은 화면이 뜨는데, 여기서 Type을 JDBC로 설정해줍니다. 그리고 Transaction pooler의 주소를 복사합니다.
 
@@ -83,21 +83,21 @@ spring.jpa.hibernate.ddl-auto=update
 spring.session.jdbc.initialize-schema=always
 ```
 
-![InteliJ Application Properties](/contents/tech/springboot-socket/intelij-properties.png) _application.properties_
+![InteliJ Application Properties](/contents/tech/springboot-socket/intelij-properties.webp) _application.properties_
 
 추가로 InteliJ Ultimate 버전을 사용하신다면 아래와 같이 InteliJ와 Database를 연결해서 Database를 쉽게 확인할 수 있습니다.
 
-![InteliJ Ultimate](/contents/tech/springboot-socket/intelij-dbcheck.png) _InteliJ Database 연결_
+![InteliJ Ultimate](/contents/tech/springboot-socket/intelij-dbcheck.webp) _InteliJ Database 연결_
 
 ## Member 관련 기능 만들기
 
 우선 채팅 기능 구현 전 사용자들 간 식별을 위해 Member 테이블을 생성한 뒤 회원가입과 로그인 기능을 만들어 주겠습니다.
 
-![Member Class 생성](/contents/tech/springboot-socket/member-class.png) _Member Class 생성_
+![Member Class 생성](/contents/tech/springboot-socket/member-class.webp) _Member Class 생성_
 
 위와 같이 Member Class를 생성한 뒤 프로젝트를 실행한다면 Supabase에 Member 테이블이 생성됩니다.
 
-![Supabase Member Table](/contents/tech/springboot-socket/db-member.png) _Supabase Member Table_
+![Supabase Member Table](/contents/tech/springboot-socket/db-member.webp) _Supabase Member Table_
 
 이제 회원가입과 로그인 기능을 만들어주겠습니다.
 
@@ -118,7 +118,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 }
 ```
 
-![Member Repository](/contents/tech/springboot-socket/intelij-memberrepo.png) _Member Repository_
+![Member Repository](/contents/tech/springboot-socket/intelij-memberrepo.webp) _Member Repository_
 
 그리고 BCryptPasswordEncoder 및 CSRF 보호를 비활성화 하기 위해서 SecurityConfig를 생성합니다.
 
@@ -154,7 +154,7 @@ public class SecurityConfig {
 }
 ```
 
-![Security Config](/contents/tech/springboot-socket/intelij-securityconfig.png) _Security Config_
+![Security Config](/contents/tech/springboot-socket/intelij-securityconfig.webp) _Security Config_
 
 이제 회원가입과 로그인 기능을 만들어줍니다.
 
@@ -198,15 +198,15 @@ public class MemberController {
 }
 ```
 
-![Member Controller](/contents/tech/springboot-socket/intelij-membercontroller.png) _Member Controller_
+![Member Controller](/contents/tech/springboot-socket/intelij-membercontroller.webp) _Member Controller_
 
 Postman으로 회원가입과 로그인을 시도해보면 Table에 잘 추가되는 것을 확인할 수 있습니다.
 
-![Postman Register](/contents/tech/springboot-socket/postman-register.png) _Postman Register_
+![Postman Register](/contents/tech/springboot-socket/postman-register.webp) _Postman Register_
 
-![Table에 추가된 Member](/contents/tech/springboot-socket/db-register.png) _Table에 추가된 Member_
+![Table에 추가된 Member](/contents/tech/springboot-socket/db-register.webp) _Table에 추가된 Member_
 
-![Postman Login](/contents/tech/springboot-socket/postman-login.png) _Postman Login_
+![Postman Login](/contents/tech/springboot-socket/postman-login.webp) _Postman Login_
 
 ## Member 기능 적용하기
 
@@ -243,17 +243,17 @@ export default defineConfig({
 
 ### Register
 
-![Frontend Register](/contents/tech/springboot-socket/fe-register.png) _Frontend Register_
+![Frontend Register](/contents/tech/springboot-socket/fe-register.webp) _Frontend Register_
 
-![Frontend Register Response Ok](/contents/tech/springboot-socket/fe-registerok.png) _Frontend Register Response Ok_
+![Frontend Register Response Ok](/contents/tech/springboot-socket/fe-registerok.webp) _Frontend Register Response Ok_
 
-![Supabase Register Response Ok](/contents/tech/springboot-socket/db-registerok.png) _Supabase Register Response Ok_
+![Supabase Register Response Ok](/contents/tech/springboot-socket/db-registerok.webp) _Supabase Register Response Ok_
 
 ### Login
 
-![Frontend Register Response Ok](/contents/tech/springboot-socket/fe-signin.png) _Frontend Login_
+![Frontend Register Response Ok](/contents/tech/springboot-socket/fe-signin.webp) _Frontend Login_
 
-![Supabase Register Response Ok](/contents/tech/springboot-socket/fe-signinok.png) _Frontend Login Reponse Ok_
+![Supabase Register Response Ok](/contents/tech/springboot-socket/fe-signinok.webp) _Frontend Login Reponse Ok_
 
 ## Chat 기능 만들기
 

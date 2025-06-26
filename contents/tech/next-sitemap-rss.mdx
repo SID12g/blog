@@ -2,7 +2,7 @@
 title: Next.JS에서 동적으로 Sitemap, RSS 생성하는 방법
 date: "2024-03-17"
 description: SEO 관리를 위해 동적으로 Sitemap과 RSS를 생성하는 방법을 알아봅니다.
-image: /contents/tech/next-sitemap-rss/thumbnail.png
+image: /contents/tech/next-sitemap-rss/thumbnail.webp
 tag: Next
 ---
 
@@ -56,7 +56,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
 이는 도메인 뒤에 /sitemap.xml 을 붙여 확인하실 수 있습니다.
 
-![PodfileCode](/contents/tech/next-sitemap-rss/sitemap.png)
+![PodfileCode](/contents/tech/next-sitemap-rss/sitemap.webp)
 
 ## RSS 생성하기
 
@@ -79,7 +79,7 @@ export async function GET() {
     generator: "RSS for Node and Next.js",
     feed_url: "https://post.sid12g.dev/feed.xml",
     site_url: "https://post.sid12g.dev",
-    image_url: "https://post.sid12g.dev/images/blog_image.png",
+    image_url: "https://post.sid12g.dev/images/blog_image.webp",
     copyright: `Copyright ${new Date().getFullYear().toString()}`,
     language: "ko-KR",
     pubDate: new Date().toUTCString(),
@@ -113,7 +113,7 @@ export async function GET() {
 
 이는 도메인 뒤에 /feed.xml 을 붙여 확인하실 수 있습니다.
 
-![PodfileCode](/contents/tech/next-sitemap-rss/rss.png)
+![PodfileCode](/contents/tech/next-sitemap-rss/rss.webp)
 
 ## Robots.txt 작성하기
 
@@ -134,7 +134,7 @@ robots.txt는 각 포털의 크롤러들이 수집할 수 있도록 권한을 �
 
 이 또한 도메인 뒤에 /robots.txt 을 붙여 확인하실 수 있습니다.
 
-![PodfileCode](/contents/tech/next-sitemap-rss/robots.png)
+![PodfileCode](/contents/tech/next-sitemap-rss/robots.webp)
 
 위와 같이 Sitemap, RSS, robots.txt를 사용한다면 사이트의 노출과 SEO에 더 좋은 영향을 줄 수 있을 것입니다.
 여러분의 사이트를 Google Search Console에 등록하면 검색 뿐 아니라 사이트의 유입, 검색어, 순위 등의 통계를 알 수 있으니 꼭 등록해보시길 바랍니다.
