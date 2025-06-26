@@ -40,6 +40,8 @@
     "eslint": "^8",
     "eslint-config-next": "14.1.0",
     "shiki": "^1.10.1",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vercel": "^44.2.5",
+    "wrangler": "^4.21.2"
   }
 }
