@@ -1,3 +1,3 @@
-export const runtime = 'edge';
+export const runtime = "nodejs";
 
 export { default as GET } from "./get";
