@@ -4,7 +4,4 @@ Allow : /
 User-agent: Yeti
 Allow: /
 
-User-agent: *
-Disallow: /
-
 Sitemap: https://post.sid12g.dev/sitemap.xml
