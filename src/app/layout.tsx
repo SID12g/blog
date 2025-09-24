@@ -8,6 +8,7 @@ import Footer from "../components/footer";
 import { baseUrl } from "./sitemap";
 import Link from "next/link";
 import Image from "next/image";
+import { Navbar } from "@/components/nav";
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -55,10 +56,10 @@ export default function RootLayout({
           {/* <Link href="/">
             <h1 className="text-2xl mb-8 tracking-tighter">sead post</h1>
           </Link> */}
-          <Link href="/" className="mb-8">
+          {/* <Link href="/" className="mb-8">
             <Image src="logo.svg" alt="sead post" width={100} height={100} />
-          </Link>
-          {/* <Navbar /> */}
+          </Link> */}
+          <Navbar />
           {children}
           <Footer />
           <Analytics />

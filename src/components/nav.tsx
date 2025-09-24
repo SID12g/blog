@@ -2,10 +2,10 @@ import Link from "next/link";
 
 const navItems = {
   "/": {
-    name: "post",
+    name: "Home",
   },
-  "https://sid12g.dev": {
-    name: "about me",
+  "/tags": {
+    name: "Tags",
   },
 };
 

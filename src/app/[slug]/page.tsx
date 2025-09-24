@@ -107,7 +107,7 @@ export default async function Blog({ params }) {
             {post.metadata.tag.map((t) => (
               <a
                 key={t}
-                href={`${baseUrl}/tag/${encodeURIComponent(t)}`}
+                href={`${baseUrl}/tags/${encodeURIComponent(t)}`}
                 className="inline-block rounded-md bg-neutral-100 px-2 py-1 text-xs text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700"
               >
                 {t}
