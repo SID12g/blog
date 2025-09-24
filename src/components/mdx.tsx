@@ -63,7 +63,7 @@ function MdxImage(props) {
   // Use span wrappers to remain valid inside <p> that markdown often creates around images
   return (
     <span className="block my-4">
-      <img alt={props.alt} className="rounded-lg m-0" {...props} />
+      <Image alt={props.alt} className="rounded-lg m-0" {...props} />
       {caption ? (
         <span className="mt-2 block text-center text-sm text-neutral-500 dark:text-neutral-400">
           {caption}
