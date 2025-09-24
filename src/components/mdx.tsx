@@ -60,21 +60,161 @@ function RoundedImage(props) {
 
 function MdxImage(props) {
   const caption = props.title || props.alt;
+  // Use span wrappers to remain valid inside <p> that markdown often creates around images
   return (
-    <figure className="my-4">
+    <span className="block my-4">
       <img alt={props.alt} className="rounded-lg m-0" {...props} />
       {caption ? (
-        <figcaption className="mt-2 text-center text-sm text-neutral-500 dark:text-neutral-400">
+        <span className="mt-2 block text-center text-sm text-neutral-500 dark:text-neutral-400">
           {caption}
-        </figcaption>
+        </span>
       ) : null}
-    </figure>
+    </span>
   );
 }
 
 function Code({ children, ...props }) {
   let codeHTML = highlight(children);
   return <code dangerouslySetInnerHTML={{ __html: codeHTML }} {...props} />;
+}
+
+function extractFilename(metastring?: string): string | undefined {
+  if (!metastring) return undefined;
+  const namedMatch = metastring.match(
+    /(?:^|\s)(?:title|file|filename|name)="([^"]+)"/
+  );
+  if (namedMatch && namedMatch[1]) return namedMatch[1];
+  const bareMatch = metastring.trim().match(/([\w@./-]+\.[\w]+)(?:\s|$)/);
+  if (bareMatch && bareMatch[1]) return bareMatch[1];
+  return undefined;
+}
+
+function languageFromClassName(className?: string): string | undefined {
+  if (!className) return undefined;
+  const m = className.match(/language-([\w+-]+)/);
+  return m ? m[1] : undefined;
+}
+
+function Pre(props) {
+  const child = props.children as any;
+  if (child && typeof child === "object" && "props" in child) {
+    const { className, children, metastring } = child.props || {};
+    const filename = extractFilename(metastring);
+    const language = languageFromClassName(className);
+    const code =
+      typeof children === "string"
+        ? children
+        : Array.isArray(children)
+        ? children.join("")
+        : "";
+    const codeHTML = highlight(code);
+
+    return (
+      <div className="my-4 overflow-hidden rounded-lg border border-neutral-200 dark:border-neutral-900">
+        {filename ? (
+          <div className="flex items-center justify-between px-3 py-2 text-xs bg-neutral-100 dark:bg-neutral-900/60 border-b border-neutral-200 dark:border-neutral-900">
+            <span className="font-medium text-neutral-700 dark:text-neutral-300 truncate">
+              {filename}
+            </span>
+            {language ? (
+              <span className="ml-2 uppercase text-[10px] text-neutral-500 dark:text-neutral-400">
+                {language}
+              </span>
+            ) : null}
+          </div>
+        ) : null}
+        <pre className="bg-neutral-50 dark:bg-neutral-900 overflow-x-auto py-2 px-3 text-sm">
+          <code
+            className={className}
+            dangerouslySetInnerHTML={{ __html: codeHTML }}
+          />
+        </pre>
+      </div>
+    );
+  }
+  return <pre {...props} />;
+}
+
+type FileTreeNodeType = {
+  name: string;
+  type: "file" | "dir";
+  children?: FileTreeNodeType[];
+};
+
+function FileTreeNode({
+  node,
+  depth = 0,
+}: {
+  node: FileTreeNodeType;
+  depth?: number;
+}) {
+  const isDirectory = node.type === "dir";
+  return (
+    <div className="leading-6">
+      <div
+        className={
+          `flex items-center` +
+          ` ${
+            isDirectory
+              ? "font-medium text-neutral-800 dark:text-neutral-200"
+              : "text-neutral-600 dark:text-neutral-400"
+          }`
+        }
+        style={{ paddingLeft: `${depth * 12}px` }}
+      >
+        <span className="mr-2 select-none">{isDirectory ? "📁" : "📄"}</span>
+        <span className="truncate">{node.name}</span>
+      </div>
+      {isDirectory && node.children && node.children.length > 0 ? (
+        <div className="mt-1">
+          {node.children.map((child, idx) => (
+            <FileTreeNode
+              key={`${node.name}-${idx}`}
+              node={child}
+              depth={depth + 1}
+            />
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function FileTree({ tree }: { tree: FileTreeNodeType[] }) {
+  return (
+    <div className="rounded-lg border border-neutral-200 dark:border-neutral-800 p-3 text-sm overflow-hidden">
+      {tree.map((node, idx) => (
+        <FileTreeNode key={`root-${idx}`} node={node} />
+      ))}
+    </div>
+  );
+}
+
+function CodeWithTree({
+  code,
+  language = "tsx",
+  tree,
+}: {
+  code: string;
+  language?: string;
+  tree: FileTreeNodeType[];
+}) {
+  const codeHTML = highlight(code);
+  return (
+    <div className="my-4 md:grid md:grid-cols-5 gap-4">
+      <div className="md:col-span-2 mb-4 md:mb-0">
+        <FileTree tree={tree} />
+      </div>
+      <div className="md:col-span-3">
+        <pre className="bg-neutral-50 dark:bg-neutral-900 rounded-lg overflow-x-auto border border-neutral-200 dark:border-neutral-900 py-2 px-3 text-sm">
+          <code
+            className={`language-${language}`}
+            dangerouslySetInnerHTML={{ __html: codeHTML }}
+          />
+        </pre>
+      </div>
+    </div>
+  );
 }
 
 function slugify(str) {
@@ -121,6 +261,9 @@ let components = {
   Image: RoundedImage,
   a: CustomLink,
   code: Code,
+  pre: Pre,
+  FileTree,
+  CodeWithTree,
   Table,
 };
 
