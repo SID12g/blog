@@ -51,7 +51,7 @@ export default async function TagDetailPage({
         Tag: {tag}
       </h1>
       <div className="mt-4 mb-6">
-        <Link className="text-sm underline" href={`/tag`}>
+        <Link className="text-sm underline" href={`/tags`}>
           ← All tags
         </Link>
       </div>
