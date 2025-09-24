@@ -4,6 +4,7 @@ import { getBlogPosts } from "@/utils";
 import { baseUrl } from "@/app/sitemap";
 import Image from "next/image";
 import CopyCurrentLink from "@/components/copy-link";
+import Comments from "@/components/comments";
 
 export async function generateStaticParams() {
   let posts = getBlogPosts();
@@ -122,6 +123,9 @@ export default async function Blog({ params }) {
       </article>
       <div className="mt-12" />
       <CopyCurrentLink />
+      <div className="mt-12" />
+      <Comments />
+      <div className="mt-12" />
     </section>
   );
 }
