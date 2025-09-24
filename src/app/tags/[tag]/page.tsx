@@ -15,22 +15,14 @@ export async function generateStaticParams() {
   return Array.from(tagSet).map((tag) => ({ tag }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { tag: string };
-}) {
+export async function generateMetadata({ params }) {
   const { tag } = await params;
   let title = `Tag: ${tag}`;
   let description = `Posts tagged with ${tag}.`;
   return { title, description };
 }
 
-export default async function TagDetailPage({
-  params,
-}: {
-  params: { tag: string };
-}) {
+export default async function TagDetailPage({ params }) {
   const { tag } = await params;
   let posts = getBlogPosts();
   let filtered = posts
