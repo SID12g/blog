@@ -2,25 +2,23 @@ import "./global.css";
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
-import { Navbar } from "../components/nav";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Footer from "../components/footer";
 import { baseUrl } from "./sitemap";
+import Link from "next/link";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
-  title: {
-    default: "Next.js Portfolio Starter",
-    template: "%s | Next.js Portfolio Starter",
-  },
-  description: "This is my portfolio.",
+  title: "sead post",
+  description: "Welcome to sead post",
   openGraph: {
-    title: "My Portfolio",
-    description: "This is my portfolio.",
+    title: "sead post",
+    description: "Welcome to sead post",
     url: baseUrl,
-    siteName: "My Portfolio",
-    locale: "en_US",
+    siteName: "sead post",
+    locale: "ko_KR",
     type: "website",
   },
   robots: {
@@ -54,7 +52,13 @@ export default function RootLayout({
     >
       <body className="antialiased max-w-xl mx-4 mt-8 lg:mx-auto">
         <main className="flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0">
-          <Navbar />
+          {/* <Link href="/">
+            <h1 className="text-2xl mb-8 tracking-tighter">sead post</h1>
+          </Link> */}
+          <Link href="/" className="mb-8">
+            <Image src="logo.svg" alt="sead post" width={100} height={100} />
+          </Link>
+          {/* <Navbar /> */}
           {children}
           <Footer />
           <Analytics />

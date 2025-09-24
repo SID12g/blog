@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { CustomMDX } from "@/components/mdx";
 import { getBlogPosts } from "@/app/utils";
 import { baseUrl } from "@/app/sitemap";
+import Image from "next/image";
 
 export async function generateStaticParams() {
   let posts = getBlogPosts();
@@ -23,10 +24,9 @@ export async function generateMetadata({ params }) {
     publishedAt: publishedTime,
     summary: description,
     image,
+    tag,
   } = post.metadata;
-  let ogImage = image
-    ? image
-    : `${baseUrl}/og?title=${encodeURIComponent(title)}`;
+  let ogImage = image ? image : `기본 이미지`;
 
   return {
     title,
@@ -36,7 +36,7 @@ export async function generateMetadata({ params }) {
       description,
       type: "article",
       publishedTime,
-      url: `${baseUrl}/blog/${post.slug}`,
+      url: `${baseUrl}/${post.slug}`,
       images: [
         {
           url: ogImage,
@@ -75,14 +75,21 @@ export default async function Blog({ params }) {
             description: post.metadata.summary,
             image: post.metadata.image
               ? `${baseUrl}${post.metadata.image}`
-              : `/og?title=${encodeURIComponent(post.metadata.title)}`,
+              : `기본 이미지`,
             url: `${baseUrl}/${post.slug}`,
             author: {
               "@type": "Person",
-              name: "My Portfolio",
+              name: "Sungmin Cho",
             },
           }),
         }}
+      />
+      <Image
+        src={post.metadata.image ? post.metadata.image : `기본 이미지`}
+        alt={post.metadata.title}
+        width={800}
+        height={400}
+        className="rounded-md mb-4"
       />
       <h1 className="title font-semibold text-2xl tracking-tighter">
         {post.metadata.title}
@@ -95,6 +102,19 @@ export default async function Blog({ params }) {
       <article className="prose">
         <CustomMDX source={post.content} />
       </article>
+      {post.metadata.tag && post.metadata.tag.length > 0 && (
+        <div className="mt-12 flex flex-wrap gap-2">
+          {post.metadata.tag.map((t) => (
+            <a
+              key={t}
+              href={`http://localhost:3000/tag/${encodeURIComponent(t)}`}
+              className="inline-block rounded-md bg-neutral-100 px-2 py-1 text-xs text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700"
+            >
+              {t}
+            </a>
+          ))}
+        </div>
+      )}
     </section>
   );
 }
