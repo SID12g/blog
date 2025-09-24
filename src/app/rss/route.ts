@@ -1,5 +1,5 @@
 import { baseUrl } from "@/app/sitemap";
-import { getBlogPosts } from "@/app/utils";
+import { getBlogPosts } from "@/utils";
 
 export async function GET() {
   let allBlogs = await getBlogPosts();
@@ -29,7 +29,7 @@ export async function GET() {
     <channel>
         <title>sead post</title>
         <link>${baseUrl}</link>
-        <description>This is my Blog RSS feed</description>
+        <description>This is sead post RSS feed</description>
         ${itemsXml}
     </channel>
   </rss>`;

@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { CustomMDX } from "@/components/mdx";
-import { getBlogPosts } from "@/app/utils";
+import { getBlogPosts } from "@/utils";
 import { baseUrl } from "@/app/sitemap";
 import Image from "next/image";
 import CopyCurrentLink from "@/components/copy-link";

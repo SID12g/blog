@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getBlogPosts } from "@/app/utils";
+import { getBlogPosts } from "@/utils";
 
 export async function generateStaticParams() {
   let posts = getBlogPosts();

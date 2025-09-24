@@ -1,4 +1,4 @@
-import { getBlogPosts } from "@/app/utils";
+import { getBlogPosts } from "@/utils";
 import { baseUrl } from "@/app/sitemap";
 
 export const metadata = {
