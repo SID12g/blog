@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  outputFileTracingRoot: "./",
+  //   outputFileTracingRoot: "./",
   images: {
     remotePatterns: [
       {

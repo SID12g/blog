@@ -34,7 +34,7 @@ export default function TagsPage() {
         {tagCounts.map(({ tag, count }) => (
           <a
             key={tag}
-            href={`${baseUrl}/tags/${encodeURIComponent(tag)}`}
+            href={`tags/${encodeURIComponent(tag)}`}
             className="inline-block rounded-md bg-neutral-100 px-2 py-1 text-xs text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700"
           >
             {tag} <span className="opacity-70">({count})</span>
