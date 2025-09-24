@@ -90,7 +90,8 @@ export default async function Blog({ params }) {
         alt={post.metadata.title}
         width={800}
         height={400}
-        className="rounded-md mb-4"
+        sizes="(max-width: 640px) 100vw, 800px"
+        className="w-full h-auto rounded-md mb-4"
       />
       <h1 className="title font-semibold text-2xl tracking-tighter">
         {post.metadata.title}
@@ -106,7 +107,7 @@ export default async function Blog({ params }) {
             {post.metadata.tag.map((t) => (
               <a
                 key={t}
-                href={`http://${baseUrl}/tag/${encodeURIComponent(t)}`}
+                href={`${baseUrl}/tag/${encodeURIComponent(t)}`}
                 className="inline-block rounded-md bg-neutral-100 px-2 py-1 text-xs text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700"
               >
                 {t}
