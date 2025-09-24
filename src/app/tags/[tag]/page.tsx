@@ -17,16 +17,21 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }) {
   const { tag } = await params;
-  let title = `Tag: ${tag}`;
-  let description = `Posts tagged with ${tag}.`;
+  const decodedTag = decodeURIComponent(tag);
+  let title = `Tag: ${decodedTag}`;
+  let description = `Posts tagged with ${decodedTag}.`;
   return { title, description };
 }
 
 export default async function TagDetailPage({ params }) {
   const { tag } = await params;
+  // URL에서 받은 tag를 디코딩하여 원본 태그와 비교할 수 있도록 함
+  const decodedTag = decodeURIComponent(tag);
   let posts = getBlogPosts();
   let filtered = posts
-    .filter((p) => (p.metadata.tag || []).map((t) => t.trim()).includes(tag))
+    .filter((p) =>
+      (p.metadata.tag || []).map((t) => t.trim()).includes(decodedTag)
+    )
     .sort((a, b) => {
       if (new Date(a.metadata.publishedAt) > new Date(b.metadata.publishedAt))
         return -1;
@@ -40,7 +45,7 @@ export default async function TagDetailPage({ params }) {
   return (
     <section>
       <h1 className="title font-semibold text-2xl tracking-tighter">
-        Tag: {tag}
+        Tag: {decodedTag}
       </h1>
       <div className="mt-4 mb-6">
         <Link className="text-sm underline" href={`/tags`}>
