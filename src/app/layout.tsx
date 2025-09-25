@@ -6,8 +6,6 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Footer from "../components/footer";
 import { baseUrl } from "./sitemap";
-import Link from "next/link";
-import Image from "next/image";
 import { Navbar } from "@/components/nav";
 
 export const metadata: Metadata = {
@@ -53,12 +51,6 @@ export default function RootLayout({
     >
       <body className="antialiased max-w-xl mx-auto mt-8 px-4">
         <main className="flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0">
-          {/* <Link href="/">
-            <h1 className="text-2xl mb-8 tracking-tighter">sead post</h1>
-          </Link> */}
-          {/* <Link href="/" className="mb-8">
-            <Image src="logo.svg" alt="sead post" width={100} height={100} />
-          </Link> */}
           <Navbar />
           {children}
           <Footer />
