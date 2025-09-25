@@ -27,7 +27,7 @@ export async function generateMetadata({ params }) {
     summary: description,
     image,
   } = post.metadata;
-  let ogImage = image ? image : `기본 이미지`;
+  let ogImage = image ? image : `${baseUrl}/background.png`;
 
   return {
     title,
