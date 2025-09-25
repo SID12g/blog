@@ -1,7 +1,0 @@
-User-agent: Googlebot
-Allow : /
-
-User-agent: Yeti
-Allow: /
-
-Sitemap: https://post.sid12g.dev/sitemap.xml

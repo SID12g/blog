@@ -1,42 +1,17 @@
-import { articleContents } from "@/utils/article/getPosts";
-import { techContents } from "@/utils/tech/getPosts";
-import { MetadataRoute } from "next";
+import { getBlogPosts } from "@/utils";
 
-const URL = "https://post.sid12g.dev";
+export const baseUrl = "https://blog.sid12g.dev";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const techContentsList = techContents.map((postName) => ({
-    name: postName.meta.title,
-    url: postName.url,
-    slug: postName.slug,
-    date: postName.meta.date,
+export default async function sitemap() {
+  let blogs = getBlogPosts().map((post) => ({
+    url: `${baseUrl}/${post.slug}`,
+    lastModified: post.metadata.publishedAt,
   }));
 
-  const articleContentsList = articleContents.map((postName) => ({
-    name: postName.meta.title,
-    url: postName.url,
-    slug: postName.slug,
-    date: postName.meta.date,
+  let routes = ["", "/"].map((route) => ({
+    url: `${baseUrl}${route}`,
+    lastModified: new Date().toISOString().split("T")[0],
   }));
 
-  const techContentsRoute = techContentsList.map(({ url, date }) => {
-    return {
-      url: url,
-      lastModified: date,
-    };
-  });
-
-  const articleContentsRoute = articleContentsList.map(({ url, date }) => {
-    return {
-      url: url,
-      lastModified: date,
-    };
-  });
-
-  const routes = [""].map((route) => ({
-    url: `${URL}${route}`,
-    lastModified: new Date().toISOString(),
-  }));
-
-  return [...routes, ...techContentsRoute, ...articleContentsRoute];
+  return [...routes, ...blogs];
 }
