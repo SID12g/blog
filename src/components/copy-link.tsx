@@ -52,7 +52,7 @@ export default function CopyCurrentLink() {
       <div
         role="status"
         aria-live="polite"
-        className={`pointer-events-none absolute left-0 top-full mt-2 flex items-center gap-2 rounded-md bg-neutral-900/90 px-3 py-1.5 text-xs text-white shadow transition-opacity duration-300 ${
+        className={`pointer-events-none absolute left-0 top-full mt-2 flex items-center gap-2 rounded-md bg-neutral-900/90 px-3 py-1.5 text-xs text-white shadow transition-opacity duration-300 dark:bg-neutral-100/90 dark:text-neutral-900 ${
           visible ? "opacity-100" : "opacity-0"
         }`}
       >
