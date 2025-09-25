@@ -2,8 +2,7 @@ import { notFound } from "next/navigation";
 import { getBlogPosts } from "@/utils";
 import Tags from "@/components/tags";
 import HeroSection from "@/components/hero-section";
-import PostsList from "@/components/filtered-posts-list";
-import FilterPostSList from "@/components/filtered-posts-list";
+import FilterPostsList from "@/components/filtered-posts-list";
 
 export async function generateStaticParams() {
   let posts = getBlogPosts();
@@ -48,7 +47,7 @@ export default async function TagDetailPage({ params }) {
     <section>
       <HeroSection />
       <Tags selectedTag={decodeURIComponent(tag)} />
-      <FilterPostSList posts={filtered} />
+      <FilterPostsList posts={filtered} />
     </section>
   );
 }

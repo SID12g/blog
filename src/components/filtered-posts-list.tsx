@@ -8,11 +8,11 @@ interface Post {
   };
 }
 
-interface FilterPostSListProps {
+interface FilterPostsListProps {
   posts: Post[];
 }
 
-export default function FilterPostSList({ posts }: FilterPostSListProps) {
+export default function FilterPostsList({ posts }: FilterPostsListProps) {
   return (
     <div>
       {posts.map((post) => (
