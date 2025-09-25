@@ -106,7 +106,7 @@ export default async function Blog({ params }) {
       {post.metadata.tag && post.metadata.tag.length > 0 && (
         <div className="mt-2 mb-8">
           <div className="flex flex-wrap gap-2">
-            {post.metadata.tag.map((t) => (
+            {post.metadata.tag.sort().map((t) => (
               <a
                 key={t}
                 href={`tags/${encodeURIComponent(t)}`}
