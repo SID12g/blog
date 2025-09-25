@@ -4,8 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 export const metadata = {
-  title: "Blog",
-  description: "Read my blog.",
+  title: "sead post",
+  description: "Welcome to sead post",
 };
 
 export default function Page() {
