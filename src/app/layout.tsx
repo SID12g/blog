@@ -1,67 +1,62 @@
+import "./global.css";
 import type { Metadata } from "next";
-import "./globals.css";
-import Footer from "@/components/footer/footer";
-import Navbar from "@/components/navbar/navbar";
-import localFont from "next/font/local";
-import Script from "next/script";
-
-const wantedSans = localFont({
-  src: "./fonts/WantedSansVariable.woff2",
-  variable: "--font-wanted-sans",
-  weight: "100 900",
-  style: "normal",
-  display: "swap",
-});
-
-const tossFace = localFont({
-  src: "./fonts/TossFaceFontMac.ttf",
-  variable: "--font-toss-face",
-});
-
-const menlo = localFont({
-  src: "./fonts/Menlo-Regular.ttf",
-  variable: "--font-menlo",
-});
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import Footer from "../components/footer";
+import { baseUrl } from "./sitemap";
+import { Navbar } from "@/components/nav";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://post.sid12g.dev"),
+  metadataBase: new URL(baseUrl),
   title: "sead post",
-  description: "Welcome to sead post.",
+  description: "Welcome to sead post",
   openGraph: {
-    images: "https://post.sid12g.dev/og-image.webp",
+    title: "sead post",
+    description: "Welcome to sead post",
+    url: baseUrl,
+    siteName: "sead post",
+    locale: "ko_KR",
+    type: "website",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
 };
 
+const cx = (...classes) => classes.filter(Boolean).join(" ");
+
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="ko">
-      <head>
-        <Script
-          async
-          src="https://www.googletagmanager.com/gtag/js?id=G-R3FR04H7H3"
-        ></Script>
-        <Script id="google-tag-management">{`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-R3FR04H7H3');
-        `}</Script>
-        <meta
-          name="naver-site-verification"
-          content="64a062d6249bccc8a191d99ee7deb1dcfd4904b0"
-        />
-      </head>
-      <body
-        className={`${wantedSans.variable} ${tossFace.variable} ${menlo.variable}`}
-      >
-        <Navbar />
-        <div id="area" />
-        {children}
-        <Footer />
+    <html
+      lang="en"
+      className={cx(
+        "text-black bg-white dark:text-white dark:bg-black",
+        GeistSans.variable,
+        GeistMono.variable
+      )}
+    >
+      <body className="antialiased max-w-xl mx-auto mt-8 px-4">
+        <main className="flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0">
+          <Navbar />
+          {children}
+          <Footer />
+          <Analytics />
+          <SpeedInsights />
+        </main>
       </body>
     </html>
   );
