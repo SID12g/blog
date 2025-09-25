@@ -148,3 +148,19 @@ table {
 .title {
   text-wrap: balance;
 }
+
+.prose blockquote {
+  @apply border-l-4 border-neutral-300 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-800/50 pl-4 pr-4 py-2 my-4 italic text-neutral-700 dark:text-neutral-300;
+}
+
+.prose blockquote p {
+  @apply my-2;
+}
+
+.prose blockquote p:first-child {
+  @apply mt-0;
+}
+
+.prose blockquote p:last-child {
+  @apply mb-0;
+}
