@@ -33,7 +33,7 @@ export default function Comments() {
       reactionsEnabled="1"
       emitMetadata="0"
       inputPosition="top"
-      theme={theme}
+      theme={theme === "dark" ? "noborder_dark" : "noborder_light"}
       lang="ko"
       loading="lazy"
     />
