@@ -1,6 +1,6 @@
 # post.sid12g.dev
 
-조성민의 개인 블로그 입니다.
+<a href="https://post.sid12g.dev" target="_blank">조성민의 개인 블로그 입니다.</a>
 
 ## 기술 스택
 
