@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getBlogPosts } from "@/utils";
+import Tags from "@/components/tags";
+import Image from "next/image";
 
 export async function generateStaticParams() {
   let posts = getBlogPosts();
@@ -25,7 +27,6 @@ export async function generateMetadata({ params }) {
 
 export default async function TagDetailPage({ params }) {
   const { tag } = await params;
-  // URL에서 받은 tag를 디코딩하여 원본 태그와 비교할 수 있도록 함
   const decodedTag = decodeURIComponent(tag);
   let posts = getBlogPosts();
   let filtered = posts
@@ -44,14 +45,16 @@ export default async function TagDetailPage({ params }) {
 
   return (
     <section>
-      <h1 className="title font-semibold text-2xl tracking-tighter">
-        Tag: {decodedTag}
-      </h1>
-      <div className="mt-4 mb-6">
-        <Link className="text-sm underline" href={`/tags`}>
-          ← All tags
-        </Link>
-      </div>
+      <Image
+        src="/background.png"
+        alt="Background"
+        width={544}
+        height={240}
+        quality={95}
+        priority
+        className="w-full h-auto"
+      />
+      <Tags selectedTag={decodeURIComponent(tag)} />
       <div>
         {filtered.map((post) => (
           <Link
