@@ -25,7 +25,7 @@ export default function CopyCurrentLink() {
   }, []);
 
   return (
-    <div className="relative mb-3">
+    <div className="relative mb-6">
       <button
         type="button"
         onClick={copy}
