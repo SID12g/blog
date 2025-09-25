@@ -29,7 +29,7 @@ export default function CopyCurrentLink() {
       <button
         type="button"
         onClick={copy}
-        className="inline-flex items-center gap-2 rounded-md border border-neutral-300 px-3 py-1.5 text-sm text-neutral-700 hover:bg-neutral-100 active:translate-y-[0.5px] dark:border-neutral-700 dark:text-neutral-200 dark:hover:bg-neutral-800"
+        className="inline-flex items-center gap-2 rounded-md border border-neutral-300 px-3 py-1.5 text-sm text-neutral-700 hover:bg-neutral-100 hover:cursor-pointer active:translate-y-[0.5px] dark:border-neutral-700 dark:text-neutral-200 dark:hover:bg-neutral-800"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

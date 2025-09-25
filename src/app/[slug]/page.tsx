@@ -123,7 +123,7 @@ export default async function Blog({ params }) {
       </article>
       <div className="mt-12" />
       <CopyCurrentLink />
-      <div className="mt-12" />
+      <div className="h-[40px]" />
       <Comments />
       <div className="mt-12" />
     </section>
