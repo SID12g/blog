@@ -42,7 +42,7 @@ export default function RootLayout({
 }) {
   return (
     <html
-      lang="en"
+      lang="ko"
       className={cx(
         "text-black bg-white dark:text-white dark:bg-black",
         GeistSans.variable,
