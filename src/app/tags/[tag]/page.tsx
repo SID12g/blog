@@ -20,7 +20,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const { tag } = await params;
   const decodedTag = decodeURIComponent(tag);
-  let title = `Tag: ${decodedTag}`;
+  let title = `sead post: ${decodedTag}`;
   let description = `Posts tagged with ${decodedTag}.`;
   return { title, description };
 }

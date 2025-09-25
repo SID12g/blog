@@ -76,7 +76,7 @@ export default async function Blog({ params }) {
             description: post.metadata.summary,
             image: post.metadata.image
               ? `${baseUrl}${post.metadata.image}`
-              : `기본 이미지`,
+              : `${baseUrl}/background.png`,
             url: `${baseUrl}/${post.slug}`,
             author: {
               "@type": "Person",
@@ -87,7 +87,7 @@ export default async function Blog({ params }) {
       />
       {post.metadata.image && (
         <Image
-          src={post.metadata.image ? post.metadata.image : `기본 이미지`}
+          src={post.metadata.image}
           alt={post.metadata.title}
           width={800}
           height={400}
