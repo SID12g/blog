@@ -217,6 +217,17 @@ function CodeWithTree({
   );
 }
 
+function Blockquote({ children, ...props }) {
+  return (
+    <blockquote
+      className="border-l-4 border-neutral-300 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-800/50 pl-4 pr-4 py-2 my-4 italic text-neutral-700 dark:text-neutral-300"
+      {...props}
+    >
+      {children}
+    </blockquote>
+  );
+}
+
 function slugify(str) {
   return str
     .toString()
@@ -262,6 +273,7 @@ let components = {
   a: CustomLink,
   code: Code,
   pre: Pre,
+  blockquote: Blockquote,
   FileTree,
   CodeWithTree,
   Table,
