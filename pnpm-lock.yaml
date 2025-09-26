@@ -35,6 +35,9 @@ importers:
       next:
         specifier: 15.5.4
         version: 15.5.4(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      next-image-blur:
+        specifier: ^1.0.2
+        version: 1.0.2(next@15.5.4(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(plaiceholder@3.0.0(sharp@0.34.4))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sharp@0.34.4)
       next-mdx-remote:
         specifier: 5.0.0
         version: 5.0.0(@types/react@19.1.13)(react@19.1.1)
@@ -47,6 +50,9 @@ importers:
       react-dom:
         specifier: 19.1.1
         version: 19.1.1(react@19.1.1)
+      sharp:
+        specifier: ^0.34.4
+        version: 0.34.4
       sugar-high:
         specifier: 0.9.3
         version: 0.9.3
@@ -1743,6 +1749,15 @@ packages:
   natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
 
+  next-image-blur@1.0.2:
+    resolution: {integrity: sha512-ty7mZXSCo5AfEMPUfJP+duMWnY0ojNEjOYbVKDSPwQZoOru7VlBBN/31RNN1iPMeXoxyODWW7Hrt/OM817Ggyg==}
+    peerDependencies:
+      next: '>=10.0.0'
+      plaiceholder: ^3.0.0
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+      sharp: ^0.34.1
+
   next-mdx-remote@5.0.0:
     resolution: {integrity: sha512-RNNbqRpK9/dcIFZs/esQhuLA8jANqlH694yqoDBK8hkVdJUndzzGmnPHa2nyi90N4Z9VmzuSWNRpr5ItT3M7xQ==}
     engines: {node: '>=14', npm: '>=7'}
@@ -1846,6 +1861,11 @@ packages:
   picomatch@4.0.3:
     resolution: {integrity: sha512-5gTmgEY/sqK6gFXLIsQNH19lWb4ebPDLA4SdLP7dsWkIXHWlG66oPuVvXSGFPppYZz8ZDZq0dYYrbHfBCVUb1Q==}
     engines: {node: '>=12'}
+
+  plaiceholder@3.0.0:
+    resolution: {integrity: sha512-jwHxxHPnr1BwRzPCeZgEK2BMsEy2327sWynw3qb6XC/oGgGDUTPtR8pFxFQmNArhMBwhkUbUr5OPhhIJpCa8eQ==}
+    peerDependencies:
+      sharp: '>= 0.30.6'
 
   possible-typed-array-names@1.1.0:
     resolution: {integrity: sha512-/+5VFTchJDoVj3bhoqi6UeymcD00DAwb1nJwamzPvHEszJ4FpF6SNNbUbOS8yI56qHzdV8eK0qEfOSiodkTdxg==}
@@ -2335,8 +2355,7 @@ snapshots:
 
   '@humanwhocodes/retry@0.4.3': {}
 
-  '@img/colour@1.0.0':
-    optional: true
+  '@img/colour@1.0.0': {}
 
   '@img/sharp-darwin-arm64@0.34.4':
     optionalDependencies:
@@ -4236,6 +4255,14 @@ snapshots:
 
   natural-compare@1.4.0: {}
 
+  next-image-blur@1.0.2(next@15.5.4(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(plaiceholder@3.0.0(sharp@0.34.4))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sharp@0.34.4):
+    dependencies:
+      next: 15.5.4(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      plaiceholder: 3.0.0(sharp@0.34.4)
+      react: 19.1.1
+      react-dom: 19.1.1(react@19.1.1)
+      sharp: 0.34.4
+
   next-mdx-remote@5.0.0(@types/react@19.1.13)(react@19.1.1):
     dependencies:
       '@babel/code-frame': 7.27.1
@@ -4362,6 +4389,10 @@ snapshots:
   picomatch@2.3.1: {}
 
   picomatch@4.0.3: {}
+
+  plaiceholder@3.0.0(sharp@0.34.4):
+    dependencies:
+      sharp: 0.34.4
 
   possible-typed-array-names@1.1.0: {}
 
@@ -4578,7 +4609,6 @@ snapshots:
       '@img/sharp-win32-arm64': 0.34.4
       '@img/sharp-win32-ia32': 0.34.4
       '@img/sharp-win32-x64': 0.34.4
-    optional: true
 
   shebang-command@2.0.0:
     dependencies:
