@@ -1,7 +1,9 @@
+import { getBlurDataUrl } from "next-image-blur";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function HeroSection() {
+export default async function HeroSection() {
+  const blurDataURL = await getBlurDataUrl("/background.png");
   return (
     <Link
       href="https://www.youtube.com/watch?v=DXvjwv_9yHU&list=LL&index=4"
@@ -10,6 +12,8 @@ export default function HeroSection() {
       <Image
         src="/background.png"
         alt="Background"
+        placeholder="blur"
+        blurDataURL={blurDataURL}
         width={544}
         height={240}
         quality={95}
