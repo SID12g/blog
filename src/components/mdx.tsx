@@ -48,7 +48,9 @@ function RoundedImage(props) {
   const caption = props.title || props.alt;
   return (
     <figure className="my-4">
-      <Image alt={props.alt} className="rounded-lg" {...props} />
+      <div className="flex justify-center">
+        <Image alt={props.alt} className="rounded-lg" {...props} />
+      </div>
       {caption ? (
         <figcaption className="mt-2 text-center text-sm text-neutral-500 dark:text-neutral-400">
           {caption}
@@ -63,7 +65,9 @@ function MdxImage(props) {
   // Use span wrappers to remain valid inside <p> that markdown often creates around images
   return (
     <span className="block my-4">
-      <img alt={props.alt} className="rounded-lg m-0" {...props} />
+      <span className="flex justify-center block">
+        <img alt={props.alt} className="rounded-lg m-0" {...props} />
+      </span>
       {caption ? (
         <span className="mt-2 block text-center text-sm text-neutral-500 dark:text-neutral-400">
           {caption}
@@ -235,7 +239,7 @@ function slugify(str) {
     .trim() // Remove whitespace from both ends of a string
     .replace(/\s+/g, "-") // Replace spaces with -
     .replace(/&/g, "-and-") // Replace & with 'and'
-    .replace(/[^\w\-]+/g, "") // Remove all non-word characters except for -
+    .replace(/[^\w\u3131-\u3163\uac00-\ud7a3\-]+/g, "") // Keep Korean characters and word characters
     .replace(/\-\-+/g, "-"); // Replace multiple - with single -
 }
 
