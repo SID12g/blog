@@ -1,0 +1,295 @@
+---
+title: NextAuth.JS Credentials를 사용하여 회원가입, 로그인 구현
+publishedAt: 2024-03-18
+summary: Next.JS와 MongoDB를 연결하고, NextAuth.JS의 Credentials를 사용하여 회원가입과 로그인을 구현합니다.
+tag: Next
+---
+
+> 이 글은 NextAuth.JS v4를 기준으로 작성되었습니다.
+
+Next.JS에서는 NextAuth.JS를 통해 쉽게 로그인을 구현할 수 있습니다. 로그인 방식으로는 Credentials (직접 구현)와 Google, Github, Naver, Kakao 등 다양한 제공업체들이 있습니다.
+
+이번 글에서는 Credentials를 이용하여 자체 로그인을 구현합니다. 로그인 기능을 구현하기 전에 회원가입 기능을 추가하도록 하겠습니다.
+
+## MongoDB 연결하기
+
+회원가입 후 유저들을 등록하기 위해서는 데이터베이스가 필요합니다. 이번 글에서는 MongoDB를 사용합니다. 데이터베이스 사용을 위해 [MongoDB Atlas](https://account.mongodb.com/account/login)에서 데이터베이스를 생성합니다.
+
+데이터베이스를 생성했다면 SECURITY 메뉴에 있는 Network Access를 통해 접근 가능 IP를 설정주세요. 그 뒤에 Database Access에서 Atlas admin의 role을 가진 유저를 추가해주세요.
+
+그 뒤에 connect를 눌러 아래와 같은 연결 주소를 복사합니다. `<password>`에는 데이터베이스에서 관리자로 추가한 유저의 비밀번호를 입력해주세요.
+
+```bash
+mongodb+srv://<username>:<password>@db세부내용
+```
+
+URI를 복사한 뒤에 database.ts를 생성하고, mongodb를 다운로드합니다.
+
+```bash
+yarn add mongodb
+```
+
+mongodb를 다운로드 한 뒤 env파일에 MONGO_URI를 선언하고 위에서 복사한 데이터베이스 주소를 넣어줍니다.
+
+```tsx
+// src/util/database.ts
+import { MongoClient } from "mongodb";
+const url = process.env.MONGO_URI || "";
+let connectDB: Promise<MongoClient>;
+
+if (process.env.NODE_ENV === "development") {
+  if (!global._mongo) {
+    global._mongo = new MongoClient(url).connect();
+  }
+  connectDB = global._mongo;
+} else {
+  connectDB = new MongoClient(url).connect();
+}
+
+export { connectDB };
+```
+
+위에 코드가 데이터베이스와 연결하는 코드입니다. 만약 타입 에러가 발생할 경우, 아래의 파일을 추가해주세요.
+
+```ts
+// global.d.ts
+import type { MongoClient } from "mongodb";
+
+declare global {
+  namespace globalThis {
+    var _mongo: Promise<MongoClient>;
+  }
+}
+```
+
+## 회원가입 구현하기
+
+먼저 bcrypt를 설치합니다. TS환경에서는 @types/bcrpyt 설치가 추가로 필요합니다.
+
+```bash
+yarn add bcrpyt
+```
+
+```bash
+yarn add -D @types/bcrypt
+```
+
+그리고 회원가입 api 파일을 생성합니다.
+
+```ts
+// src/app/api/auth/signup/route.ts
+import { connectDB } from "@/util/database";
+import bcrypt from "bcrypt";
+import { NextResponse } from "next/server";
+
+export async function POST(request: Request, response: Response) {
+  const formData = await request.formData();
+  const username = formData.get("username");
+  const password: string | any = formData.get("password")?.toString();
+  const hash = await bcrypt.hash(password, 10);
+  const user = {
+    username,
+    password: hash,
+  };
+
+  let db = (await connectDB).db("<database>");
+  let dbuser = await db
+    .collection("<collection>")
+    .findOne({ username: username });
+
+  if (dbuser) {
+    return NextResponse.json({
+      status: 409,
+      error: "해당 번호는 이미 존재합니다.",
+    });
+  }
+
+  try {
+    let db = (await connectDB).db("<database>");
+    await db.collection("<collection>").insertOne(user);
+    return NextResponse.redirect(new URL("/api/auth/signin", request.url));
+  } catch (error) {
+    return NextResponse.json({ status: 500, error });
+  }
+}
+```
+
+그리고 전에 작성한 데이터베이스 파일 내에 있는 connectDB를 import 해와서 POST api를 생성합니다.
+
+> Next.JS의 경우 POST 요청의 body를 확인할 수 없기 때문에 위와 같이 formData를 사용하여 body를 수정하거나 사용합니다.
+
+데이터베이스에서 현재 유저와 이메일이 같은 유저가 있는지 확인한 뒤 이메일이 같은 유저가 없을 경우 데이터베이스에 등록되며 회원가입이 성공하게 됩니다.
+
+## NextAuth 사용하기
+
+이제 데이터베이스 연결과 회원가입 api가 모두 준비되었기 때문에 로그인을 담당해줄 NextAuth.JS를 설정해줍니다.
+
+로그인을 구현하기 위해 NextAuth와 mongodb adapter를 설치합니다.
+
+```bash
+yarn add next-auth
+```
+
+```bash
+yarn add @next-auth/mongodb-adapter
+```
+
+NextAuth.JS와 MongoDB adapter를 설치한 뒤 [...nextauth]폴더 안에 route.ts를 생성해줍니다.
+
+```ts
+// src/app/api/auth/[...nextauth]/route.ts
+import NextAuth from "next-auth/next";
+import CredentialsProvider from "next-auth/providers/credentials";
+import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
+import { connectDB } from "@/util/database";
+import bcrypt from "bcrypt";
+import { NextAuthOptions } from "next-auth";
+
+export const authOptions: NextAuthOptions = {
+  providers: [
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        username: {
+          label: "Username",
+          type: "username",
+          placeholder: "아이디를 입력해주세요.",
+        },
+        password: {
+          label: "Password",
+          type: "password",
+          placeholder: "비밀번호를 입력하세요.",
+        },
+      },
+      async authorize(credentials: any) {
+        let db = (await connectDB).db("<database>");
+        let user = await db
+          .collection("<collection>")
+          .findOne({ username: credentials?.username });
+        if (user) {
+          const pwcheck = await bcrypt.compare(
+            credentials.password,
+            user.password
+          );
+          if (pwcheck) {
+            return user as any;
+          }
+          return null;
+        } else {
+          return null;
+        }
+      },
+    }),
+  ],
+
+  session: {
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, //30d
+  },
+
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.user = user;
+        console.log(token);
+      }
+      return token;
+    },
+    async session({ session, token, user }) {
+      session.user = token;
+      console.log(session.user);
+      return session;
+    },
+  },
+
+  secret: process.env.NEXTAUTH_SECRET,
+  adapter: MongoDBAdapter(connectDB),
+};
+
+const handler = NextAuth(authOptions);
+
+export { handler as GET, handler as POST };
+```
+
+위 코드를 간단하게 설명한다면, CredentialsProvider를 사용하여 username과 password를 받는 로그인 폼을 생성합니다. 그 다음 username이 입력되면 username을 데이터베이스에서 찾고 찾은 뒤에 비밀번호가 일치하는지 확인합니다. 일치한다면 밑에 jwt 설정에 따라 30일 동안 로그인 정보를 유지합니다.
+
+NEXTAUTH_SECRET은 env에 설정되어야 하며 내용은 어떠한 문자열이 들어가도 괜찮습니다.
+
+```ts
+// src/next-auth.d.ts
+import { DefaultSession } from "next-auth";
+
+declare module "next-auth" {
+  interface User {
+    id?: string;
+    username?: string;
+  }
+
+  interface Session extends DefaultSession {
+    user?: User;
+  }
+}
+```
+
+만약 next-auth 관련 타입 에러가 발생할 경우 위의 파일 처럼 User의 타입을 지정해서 사용하시길 바랍니다.
+
+그리고 NextAuth.JS를 이용하기 위해서는 SessionProvider로 root를 감싸주어야 합니다.
+
+SessionProvider를 사용하기위해 AuthSession을 만들어줍니다.
+
+```tsx
+// src/components/AuthSession.tsx
+"use client";
+import { SessionProvider } from "next-auth/react";
+
+type Props = {
+  children: React.ReactNode;
+};
+
+export default function AuthSession({ children }: Props) {
+  return <SessionProvider>{children}</SessionProvider>;
+}
+```
+
+AuthSession을 만든 뒤 layout.tsx에서 AuthSession으로 둘러줍니다.
+
+```tsx:src/app/layout.tsx
+import type { Metadata } from "next";
+import "./globals.css";
+import AuthSession from "@/components/AuthSession";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]/route";
+
+export const metadata: Metadata = {
+  title: "Create Next App",
+  description: "Generated by create next app",
+};
+
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="ko">
+      <body>
+        <AuthSession>{children}</AuthSession>
+      </body>
+    </html>
+  );
+}
+```
+
+그러면 이제 session 정보를 사용할 수 있습니다.
+
+```tsx
+const session: any = await getServerSession(authOptions); // server component
+```
+
+```tsx
+const { data: session, status } = useSession(); // client component
+```
+
+또한 Client에서 signIn, signOut을 통하여 로그인, 로그아웃을 사용할 수 있습니다. 이렇게 NextAuth.JS를 통한 회원가입, 로그인 구현이 완료되었습니다.
+
+긴 글 읽어주셔서 감사합니다.

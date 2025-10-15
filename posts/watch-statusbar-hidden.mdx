@@ -1,0 +1,66 @@
+---
+title: Apple Watch 상태바 숨기는 법
+publishedAt: 2025-04-16
+summary: Apple Watch에서 상태바를 숨기는 법을 알아봅니다.
+tag: Swift
+---
+
+> 본 포스트는 [How to hide time on Apple Watch?](https://medium.com/@zj56789012/how-to-hide-time-on-apple-watch-9893ed0eff09)를 참고하여 작성하였습니다.
+
+## 주의
+
+- [How to hide or remove the time from the Apple Watch status bar? - Stack Overflow](https://stackoverflow.com/questions/38067952/how-to-hide-or-remove-the-time-from-the-apple-watch-status-bar)
+- [Is there a way to remove the status bar on a now playing view? Interface Apple Watch App - Apple Developer Forums](https://developer.apple.com/forums/thread/715376)
+- [Hide Watch Status Bar - Apple Developer Forums](https://developer.apple.com/forums/thread/7840)
+
+Apple 공식 Framework Engineer은 상태바를 숨길 수 없으며, 상태바를 가릴 경우 앱 승인이 거절될 수 있습니다.
+
+**단순히 내부 프로젝트, 토이 프로젝트 등 앱 승인이 필요 없는 경우에만 사용할 것을 권장드립니다.**
+
+## 상태바 숨기기
+
+Apple Watch는 모든 앱 상단에 시간이 표시되는 상태바가 존재합니다.
+
+![Apple Watch 시간이 보이는 상태바](posts/watch-statusbar-hidden/visible.webp)
+이 상태바는 Apple Watch가 시계라는 정체성에는 충실하지만 앱의 UX를 방해하는 요소입니다. 따라서 상태바를 숨기고 싶은 경우가 생길 수 있습니다.
+
+```swift
+import SwiftUI
+import AVFoundation
+import AVKit
+
+struct OverlayPlayerForTimeRemove: View {
+    var body: some View {
+        VideoPlayer(player: nil,videoOverlay: { })
+        .focusable(false)
+        .disabled(true)
+        .opacity(0)
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+    }
+}
+
+struct ContentView: View {
+    var body: some View {
+        VStack {
+            Image(systemName: "globe")
+                .imageScale(.large)
+                .foregroundStyle(.tint)
+            Text("Hello, world!")
+        }
+        .padding()
+        .background(OverlayPlayerForTimeRemove())
+    }
+}
+
+
+#Preview {
+    ContentView()
+}
+```
+
+이는 VideoPlayer를 사용하여 상태바를 없애는 코드입니다. 코드를 적용한다면 아래와 같이 상태바가 사라진 모습을 확인할 수 있습니다.
+
+![Apple Watch 상단에서 사라진 상태바](posts/watch-statusbar-hidden/invisible.webp)
+
+[GitHub - SID12g/watch-statusbar-hidden](https://github.com/SID12g/watch-statusbar-hidden?tab=readme-ov-file)
