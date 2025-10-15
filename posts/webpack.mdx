@@ -1,0 +1,203 @@
+---
+title: Webpack 알아보기
+publishedAt: 2024-07-15
+summary: Webpack이 왜 필요하고 어떤 구조를 가지는지, 어떻게 사용하는지 알아봅니다.
+tag: Webpack
+---
+
+## Webpack이란?
+
+Webpack이란 모던 JavaScript 애플리케이션을 위한 정적 모듈 번들러입니다. 모듈은 모듈형 프로그래밍에서 개별 기능으로 프로그램을 나눈 것을 의미합니다. 각 모듈은 전체 프로그램 보다 영향 범위가 좁기 때문에 검증과 디버깅 및 테스트가 간단하기 때문에 사용됩니다. 모듈 번들러는 여러 모듈을 합쳐 하나의 결과물을 추출하는 역할을 합니다.
+
+## 왜 Webpack이 필요한가?
+
+앞서 말했듯이 모듈 관리를 위해 Webpack이 사용됩니다. 뿐만 아니라 [다양한 포맷의 모듈](https://webpack.js.org/concepts/modules/)을 지원하며, 리소스와 에셋을 동시에 처리할 수 있습니다. 또한 Webpack은 성능과 로딩시간을 중요시 생각합니다. 프로젝트와 사용자에게 최고의 경험을 제공하기 위해 비동기 청크 로딩이나 프리패칭 같은 기능을 추가하고 있습니다.
+
+자세히 알고싶다면 [Webpack](https://webpack.js.org/concepts/why-webpack/) 공식 홈페이지를 참고해주세요.
+
+## Concepts
+
+Webpack을 이해하기 위해서는 주요 Concepts를 알고있어야 합니다.
+
+### Entry
+
+Entry는 Webpack에서 변환을 위해 필요한 최초 진입점이자 자바스크립트 파일 경로입니다. 기본값은 ./src/index입니다. webpack.config.js에서 수정할 수 있습니다.
+
+```js
+// webpack.config.js
+module.exports = {
+  entry: "./src/index.js",
+};
+```
+
+### Output
+
+Output은 Webpack으로 만들어진 파일을 의미합니다. filename을 통해 파일명을 지정하고 path를 통해서 경로를 지정합니다.
+
+```js
+// webpack.config.js
+module.exports = {
+  output: {
+    filename: "main.js",
+    path: path.resolve(__dirname, "./dist"),
+  },
+};
+```
+
+### Loaders
+
+Webpack은 기본적으로 JavaScript와 JSON 파일만 해석할 수 있습니다. Loader를 사용한다면 HTML, CSS, Fonts 등을 변환할 수 있습니다.
+
+```js
+// webpack.config.js
+module.exports = {
+  module: {
+    rules: [{ test: /\.txt$/, use: "raw-loader" }],
+  },
+};
+```
+
+위 코드의 경우 txt파일을 발견할 경우 raw-loader를 사용해 변환하는 코드입니다.
+
+### Plugins
+
+Loader는 특정 유형의 모듈을 변환하는데 사용되지만, Plugin은 번들을 최적화하거나, 애셋 관리, 환경 변수 주입 등 광범위한 작업을 수행합니다. 쉽게 말해서 Loader는 파일을 해석하고 변환, Plugin은 결과물의 형태 변환이라고 표현할 수 있습니다.
+
+```js
+// webpack.config.js
+var HtmlWebpackPlugin = require("html-webpack-plugin");
+
+module.exports = {
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "./src/index.html",
+    }),
+  ],
+};
+```
+
+위 코드는 Webpack으로 빌드한 결과물로 HTML 파일을 생성해주는 플러그인을 추가한 코드입니다.
+
+### Mode
+
+Mode 파라미터에 따라 Webpack 환경별 최적화를 활성화 할 수 있습니다. 기본 값은 production 입니다.
+
+```js
+// webpack.config.js
+module.exports = {
+  mode: "production",
+};
+```
+
+- development: 개발 모드를 의미합니다. 코드가 압축되지 않은 상태이며, 난독화가 되지 않은 상태입니다.
+- production: 배포 모드를 의미합니다. 코드가 압축된 상태이며, 파일을 난독화 합니다.
+- none: mode 설정이 되지 않았음을 의미합니다. development와 비슷한 상태입니다.
+
+### Browser Compatibility
+
+.Webpack은 ES5가 호환되는 브라우저를 지원하며 (IE8 이하는 지원하지 않음) import(), require.ensure()을 위한 Promise를 요구합니다. 구형 브라우저의 경우 [폴리필을 로드](https://webpack.js.org/guides/shimming/)해야 합니다.
+
+### Environment
+
+Webpack 5는 Node.js 버전 10.13.0 이상에서 실행됩니다.
+
+## Webpack 사용해보기
+
+Webpack을 사용해 보기 위해서 프로젝트 폴더를 하나 생성해줍니다. 그리고 package.json을 추가하기 위해 아래 명령어를 입력합니다.
+
+```bash
+yarn init
+```
+
+그리고 Webpack 사용을 위해 패키지들을 다운로드 합니다.
+
+```bash
+yarn add webpack webpack-cli webpack-dev-server html-webpack-plugin lodash
+```
+
+loadsh는 데이터의 구조를 쉽게 다루기 위해 사용되는 JavaScript 라이브러리 입니다. 라이브러리 설치가 끝났다면, src 폴더를 만들고, src 폴더 내에 index.html을 만듭니다.
+
+```html
+// src/index.html
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Webpack</title>
+    <script src="https://unpkg.com/lodash@4.17.12/lodash.js"></script>
+  </head>
+  <body>
+    <script src="index.js"></script>
+  </body>
+</html>
+```
+
+그리고 index.js를 만듭니다. index.js 내에 Powered by webpack을 HTML에서 나타낼 수 있는 함수를 작성합니다.
+
+```jsx
+// src/index.js
+import _ from "lodash";
+
+function component() {
+  var element = document.createElement("div");
+  element.innerHTML = _.join(["Powered", "by", "Webpack"], " ");
+
+  return element;
+}
+
+document.body.appendChild(component());
+```
+
+그리고 webpack.config.js를 루트 디렉토리에 만들어 준 뒤 자신이 원하는 대로 설정합니다.
+
+```js
+// webpack.config.js
+var path = require("path");
+var HtmlWebpackPlugin = require("html-webpack-plugin");
+
+module.exports = {
+  mode: "none",
+  entry: "./src/index.js",
+  output: {
+    filename: "main.js",
+    path: path.resolve(__dirname, "./dist"),
+  },
+  devServer: {
+    port: 9000,
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "./src/index.html",
+    }),
+  ],
+};
+```
+
+그리고 build와 debugging를 위해 package.json에서 scripts를 추가합니다.
+
+```json
+// package.json
+{
+  "scripts": {
+    "build": "webpack",
+    "dev": "webpack serve"
+  }
+}
+```
+
+scripts를 설정한다면 build와 debugging을 아래와 같은 명령어로 할 수 있습니다. 위에서 설정한대로 9000번 포트로 접속해야합니다.
+
+```bash
+yarn build
+```
+
+```bash
+yarn dev
+```
+
+![debugging](posts/webpack/test.webp) \_
+
+오늘은 Webpack에 대해 알아보고 사용해 보았습니다. 사실 프론트엔드 개발자에게 꼭 필요한 지식 중 하나가 Webpack이라고 생각해서 글로 정리해 보았습니다. 더 자세한 정보는 [Webpack 공식 문서](https://webpack.js.org/)를 참고해 주시길 바랍니다.
+
+긴 글 읽어주셔서 감사합니다.

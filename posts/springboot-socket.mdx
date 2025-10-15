@@ -1,0 +1,822 @@
+---
+title: Spring Boot를 사용하여 채팅 서비스 만들기
+publishedAt: 2025-03-17
+summary: Spring Boot와 Socket을 사용하여 간단한 채팅 예제를 구현해봅니다.
+tag: AI
+---
+
+> 해당 포스트는 한국디지털미디어고등학교 공업일반 프로젝트 수행평가를 목적으로 작성되었습니다. [자기계발계획서 확인하기](posts/springboot-socket/자기계발계획서.pdf)
+
+## Spring Boot 프로젝트 생성하기
+
+Spring Boot 프로젝트를 생성하기 위해선 [spring initializr](https://start.spring.io/)에 접속하여 프로젝트를 생성해야 합니다. 본 프로젝트는 Java 17 기반으로 생성하였으며, Spring Boot는 3.4.3 버전을 사용하였습니다. 옆에 Dependencies에서 개발에 사용할 dependency를 추가할 수 있는데, 저는 Lombok, Spring Boot DevTools, Spring Web 이렇게 3개를 추가하였습니다. 프로젝트 설정이 완료되었다면, 아래 Generate 버튼을 눌러 다운로드 후 InteliJ로 열어주세요.
+
+![spring initializr](posts/springboot-socket/init.webp)
+
+## Supabase Database 연결하기
+
+채팅 앱에서 회원 식별과 채팅 내용 저장 등의 기능을 위해 데이터베이스를 생성한 후 연결해줘야 합니다. 우선 Supbase에 접속합니다.
+
+![Supabase Dashboard](posts/springboot-socket/db-dash.webp)
+
+그리고 새 프로젝트를 생성합니다. 서버를 가까운 곳으로 선택하고, 비밀번호는 기억해놓아야 합니다.
+
+![Supabase New Project](posts/springboot-socket/db-set.webp)
+
+그리고 프로젝트가 생성되면 아래와 같은 페이지로 이동합니다. 이 페이지가 방금 만든 프로젝트의 대시보드입니다.
+
+![Supabase Project Dashboard](posts/springboot-socket/db-home.webp)
+
+Database를 생성했으니, Spring Boot 프로젝트에서 연결할 수 있도록 설정해줍니다.
+
+```java
+// build.gradle
+implementation 'org.springframework.session:spring-session-jdbc'
+implementation 'org.postgresql:postgresql'
+implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+implementation 'org.springframework.boot:spring-boot-starter-security'
+```
+
+첫 번째는 Spring Session JDBC 지원을 위한 라이브러리입니다. JDBC 기반 세션 저장소를 사용하여 세션 정보를 RDBMS(PostgreSQL, MySQL 등)에 저장할 수 있습니다.
+
+두 번째는 PostgreSQL 라이브러리입니다. Supabase는 PostgreSQL을 기반으로 만들어진 서비스이기 때문에, PostgreSQL 라이브러리를 추가해줍니다.
+
+세 번째는 Spring Data JPA 라이브러리입니다. JPA를 통해 리포지토리, 트랜잭션 관리, 데이터베이스 마이그레이션 등을 쉽게 처리할 수 있습니다.
+
+네 번째는 Spring Security 라이브러리입니다. Spring Security를 사용하여 인증, 권한 부여, 보안 설정 등을 쉽게 처리할 수 있습니다.
+
+![build.gradle](posts/springboot-socket/intelij-dependencies.webp)
+
+이 처럼 build.gradle에 위 세 가지 라이브러리를 추가해줍니다. 그리고 설치해줍니다.
+
+<p>
+  <img
+    src="posts/springboot-socket/gradle-download.webp"
+    alt="gradle download"
+    width="200px"
+  />
+  <em>gradle 다운로드 버튼을 눌러주세요.</em>
+</p>
+
+라이브러리를 설치했다면, 이제 Spring Boot 프로젝트와 연결해줘야 합니다. 연결을 위해 우선 Supabase로 돌아가 상단의 Connect 버튼을 눌러줍니다.
+
+![Supabase Connect](posts/springboot-socket/db-connect.webp)
+
+Connect 버튼을 누르면 위와 같은 화면이 뜨는데, 여기서 Type을 JDBC로 설정해줍니다. 그리고 Transaction pooler의 주소를 복사합니다.
+
+그리고 application.properties에 아래와 같이 Database 정보를 설정해줍니다.
+
+> Database 정보는 중요하기 때문에 Git을 사용하시는 분들은 gitignore에 추가해주세요.
+
+```java
+// application.properties
+spring.application.name=ProjectName
+
+spring.datasource.url=jdbc:postgresql://aws-0-ap-northeast-2.pooler.supabase.com:6543/postgres?user=<User>&password=<Password>
+spring.datasource.username=postgres
+spring.datasource.password=<Password>
+
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.jpa.properties.hibernate.show_sql=true
+spring.jpa.hibernate.ddl-auto=update
+spring.session.jdbc.initialize-schema=always
+```
+
+![application.properties](posts/springboot-socket/intelij-properties.webp)
+
+추가로 InteliJ Ultimate 버전을 사용하신다면 아래와 같이 InteliJ와 Database를 연결해서 Database를 쉽게 확인할 수 있습니다.
+
+![InteliJ Database 연결](posts/springboot-socket/intelij-dbcheck.webp)
+
+## Member 관련 기능 만들기
+
+우선 채팅 기능 구현 전 사용자들 간 식별을 위해 Member 테이블을 생성한 뒤 회원가입과 로그인 기능을 만들어 주겠습니다.
+
+![Member Class 생성](posts/springboot-socket/member-class.webp)
+
+위와 같이 Member Class를 생성한 뒤 프로젝트를 실행한다면 Supabase에 Member 테이블이 생성됩니다.
+
+![Supabase Member Table](posts/springboot-socket/db-member.webp)
+
+이제 회원가입과 로그인 기능을 만들어주겠습니다.
+
+> 오늘 프로젝트는 소켓 이해에 초점을 두었기 때문에 회원가입과 로그인 기능의 예외 처리 및 토큰 발행은 생략하고 유저를 단순히 유저 이름 값으로 식별하겠습니다.
+
+p.s. 옆에 있던 친구가 말도 안되는 소리라고 하였지만 제가 고3인 관계로 수행평가에 투자할 시간이 많이 없기 때문에 넘어가겠습니다. 😢
+
+우선 JPA를 사용하여 CRUD 기능을 구현하기 위해 MemberRepository를 생성합니다.
+
+```java
+// MemberRepository.java
+package com.pickle.socket.member;
+
+import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface MemberRepository extends JpaRepository<Member, Long> {
+    Optional<Member> findByUsername(String Username);
+}
+```
+
+![Member Repository](posts/springboot-socket/intelij-memberrepo.webp)
+
+그리고 BCryptPasswordEncoder 및 CSRF 보호를 비활성화 하기 위해서 SecurityConfig를 생성합니다.
+
+```java
+// SecurityConfig.java
+package com.pickle.socket;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.csrf((csrf) -> csrf.disable());
+
+        http.authorizeHttpRequests((authorize) ->
+                authorize.requestMatchers("/**").permitAll()
+        );
+
+        return http.build();
+    }
+}
+```
+
+![Security Config](posts/springboot-socket/intelij-securityconfig.webp)
+
+이제 회원가입과 로그인 기능을 만들어줍니다.
+
+```java
+// MemberController.Java
+package com.pickle.socket.member;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+@Controller
+@RequestMapping("member")
+@RequiredArgsConstructor
+public class MemberController {
+    private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    @PostMapping("/register")
+    @ResponseBody
+    String Register(String username, String password) {
+        Member member = new Member();
+        member.setUsername(username);
+        member.setPassword(passwordEncoder.encode(password));
+        memberRepository.save(member);
+        return "success";
+    }
+
+    @PostMapping("login")
+    @ResponseBody
+    String Login(String username, String password) {
+        var member = memberRepository.findByUsername(username).get();
+        if(passwordEncoder.matches(password, member.getPassword())) {
+            return member.getUsername();
+        } else {
+            return "fail";
+        }
+    }
+}
+```
+
+![Member Controller](posts/springboot-socket/intelij-membercontroller.webp)
+
+Postman으로 회원가입과 로그인을 시도해보면 Table에 잘 추가되는 것을 확인할 수 있습니다.
+
+![Postman Register](posts/springboot-socket/postman-register.webp)
+
+![Table에 추가된 Member](posts/springboot-socket/db-register.webp)
+
+![Postman Login](posts/springboot-socket/postman-login.webp)
+
+## Member 기능 적용하기
+
+이제 미리 만들어 놓은 프론트엔드로 이동하여 지금까지 만들었던 Member 관련 기능을 확인해보겠습니다.
+
+[프론트엔드 코드](https://github.com/pickle-team/front-socket)
+
+프론트엔드는 vite 기반 React로 개발되었습니다. 우선 CORS 문제를 해결하기 위해 vite.config.js에 proxy를 추가해줍니다.
+
+```javascript
+// vite.config.js
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+    },
+  },
+});
+```
+
+그리고 Login과 Register 기능을 추가하기 전 다시 한번 현재 프로젝트의 플로우를 확인해보자면,
+
+우선 Register의 경우 프론트엔드에서 Sign Up 모달에서 Username과 Password를 입력받아 MemberController의 Register로 요청을 보내고, Register에서는 MemberRepository를 통해 Member Table에 Username과 Password를 저장합니다.
+
+그리고 Login의 경우 Sign In 모달에서 Username과 Password를 입력받아 MemberController의 Login으로 요청을 보내고, Login에서는 MemberRepository를 통해 Member Table에서 Username을 찾아 Password를 비교하여 일치하면 Username을 반환합니다. 반환한 Username은 프론트엔드에서 Cookie에 저장되며 이는 사용자 구별을 위해 사용됩니다. (다시 한 번 강조하지만 저는 고3이기 때문에 넘어가는 것이지 여러분은 토큰 발행을 철저하게 해주시길 바랍니다.)
+
+### Register
+
+![Frontend Register](posts/springboot-socket/fe-register.webp)
+
+![Frontend Register Response Ok](posts/springboot-socket/fe-registerok.webp)
+
+![Supabase Register Response Ok](posts/springboot-socket/db-registerok.webp)
+
+### Login
+
+![Frontend Login](posts/springboot-socket/fe-signin.webp)
+
+![Frontend Login Reponse Ok](posts/springboot-socket/fe-signinok.webp)
+
+## Chat 기능 만들기
+
+Socket을 적용하기 전에, 우선 사용자가 메세지를 보내면 상대방이 확인할 수 있도록 간단한 로직을 만들어보도록 하겠습니다.
+
+### Socket 적용 전
+
+```java
+// ChatController.java
+package com.pickle.socket.chat;
+
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+@Controller
+@RequestMapping("chat")
+@RequiredArgsConstructor
+public class ChatController {
+    private final ChatRepository chatRepository;
+
+    @GetMapping("{room}")
+    @ResponseBody
+    public List<Chat> getChatsByRoom(@PathVariable Long room) {
+        return chatRepository.findByRoomOrderByTimestampDesc(room);
+    }
+
+    @PostMapping("post")
+    @ResponseBody
+    public Chat NewChat(@RequestBody Chat chat) {
+        return chatRepository.save(chat);
+    }
+}
+```
+
+위 코드는 `/chat/[방 ID]`에 요청하면 방 ID에 해당하는 채팅을 List로 반환해주고, `/chat/post`에 요청하면 사용자가 보낸 채팅을 DB에 저장하고 있습니다. 아래는 `/chat/post`로 POST 요청을 보내는 client 코드입니다.
+
+```tsx
+ try {
+      const username = getCookie("username");
+
+      if (!username) {
+        alert("You must be logged in to send messages");
+        return;
+      }
+
+      const time = new Date().toISOString();
+
+      const response = await fetch("/api/chat/post", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          room: id,
+          username,
+          content,
+          timestamp: time,
+        }),
+      });
+
+      if (response.ok) {
+        setContent("");
+        fetchMessages();
+      } else {
+        alert("Failed to send message");
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+      alert("An error occurred while sending your message");
+    }
+  };
+```
+
+이런식으로 코드를 작성할 경우 채팅에서 가장 중요한 실시간 소통이 불가능합니다.
+
+![Socket을 적용하지 않은 경우](posts/springboot-socket/not-socket.gif)
+
+### Socket 적용
+
+위의 문제를 해결하기 위해서 Socket을 사용해보도록 하겠습니다. 우선 build.gradle에 Socket을 추가한 뒤 설치합니다.
+
+```java
+implementation 'org.springframework.boot:spring-boot-starter-websocket'
+```
+
+그리고 채팅 메세지 DTO를 만들어줍니다.
+
+```java
+// ChatMessage.java
+package com.pickle.socket.chat;
+
+import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
+public class ChatMessage {
+    private String username;
+    private Long room;
+    private String content;
+    private LocalDateTime timestamp;
+
+    public Chat toEntity() {
+        Chat chat = new Chat();
+        chat.setUsername(this.username);
+        chat.setRoom(this.room);
+        chat.setContent(this.content);
+        chat.setTimestamp(this.timestamp != null ? this.timestamp : LocalDateTime.now());
+        return chat;
+    }
+}
+```
+
+그리고 Socket Controller를 만들어 Socket으로 메세지를 처리할 수 있도록 합니다.
+
+```java
+// ChatWebSocketController.javapackage
+com.pickle.socket.chat;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.stereotype.Controller;
+
+import java.time.LocalDateTime;
+
+@Slf4j
+@Controller
+@RequiredArgsConstructor
+public class ChatWebSocketController {
+
+    private final SimpMessageSendingOperations messagingTemplate;
+    private final ChatRepository chatRepository;
+
+    @MessageMapping("/chat.sendMessage")
+    public void sendMessage(@Payload ChatMessage chatMessage) {
+        log.info("Received message: {}", chatMessage);
+
+        if (chatMessage.getTimestamp() == null) {
+            chatMessage.setTimestamp(LocalDateTime.now());
+        }
+
+        Chat savedChat = chatRepository.save(chatMessage.toEntity());
+
+        messagingTemplate.convertAndSend(
+            "/topic/chat." + chatMessage.getRoom(),
+            savedChat
+        );
+    }
+}
+```
+
+이후 WebSocketConfig를 설정하여 클라이언트와 실시간 통신을 가능하도록 합니다.
+
+```java
+// WebSocketConfig.java
+package com.pickle.socket.config;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
+import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
+import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+
+@Configuration
+@EnableWebSocketMessageBroker
+public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry config) {
+        config.enableSimpleBroker("/topic");
+
+        config.setApplicationDestinationPrefixes("/app");
+    }
+
+    @Override
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/ws")
+                .setAllowedOriginPatterns("*")
+                .withSockJS();
+    }
+}
+```
+
+추가로 SessionConfig를 추가하여 PostgreSQL에서 발생할 수 있는 문제를 예방합니다.
+
+```java
+// SessionConfig.java
+package com.pickle.socket.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.support.lob.DefaultLobHandler;
+import org.springframework.jdbc.support.lob.LobHandler;
+import org.springframework.session.jdbc.config.annotation.web.http.EnableJdbcHttpSession;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+@Configuration
+@EnableJdbcHttpSession
+@EnableTransactionManagement
+public class SessionConfig {
+
+    @Bean
+    public LobHandler lobHandler() {
+        return new DefaultLobHandler();
+    }
+}
+```
+
+이제 프론트엔드 코드를 수정해주겠습니다. 우선 Stomp.js와 Sock.js를 설치하여 WebSocket 연동을 준비합니다.
+
+```bash
+pnpm add @stomp/stompjs sockjs-client
+```
+
+그리고 vite.config.js에 WebSocket과 관련된 프록시를 설정해줍니다.
+
+```js
+// vite.config.js
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react-swc";
+import { fileURLToPath, URL } from "node:url";
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
+    },
+  },
+  define: {
+    global: "window",
+  },
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+      "/ws": {
+        target: "http://localhost:8080",
+        ws: true,
+      },
+    },
+  },
+});
+```
+
+그리고 global 객체를 사용하기 위해 아래의 코드를 추가해줍니다.
+
+```ts
+// polyfills.ts
+window.global = window;
+```
+
+```ts
+// global.d.ts
+interface Window {
+  global: Window;
+}
+```
+
+이후 Socket 사용을 위해 WebSocketService를 추가해줍니다.
+
+```ts
+// WebSocketService.ts
+import { Client, IMessage } from "@stomp/stompjs";
+import SockJS from "sockjs-client";
+
+export type MessageHandler<T = unknown> = (message: T) => void;
+
+class WebSocketService {
+  private client: Client | null = null;
+  private handlers: Map<string, MessageHandler<unknown>[]> = new Map();
+
+  connect(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.client = new Client({
+        webSocketFactory: () => new SockJS("/ws"),
+        onConnect: () => {
+          console.log("WebSocket 연결 성공!");
+          resolve();
+        },
+        onStompError: (frame) => {
+          console.error("WebSocket 에러: ", frame);
+          reject(frame);
+        },
+        onDisconnect: () => {
+          console.log("WebSocket 연결 종료");
+        },
+      });
+
+      this.client.activate();
+    });
+  }
+
+  disconnect() {
+    if (this.client && this.client.connected) {
+      this.client.deactivate();
+    }
+  }
+
+  subscribe<T = unknown>(topic: string, callback: MessageHandler<T>) {
+    if (!this.client || !this.client.connected) {
+      console.error("WebSocket이 연결되지 않았습니다.");
+      return;
+    }
+
+    if (!this.handlers.has(topic)) {
+      this.handlers.set(topic, []);
+      this.client.subscribe(topic, (message: IMessage) => {
+        try {
+          const parsedBody = JSON.parse(message.body);
+          const handlers = this.handlers.get(topic) || [];
+          handlers.forEach((handler) => handler(parsedBody));
+        } catch (error) {
+          console.error("메시지 처리 중 오류 발생:", error);
+        }
+      });
+    }
+
+    const handlers = this.handlers.get(topic) || [];
+    handlers.push(callback as MessageHandler<unknown>);
+    this.handlers.set(topic, handlers);
+  }
+
+  unsubscribe(topic: string, callback?: MessageHandler<unknown>) {
+    if (!this.handlers.has(topic)) {
+      return;
+    }
+
+    if (callback) {
+      const handlers = this.handlers.get(topic) || [];
+      const updatedHandlers = handlers.filter(
+        (handler) => handler !== callback
+      );
+      this.handlers.set(topic, updatedHandlers);
+    } else {
+      this.handlers.delete(topic);
+    }
+  }
+
+  send(destination: string, body: Record<string, unknown>) {
+    if (!this.client || !this.client.connected) {
+      console.error("WebSocket이 연결되지 않았습니다.");
+      return;
+    }
+
+    this.client.publish({
+      destination,
+      body: JSON.stringify(body),
+    });
+  }
+}
+
+export default new WebSocketService();
+```
+
+이후 WebSocket을 사용한 요청으로 코드를 변경합니다.
+
+```tsx
+// Chat.tsx
+import { Box, Button, Flex, Heading, Text, TextArea } from "@radix-ui/themes";
+import { useParams } from "react-router";
+import { useEffect, useState } from "react";
+import WebSocketService from "../services/WebSocketService";
+
+interface ChatMessage {
+  id: number;
+  username: string;
+  content: string;
+  room: number;
+  timestamp: string;
+}
+
+export default function Chat() {
+  const { id } = useParams();
+  const [content, setContent] = useState("");
+  const [username, setUsername] = useState("");
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [connected, setConnected] = useState(false);
+
+  const getCookie = (name: string) => {
+    const cookieValue = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith(`${name}=`))
+      ?.split("=")[1];
+
+    return cookieValue || "";
+  };
+
+  const fetchMessages = async () => {
+    try {
+      const response = await fetch(`/api/chat/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Fetched messages:", data);
+        setMessages(data);
+      } else {
+        console.error("Failed to fetch messages:", response.status);
+      }
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
+  };
+
+  const setupWebSocket = async () => {
+    try {
+      await WebSocketService.connect();
+      setConnected(true);
+
+      WebSocketService.subscribe(
+        `/topic/chat.${id}`,
+        (message: ChatMessage) => {
+          setMessages((prevMessages) => [message, ...prevMessages]);
+        }
+      );
+    } catch (error) {
+      console.error("WebSocket 연결 실패:", error);
+    }
+  };
+
+  useEffect(() => {
+    const usernameFromCookie = getCookie("username");
+    if (usernameFromCookie) {
+      setUsername(usernameFromCookie);
+    }
+
+    fetchMessages();
+
+    setupWebSocket();
+
+    return () => {
+      WebSocketService.disconnect();
+    };
+  }, [id]);
+
+  const handleSendMessage = async () => {
+    if (!username || !content.trim()) {
+      return;
+    }
+
+    if (!connected) {
+      alert("서버에 연결되지 않았습니다. 페이지를 새로고침해 주세요.");
+      return;
+    }
+
+    const chatMessage = {
+      username,
+      content,
+      room: Number(id),
+      timestamp: new Date().toISOString(),
+    };
+
+    WebSocketService.send("/app/chat.sendMessage", chatMessage);
+
+    setContent("");
+  };
+
+  return (
+    <Flex height="100vh" direction="column" align="center" justify="center">
+      <Flex width="300px" direction="column" align="center" justify="center">
+        <Heading size="7">Chatting {id}</Heading>
+        <Box height="16px" />
+        <Text>{username}로 로그인 됨</Text>
+        <Box height="16px" />
+        <Flex
+          width="100%"
+          height="400px"
+          direction="column-reverse"
+          overflowY="scroll"
+          style={{
+            borderRadius: "12px",
+            padding: "12px",
+            border: "1px solid #d4d4d4",
+          }}
+        >
+          {messages.length > 0 ? (
+            messages.map((msg, index) => (
+              <Box
+                key={index}
+                style={{
+                  marginBottom: "8px",
+                  alignSelf:
+                    msg.username === username ? "flex-end" : "flex-start",
+                  backgroundColor:
+                    msg.username === username ? "#e3f2fd" : "#f5f5f5",
+                  padding: "8px 12px",
+                  borderRadius: "12px",
+                  maxWidth: "80%",
+                }}
+              >
+                <Text size="2" weight="bold">
+                  {msg.username + " "}
+                </Text>
+                <Text>{msg.content}</Text>
+              </Box>
+            ))
+          ) : (
+            <Text>No messages yet</Text>
+          )}
+        </Flex>
+        <Box height="16px" />
+        <TextArea
+          style={{ width: "100%" }}
+          placeholder="메세지를 입력하세요."
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              handleSendMessage();
+            }
+          }}
+        />
+        <Box height="16px" />
+        <Button
+          style={{ width: "100%" }}
+          color="purple"
+          onClick={handleSendMessage}
+        >
+          전송
+        </Button>
+      </Flex>
+    </Flex>
+  );
+}
+```
+
+그리고 서버를 재실행합니다.
+
+![Socket을 적용한 경우](posts/springboot-socket/apply-socket.gif)
+
+그렇다면 위와 같이 실시간 소통이 가능한 것을 볼 수 있습니다. 더 자세한 코드는 GitHub를 확인해주세요.
+
+감사합니다.
+
+- [GitHub - pickle-team/chat-socket](https://github.com/pickle-team/chat-socket)
+- [GitHub - pickle-team/front-socket](https://github.com/pickle-team/front-socket)
