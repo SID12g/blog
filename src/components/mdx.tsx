@@ -79,6 +79,22 @@ function MdxImage(props) {
 }
 
 function Code({ children, ...props }) {
+  // Check if this is inline code (no className) or code block (has className)
+  const isInlineCode = !props.className;
+
+  if (isInlineCode) {
+    // Inline code styling with neutral gray theme and red text (Notion style)
+    return (
+      <code
+        className="px-1.5 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-red-600 dark:text-red-400 text-sm font-medium"
+        {...props}
+      >
+        {children}
+      </code>
+    );
+  }
+
+  // Code block - use syntax highlighting
   let codeHTML = highlight(children);
   return <code dangerouslySetInnerHTML={{ __html: codeHTML }} {...props} />;
 }
