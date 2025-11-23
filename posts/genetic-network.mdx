@@ -35,14 +35,7 @@ tag: Algorithm
 
 다음 개체들의 일부 유전자는 무작위로 변경될 수 있습니다. 이는 새로운 개체 (해결 방안)을 탐색하는 데 중요한 역할을 합니다.
 
-<p>
-  <img
-    src="posts/genetic-network/genetic-algorithm-struct-chart.webp"
-    alt="유전 알고리즘 구조도"
-    width="400px"
-  />
-  <em>유전 알고리즘 구조도</em>
-</p>
+![유전 알고리즘 구조도](posts/genetic-network/genetic-algorithm-struct-chart.webp)
 
 ## 인공 신경망이란?
 
@@ -60,14 +53,7 @@ tag: Algorithm
 - 은닉층 (Hidden Layer): 입력층과 출력층 사이에 위치한 층으로, 데이터의 복잡한 패턴을 학습하는 역할을 합니다. 여러 개의 은닉층을 사용할 수 있으며, 이는 신경망의 깊이를 결정합니다.
 - 출력층 (Output Layer): 신경망의 최종 결과를 출력하는 층으로 예측하려는 결과의 수에 따라 노드 수가 결정됩니다.
 
-<p>
-  <img
-    src="posts/genetic-network/neural-network.webp"
-    alt="인공 신경망 구조"
-    width="400px"
-  />
-  <em>인공 신경망 구조</em>
-</p>
+![인공신경망 구조](posts/genetic-network/neural-network.webp)
 
 ## 인공 신경망 예제
 
@@ -118,14 +104,7 @@ document.querySelector("#predict").addEventListener("click", () =&gt; {
 
 아래는 죽림고수에 적용할 인공 신경망입니다. Input Layer에는 캐릭터의 위치 (x, y), 화살의 위치(x, y), 화살의 속도 (vx, vy)로 이루어져 8개의 Hidden Layer를 거쳐 움직임에 해당하는 Output Layer가 출력됩니다.
 
-<p>
-  <img
-    src="posts/genetic-network/bamboo-master-neural-network.webp"
-    alt="죽림고수에 적용할 인공 신경망 구조"
-    width="400px"
-  />
-  <em>죽림고수에 적용할 인공 신경망 구조</em>
-</p>
+![죽림고수에 적용할 인공 신경망 구조](posts/genetic-network/bamboo-master-neural-network.webp)
 
 ### 죽림고수 로직 이해하기
 
@@ -708,23 +687,8 @@ new p5(sketch);
 
 212세대 까지의 기록: [data.js](https://github.com/SID12g/genetic-bamboo-master/blob/main/src/data.js)
 
-<p>
-  <img
-    src="posts/genetic-network/dimigo1.webp"
-    alt="실험 중 건드리지 않는 착한 디미고 친구들"
-    width="400px"
-  />
-  <em>실험 중 건드리지 않는 착한 디미고 친구들</em>
-</p>
-
-<p>
-  <img
-    src="posts/genetic-network/dimigo2.webp"
-    alt="바로 변질됨"
-    width="400px"
-  />
-  <em>바로 변질됨</em>
-</p>
+![실험 중 건드리지 않는 착한 디미고 친구들](posts/genetic-network/dimigo1.webp)
+![바로 변질됨](posts/genetic-network/dimigo2.webp)
 
 실험은 [배포된 페이지](https://genetic-bamboo-master.vercel.app/)에서, 더 자세한
 코드는 [Github](https://github.com/SID12g/genetic-bamboo-master)에서 확인하실 수
