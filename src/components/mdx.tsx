@@ -3,6 +3,7 @@ import Image from "next/image";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { highlight } from "sugar-high";
 import React from "react";
+import remarkGfm from "remark-gfm";
 
 function Table({ data }) {
   let headers = data.headers.map((header, index) => (
@@ -265,6 +266,64 @@ function createHeading(level) {
   return Heading;
 }
 
+function TableWrapper({ children, ...props }) {
+  return (
+    <div className="my-4 overflow-x-auto">
+      <table
+        className="min-w-full border-collapse border border-neutral-300 dark:border-neutral-700"
+        {...props}
+      >
+        {children}
+      </table>
+    </div>
+  );
+}
+
+function TableHead({ children, ...props }) {
+  return (
+    <thead className="bg-neutral-100 dark:bg-neutral-800" {...props}>
+      {children}
+    </thead>
+  );
+}
+
+function TableBody({ children, ...props }) {
+  return <tbody {...props}>{children}</tbody>;
+}
+
+function TableRow({ children, ...props }) {
+  return (
+    <tr
+      className="border-b border-neutral-200 dark:border-neutral-700"
+      {...props}
+    >
+      {children}
+    </tr>
+  );
+}
+
+function TableHeader({ children, ...props }) {
+  return (
+    <th
+      className="px-4 py-2 text-left font-semibold text-neutral-800 dark:text-neutral-200 border border-neutral-300 dark:border-neutral-700"
+      {...props}
+    >
+      {children}
+    </th>
+  );
+}
+
+function TableCell({ children, ...props }) {
+  return (
+    <td
+      className="px-4 py-2 text-neutral-700 dark:text-neutral-300 border border-neutral-300 dark:border-neutral-700"
+      {...props}
+    >
+      {children}
+    </td>
+  );
+}
+
 let components = {
   h1: createHeading(1),
   h2: createHeading(2),
@@ -281,12 +340,28 @@ let components = {
   FileTree,
   CodeWithTree,
   Table,
+  table: TableWrapper,
+  thead: TableHead,
+  tbody: TableBody,
+  tr: TableRow,
+  th: TableHeader,
+  td: TableCell,
 };
 
 export function CustomMDX(props) {
+  const existingOptions = props.options || {};
+  const existingRemarkPlugins = existingOptions.mdxOptions?.remarkPlugins || [];
+
   return (
     <MDXRemote
       {...props}
+      options={{
+        ...existingOptions,
+        mdxOptions: {
+          ...existingOptions.mdxOptions,
+          remarkPlugins: [remarkGfm, ...existingRemarkPlugins],
+        },
+      }}
       components={{ ...components, ...(props.components || {}) }}
     />
   );
