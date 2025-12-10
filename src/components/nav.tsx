@@ -1,8 +1,18 @@
+import Image from "next/image";
 import Link from "next/link";
+import Logo from "@/../public/logo.png";
 
 const navItems = {
   "/": {
-    name: "🐱",
+    name: (
+      <Image
+        src={Logo}
+        alt="logo"
+        width={512}
+        height={512}
+        style={{ width: 44 }}
+      />
+    ),
   },
 };
 
@@ -20,7 +30,7 @@ export function Navbar() {
                 <Link
                   key={path}
                   href={path}
-                  className="text-xl transition-all hover:text-neutral-800 dark:hover:text-neutral-200 flex align-middle relative py-1 px-2 m-1"
+                  className="text-xl transition-all hover:text-neutral-800 dark:hover:text-neutral-200 flex align-middle relative px-1"
                 >
                   {name}
                 </Link>
