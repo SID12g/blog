@@ -1,18 +1,8 @@
-import Image from "next/image";
 import Link from "next/link";
-import Logo from "@/../public/logo.png";
 
 const navItems = {
   "/": {
-    name: (
-      <Image
-        src={Logo}
-        alt="logo"
-        width={512}
-        height={512}
-        style={{ width: 44 }}
-      />
-    ),
+    name: "🐱",
   },
 };
 

@@ -5,10 +5,7 @@ import Link from "next/link";
 export default async function HeroSection() {
   const blurDataURL = await getBlurDataUrl("/background.png");
   return (
-    <Link
-      href="https://www.youtube.com/watch?v=DXvjwv_9yHU&list=LL&index=4"
-      target="_blank"
-    >
+    <Link href="https://www.youtube.com/watch?v=fYbEaJP2sBM" target="_blank">
       <Image
         src="/background.png"
         alt="Background"
