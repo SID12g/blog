@@ -25,7 +25,7 @@ export default function Comments() {
   return (
     <Giscus
       id="comments"
-      repo="sid12g/post.sid12g.dev"
+      repo="sid12g/blog"
       repoId="R_kgDOMSXcpA"
       category="Comments"
       categoryId="DIC_kwDOMSXcpM4CgnDr"
