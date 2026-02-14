@@ -1,16 +1,24 @@
 @import "tailwindcss";
 
+/* ===== Selection ===== */
 ::selection {
-  background-color: #47a3f3;
-  color: #fefefe;
+  background-color: #a8d8ea;
+  color: #1a1a1a;
 }
 
+.dark ::selection,
+:root[class~="dark"] ::selection {
+  background-color: #3b6fa0;
+  color: #fafafa;
+}
+
+/* ===== Syntax Highlighting (sugar-high) ===== */
 :root {
   --sh-class: #2d5e9d;
-  --sh-identifier: #354150;
+  --sh-identifier: #37352f;
   --sh-sign: #8996a3;
   --sh-string: #007f7a;
-  --sh-keyword: #e02518;
+  --sh-keyword: #d44c47;
   --sh-comment: #a19595;
   --sh-jsxliterals: #6266d1;
   --sh-property: #e25a1c;
@@ -20,7 +28,7 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --sh-class: #4c97f8;
-    --sh-identifier: white;
+    --sh-identifier: #e0e0e0;
     --sh-keyword: #f47067;
     --sh-string: #0fa295;
   }
@@ -29,13 +37,58 @@
   }
 }
 
+/* ===== Base ===== */
 html {
   min-width: 320px;
 }
 
+/* ===== Prose – Notion-style Typography ===== */
+
+.prose {
+  line-height: 1.75;
+  letter-spacing: -0.003em;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+/* ---- Paragraphs ---- */
+.prose p {
+  @apply my-3 text-neutral-800 dark:text-neutral-200;
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+/* ---- Headings ---- */
+.prose h1 {
+  @apply mt-10 mb-4 font-bold tracking-tight text-neutral-900 dark:text-neutral-100;
+  font-size: 2em;
+  line-height: 1.3;
+}
+
+.prose h2 {
+  @apply mt-10 mb-3 font-semibold tracking-tight text-neutral-900 dark:text-neutral-100;
+  font-size: 1.5em;
+  line-height: 1.35;
+  padding-bottom: 0.35em;
+  border-bottom: 1px solid;
+  @apply border-neutral-200 dark:border-neutral-800;
+}
+
+.prose h3 {
+  @apply mt-8 mb-2 font-semibold tracking-tight text-neutral-900 dark:text-neutral-100;
+  font-size: 1.25em;
+  line-height: 1.4;
+}
+
+.prose h4 {
+  @apply mt-6 mb-2 font-semibold tracking-tight text-neutral-800 dark:text-neutral-200;
+  font-size: 1em;
+  line-height: 1.45;
+}
+
+/* ---- Anchor links on headings ---- */
 .prose .anchor {
   @apply absolute invisible no-underline;
-
   margin-left: -1em;
   padding-right: 0.5em;
   width: 80%;
@@ -47,12 +100,8 @@ html {
   @apply visible;
 }
 
-.prose a {
-  @apply underline transition-all decoration-neutral-400 dark:decoration-neutral-600 underline-offset-2 decoration-[0.1em];
-}
-
 .prose .anchor:after {
-  @apply text-neutral-300 dark:text-neutral-700;
+  @apply text-neutral-300 dark:text-neutral-600;
   content: "#";
 }
 
@@ -60,101 +109,73 @@ html {
   @apply visible;
 }
 
-.prose pre {
-  @apply bg-neutral-50 dark:bg-neutral-900 rounded-lg overflow-x-auto border border-neutral-200 dark:border-neutral-900 py-2 px-3 text-sm;
+/* ---- Links ---- */
+.prose a {
+  @apply text-neutral-900 dark:text-neutral-100 underline underline-offset-2;
+  text-decoration-color: rgba(55, 53, 47, 0.3);
+  transition:
+    text-decoration-color 0.15s ease,
+    background-color 0.15s ease;
 }
 
-.prose code {
-  @apply px-1 py-0.5 rounded-lg;
+.prose a:hover {
+  text-decoration-color: rgba(55, 53, 47, 0.8);
+  background-color: rgba(55, 53, 47, 0.06);
+  border-radius: 3px;
 }
 
-.prose pre code {
-  @apply p-0;
-  border: initial;
-  line-height: 1.5;
+@media (prefers-color-scheme: dark) {
+  .prose a {
+    text-decoration-color: rgba(255, 255, 255, 0.3);
+  }
+  .prose a:hover {
+    text-decoration-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 0.06);
+  }
 }
 
-.prose code span {
-  @apply font-medium;
-}
-
-.prose img {
-  /* Don't apply styles to next/image */
-  @apply m-0 max-w-full h-auto;
-}
-
-.prose p {
-  @apply my-4 text-neutral-800 dark:text-neutral-200;
-}
-
-.prose h1 {
-  @apply text-4xl font-medium tracking-tight mt-6 mb-2;
-}
-
-.prose h2 {
-  @apply text-2xl font-medium tracking-tight mt-6 mb-2;
-}
-
-.prose h3 {
-  @apply text-xl font-medium tracking-tight mt-6 mb-2;
-}
-
-.prose h4 {
-  @apply text-base font-medium tracking-tight mt-6 mb-2;
-}
-
-.prose strong {
-  @apply font-medium;
-}
-
+/* ---- Lists ---- */
 .prose ul {
-  @apply list-disc pl-6;
+  @apply list-disc pl-6 my-2;
 }
 
 .prose ol {
-  @apply list-decimal pl-6;
+  @apply list-decimal pl-6 my-2;
 }
 
-.prose > :first-child {
-  /* Override removing top margin, causing layout shift */
-  margin-top: 1.25em !important;
-  margin-bottom: 1.25em !important;
+.prose li {
+  @apply my-1 text-neutral-800 dark:text-neutral-200;
+  line-height: 1.75;
 }
 
-pre::-webkit-scrollbar {
-  display: none;
+.prose li > ul,
+.prose li > ol {
+  @apply mt-1 mb-0;
 }
 
-pre {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+/* ---- Strong / Bold ---- */
+.prose strong {
+  @apply font-semibold text-neutral-900 dark:text-neutral-100;
 }
 
-/* Remove Safari input shadow on mobile */
-input[type="text"],
-input[type="email"] {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
+/* ---- Horizontal Rule ---- */
+.prose hr {
+  @apply my-8 border-neutral-200 dark:border-neutral-800;
+  border-top-width: 1px;
 }
 
-table {
-  display: block;
-  max-width: fit-content;
-  overflow-x: auto;
-  white-space: nowrap;
-}
-
-.title {
-  text-wrap: balance;
-}
-
+/* ---- Blockquote (Notion callout style) ---- */
 .prose blockquote {
-  @apply border-l-4 border-neutral-300 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-800/50 pl-4 pr-4 py-2 my-4 italic text-neutral-700 dark:text-neutral-300;
+  @apply my-4 py-3 pl-4 pr-4;
+  border-left: 3px solid;
+  @apply border-neutral-300 dark:border-neutral-600;
+  @apply bg-neutral-50 dark:bg-neutral-800/40;
+  border-radius: 0 4px 4px 0;
 }
 
 .prose blockquote p {
-  @apply my-2;
+  @apply my-1 text-neutral-700 dark:text-neutral-300;
+  font-style: normal;
 }
 
 .prose blockquote p:first-child {
@@ -163,4 +184,72 @@ table {
 
 .prose blockquote p:last-child {
   @apply mb-0;
+}
+
+/* ---- Code blocks ---- */
+.prose pre {
+  @apply overflow-x-auto py-3 px-4 text-sm;
+  @apply bg-neutral-50 dark:bg-neutral-900;
+  border: none;
+  border-radius: 0;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.prose code {
+  @apply px-1.5 py-0.5 rounded text-sm;
+}
+
+.prose pre code {
+  @apply p-0;
+  border: initial;
+  line-height: 1.6;
+  background: transparent;
+}
+
+.prose code span {
+  @apply font-medium;
+}
+
+/* ---- Images ---- */
+.prose img {
+  @apply m-0 max-w-full h-auto rounded-md;
+}
+
+/* ---- Tables ---- */
+table {
+  display: block;
+  max-width: fit-content;
+  overflow-x: auto;
+  white-space: nowrap;
+  border-collapse: collapse;
+}
+
+/* ---- First child spacing ---- */
+.prose > :first-child {
+  margin-top: 1em !important;
+  margin-bottom: 1em !important;
+}
+
+/* ---- Scrollbar hiding for pre ---- */
+pre::-webkit-scrollbar {
+  display: none;
+}
+
+pre {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ---- Title ---- */
+.title {
+  text-wrap: balance;
+}
+
+/* ---- Safari input fix ---- */
+input[type="text"],
+input[type="email"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
