@@ -69,9 +69,6 @@ html {
   @apply mt-10 mb-3 font-semibold tracking-tight text-neutral-900 dark:text-neutral-100;
   font-size: 1.5em;
   line-height: 1.35;
-  padding-bottom: 0.35em;
-  border-bottom: 1px solid;
-  @apply border-neutral-200 dark:border-neutral-800;
 }
 
 .prose h3 {
