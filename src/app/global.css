@@ -220,7 +220,19 @@ html {
 
 /* ---- Images ---- */
 .prose img {
-  @apply m-0 max-w-full h-auto rounded-md;
+  @apply max-w-full h-auto rounded-md;
+  display: block;
+  margin: 0.5rem auto;
+}
+
+/* ---- Emphasis (em) ---- */
+.prose em {
+  @apply text-neutral-500 dark:text-neutral-400;
+  font-size: 0.875rem;
+  font-style: normal;
+  display: block;
+  text-align: center;
+  margin-top: 0.25rem;
 }
 
 /* ---- Tables ---- */
