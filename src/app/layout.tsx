@@ -19,6 +19,11 @@ export const metadata: Metadata = {
     siteName: "sead post",
     locale: "ko_KR",
     type: "website",
+    images: ["https://blog.sid12g.dev/background.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["https://blog.sid12g.dev/background.png"],
   },
   robots: {
     index: true,
@@ -46,7 +51,7 @@ export default function RootLayout({
       className={cx(
         "text-black bg-white dark:text-white dark:bg-black",
         GeistSans.variable,
-        GeistMono.variable
+        GeistMono.variable,
       )}
     >
       <body className="antialiased max-w-xl mx-auto mt-8 px-4">
