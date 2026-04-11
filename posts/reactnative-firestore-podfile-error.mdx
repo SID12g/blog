@@ -1,0 +1,41 @@
+---
+title: React Native Firebase 오류 The Swift pod FirebaseFirestore depends upon FirebaseCoreExtension and FirebaseFirestoreInternal
+publishedAt: 2024-01-06
+description: React Native Firestore 오류 해결하기
+tag: React Native
+---
+
+아마도 Firestore를 이용하던 중에 ios쪽에서 생긴 문제였던 것 같습니다. 해당 문제를 해결하기 위해서 열심히 구글링 해보았고 firebase를 ios에 적용하면서 맞닦들인 문제들이라는 포스트를 보게 되었습니다.
+
+> 해당 포스트 확인하기 : [firebase를 iOS에 적용하면서 맞닦들인 문제들](https://velog.io/@qkr135qkr/firebase%EB%A5%BC-iOS%EC%97%90-%EC%A0%81%EC%9A%A9%ED%95%98%EB%A9%B4%EC%84%9C-%EB%A7%9E%EB%8B%A6%EB%93%A4%EC%9D%B8-%EB%AC%B8%EC%A0%9C%EB%93%A4)
+
+해당 포스트에는
+
+```error
+The Swift pod `FirebaseCoreInternal` depends upon `GoogleUtilities`, which does not define modules.
+To opt into those targets generating module maps (which is necessary to import them from Swift when building as static libraries), you may set `use_modular_headers!` globally in your Podfile, or specify `:modular_headers => true` for particular dependencies.
+```
+
+와 같은 문제가 발생하였고
+
+```error
+podfile에 use_native_modules! 아래에
+
+pod 'GoogleUtilities', :modular_headers => true
+
+적은 뒤 pod install 다시 하시면 됩니다.
+```
+
+로 해결하였다고 하였습니다.
+
+저 또한 해당 문제도 겪었었지만 이제는 GoogleUtilities가 아닌 FirebaseCoreExtension 와 FirebaseFirestoreInternal에 대한 문제였기에 다시 검색해보았지만 벨로그, 스택오버플로우 등 어디에서도 답을 찾을 수 없었습니다.
+
+하지만 우연히 react-native-firebase github Issues에서 해당 문제를 똑같이 겪고있는 사용자의 사례를 볼 수 있었습니다.
+
+> 깃허브 이슈 확인하기 : [[🐛] ld: framework now found FirebaseFirestoreInternal](https://github.com/invertase/react-native-firebase/issues/7464)
+
+해결 방법은 다음과 같이 Podfile을 변경하면 됐습니다.
+
+![PodfileCode](/posts/reactnative-firestore-podfile-error/PodfileCode.png)
+
+실제로 해당 코드로 변경한 결과 Firestore가 ios에서 잘 동작하는 것을 확인할 수 있었습니다!
