@@ -1,0 +1,30 @@
+---
+title: Next.js 모바일 디버깅 중 작동 안함 이슈 해결
+publishedAt: 2026-04-27
+summary: 개발 중 겪은 Next.js 모바일 디버깅 이슈 해결 후기
+tag: Next
+---
+
+Next.js를 통해 학교 축제 부스에서 사용할 웹 앱을 개발하고 있었다.
+모바일 환경이 주 된 클라이언트 환경이었기 때문에, 모바일 환경에서 디버깅을 실행하였다.
+
+모바일 환경에서의 디버깅 과정은 다음과 같았다.
+
+1. 노트북에서 `pnpm dev`를 통해 서버를 실행한다.
+2. 노트북과 핸드폰이 같은 인터넷을 사용하고 있는지 확인한다.
+3. 노트북에서 내 IP를 복사한 뒤, 핸드폰에서 `내 노트북 IP:3000`으로 접속한다.
+
+접속한 결과 화면이 빌드되었지만, 터치가 작동하지 않는 문제가 발생하였다.
+이에 대해 처음에는 버튼 컴포넌트 문제인줄 알았으나, 노트북 환경에서 css를 검사한 결과 이상이 없어 해당 사례를 찾아보던 중 Next.js 이슈에서 해당 내용을 찾을 수 있었다.
+
+[[Bug]: Client Component onClick events fail to fire on iOS Safari (Next.js 16.2.1) #91908](https://github.com/vercel/next.js/issues/91908)
+
+위에서도 나와 같은 문제가 발생하였고, `next.config.mjs`에 allowedDevOrigins에 IP를 추가하여 해결하였다.
+
+```js
+// next.config.mjs
+
+const nextConfig: NextConfig = {
+  allowedDevOrigins: ["192.168.1.123"],  // your router ip
+};
+```
