@@ -27,7 +27,7 @@ export async function generateMetadata({ params }) {
     summary: description,
     image,
   } = post.metadata;
-  let ogImage = image ? image : `${baseUrl}/background.png`;
+  let ogImage = image ? image : `${baseUrl}/background.webp`;
 
   return {
     title,
@@ -76,7 +76,7 @@ export default async function Blog({ params }) {
             description: post.metadata.summary,
             image: post.metadata.image
               ? `${baseUrl}${post.metadata.image}`
-              : `${baseUrl}/background.png`,
+              : `${baseUrl}/background.webp`,
             url: `${baseUrl}/${post.slug}`,
             author: {
               "@type": "Person",

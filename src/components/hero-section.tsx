@@ -3,11 +3,11 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default async function HeroSection() {
-  const blurDataURL = await getBlurDataUrl("/background.png");
+  const blurDataURL = await getBlurDataUrl("/background.webp");
   return (
     <Link href="https://www.youtube.com/watch?v=fYbEaJP2sBM" target="_blank">
       <Image
-        src="/background.png"
+        src="/background.webp"
         alt="Background"
         placeholder="blur"
         blurDataURL={blurDataURL}

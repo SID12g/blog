@@ -19,11 +19,11 @@ export const metadata: Metadata = {
     siteName: "sead post",
     locale: "ko_KR",
     type: "website",
-    images: ["https://blog.sid12g.dev/background.png"],
+    images: ["https://blog.sid12g.dev/background.webp"],
   },
   twitter: {
     card: "summary_large_image",
-    images: ["https://blog.sid12g.dev/background.png"],
+    images: ["https://blog.sid12g.dev/background.webp"],
   },
   robots: {
     index: true,
