@@ -1,19 +1,18 @@
 @import "tailwindcss";
 
-/* ===== Selection ===== */
-::selection {
-  background-color: #a8d8ea;
-  color: #1a1a1a;
-}
-
-.dark ::selection,
-:root[class~="dark"] ::selection {
-  background-color: #3b6fa0;
-  color: #fafafa;
-}
-
-/* ===== Syntax Highlighting (sugar-high) ===== */
 :root {
+  --color-background: #f7f7f4;
+  --color-muted: #807d72;
+  --color-primary: #26251e;
+  --color-faint: #e6e5e0;
+  --color-accent: #f54e00;
+  --color-muted-15: #e6e5e0;
+  --color-muted-5: #ffffff;
+  --color-white-10: rgba(38, 37, 30, 0.12);
+  --color-hover: rgba(38, 37, 30, 0.04);
+  --color-black: #000000;
+  color-scheme: light;
+
   --sh-class: #2d5e9d;
   --sh-identifier: #37352f;
   --sh-sign: #8996a3;
@@ -27,19 +26,54 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
+    --color-background: #111111;
+    --color-muted: #7d7d7d;
+    --color-primary: #d8d8d8;
+    --color-faint: #323232;
+    --color-accent: #3a8ae0;
+    --color-muted-15: rgba(125, 125, 125, 0.15);
+    --color-muted-5: rgba(125, 125, 125, 0.05);
+    --color-white-10: rgba(255, 255, 255, 0.1);
+    --color-hover: rgba(255, 255, 255, 0.1);
+    color-scheme: dark;
+
     --sh-class: #4c97f8;
     --sh-identifier: #e0e0e0;
     --sh-keyword: #f47067;
     --sh-string: #0fa295;
   }
-  html {
-    color-scheme: dark;
-  }
+}
+
+@theme inline {
+  --color-background: var(--color-background);
+  --color-muted: var(--color-muted);
+  --color-primary: var(--color-primary);
+  --color-faint: var(--color-faint);
+  --color-accent: var(--color-accent);
+  --color-muted-15: var(--color-muted-15);
+  --color-muted-5: var(--color-muted-5);
+  --color-white-10: var(--color-white-10);
+  --color-hover: var(--color-hover);
+  --color-black: var(--color-black);
+
+  --font-pretendard: var(--font-pretendard);
+  --font-jetbrains-mono: var(--font-jetbrains-mono);
+}
+
+/* ===== Selection ===== */
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-background);
 }
 
 /* ===== Base ===== */
 html {
   min-width: 320px;
+  background: var(--color-background);
+  color: var(--color-primary);
+  font-family:
+    var(--font-pretendard), ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 /* ===== Prose – Notion-style Typography ===== */
@@ -53,32 +87,37 @@ html {
 
 /* ---- Paragraphs ---- */
 .prose p {
-  @apply my-3 text-neutral-800 dark:text-neutral-200;
+  @apply my-3;
+  color: var(--color-primary);
   font-size: 1rem;
   line-height: 1.8;
 }
 
 /* ---- Headings ---- */
 .prose h1 {
-  @apply mt-10 mb-4 font-bold tracking-tight text-neutral-900 dark:text-neutral-100;
+  @apply mt-10 mb-4 font-bold tracking-tight;
+  color: var(--color-primary);
   font-size: 2em;
   line-height: 1.3;
 }
 
 .prose h2 {
-  @apply mt-10 mb-3 font-semibold tracking-tight text-neutral-900 dark:text-neutral-100;
+  @apply mt-10 mb-3 font-semibold tracking-tight;
+  color: var(--color-primary);
   font-size: 1.5em;
   line-height: 1.35;
 }
 
 .prose h3 {
-  @apply mt-8 mb-2 font-semibold tracking-tight text-neutral-900 dark:text-neutral-100;
+  @apply mt-8 mb-2 font-semibold tracking-tight;
+  color: var(--color-primary);
   font-size: 1.25em;
   line-height: 1.4;
 }
 
 .prose h4 {
-  @apply mt-6 mb-2 font-semibold tracking-tight text-neutral-800 dark:text-neutral-200;
+  @apply mt-6 mb-2 font-semibold tracking-tight;
+  color: var(--color-primary);
   font-size: 1em;
   line-height: 1.45;
 }
@@ -108,7 +147,7 @@ html {
 }
 
 .prose .anchor:after {
-  @apply text-neutral-300 dark:text-neutral-600;
+  color: var(--color-faint);
   content: "#";
 }
 
@@ -118,27 +157,20 @@ html {
 
 /* ---- Links ---- */
 .prose a {
-  @apply text-neutral-900 dark:text-neutral-100 underline underline-offset-2;
-  text-decoration-color: rgba(55, 53, 47, 0.3);
+  @apply underline underline-offset-2;
+  color: var(--color-primary);
+  text-decoration-color: var(--color-muted);
   transition:
+    color 0.15s ease,
     text-decoration-color 0.15s ease,
     background-color 0.15s ease;
 }
 
 .prose a:hover {
-  text-decoration-color: rgba(55, 53, 47, 0.8);
-  background-color: rgba(55, 53, 47, 0.06);
+  color: var(--color-accent);
+  text-decoration-color: var(--color-accent);
+  background-color: var(--color-hover);
   border-radius: 3px;
-}
-
-@media (prefers-color-scheme: dark) {
-  .prose a {
-    text-decoration-color: rgba(255, 255, 255, 0.3);
-  }
-  .prose a:hover {
-    text-decoration-color: rgba(255, 255, 255, 0.7);
-    background-color: rgba(255, 255, 255, 0.06);
-  }
 }
 
 /* ---- Lists ---- */
@@ -151,7 +183,8 @@ html {
 }
 
 .prose li {
-  @apply my-1 text-neutral-800 dark:text-neutral-200;
+  @apply my-1;
+  color: var(--color-primary);
   line-height: 1.75;
 }
 
@@ -162,26 +195,27 @@ html {
 
 /* ---- Strong / Bold ---- */
 .prose strong {
-  @apply font-semibold text-neutral-900 dark:text-neutral-100;
+  @apply font-semibold;
+  color: var(--color-primary);
 }
 
 /* ---- Horizontal Rule ---- */
 .prose hr {
-  @apply my-8 border-neutral-200 dark:border-neutral-800;
-  border-top-width: 1px;
+  @apply my-8;
+  border-top: 1px solid var(--color-faint);
 }
 
 /* ---- Blockquote (Notion callout style) ---- */
 .prose blockquote {
   @apply my-4 py-3 pl-4 pr-4;
-  border-left: 3px solid;
-  @apply border-neutral-300 dark:border-neutral-600;
-  @apply bg-neutral-50 dark:bg-neutral-800/40;
+  border-left: 3px solid var(--color-faint);
+  background: var(--color-muted-5);
   border-radius: 0 4px 4px 0;
 }
 
 .prose blockquote p {
-  @apply my-1 text-neutral-700 dark:text-neutral-300;
+  @apply my-1;
+  color: var(--color-muted);
   font-style: normal;
 }
 
@@ -196,15 +230,16 @@ html {
 /* ---- Code blocks ---- */
 .prose pre {
   @apply overflow-x-auto py-3 px-4 text-sm;
-  @apply bg-neutral-50 dark:bg-neutral-900;
-  border: none;
-  border-radius: 0;
+  background: var(--color-muted-5);
+  border: 1px solid var(--color-faint);
+  border-radius: 8px;
   line-height: 1.6;
   margin: 0;
 }
 
 .prose code {
   @apply px-1.5 py-0.5 rounded text-sm;
+  font-family: var(--font-jetbrains-mono), monospace;
 }
 
 .prose pre code {
@@ -227,7 +262,7 @@ html {
 
 /* ---- Emphasis (em) ---- */
 .prose em {
-  @apply text-neutral-500 dark:text-neutral-400;
+  color: var(--color-muted);
   font-size: 0.875rem;
   font-style: normal;
   display: block;

@@ -53,7 +53,7 @@ function RoundedImage(props) {
         <Image alt={props.alt} className="rounded-lg" {...props} />
       </div>
       {caption ? (
-        <figcaption className="mt-2 text-center text-sm text-neutral-500 dark:text-neutral-400">
+        <figcaption className="mt-2 text-center text-sm text-muted">
           {caption}
         </figcaption>
       ) : null}
@@ -70,7 +70,7 @@ function MdxImage(props) {
         <img alt={props.alt} className="rounded-lg m-0" {...props} />
       </span>
       {caption ? (
-        <span className="mt-2 block text-center text-sm text-neutral-500 dark:text-neutral-400">
+        <span className="mt-2 block text-center text-sm text-muted">
           {caption}
         </span>
       ) : null}
@@ -83,10 +83,9 @@ function Code({ children, ...props }) {
   const isInlineCode = !props.className;
 
   if (isInlineCode) {
-    // Inline code styling with neutral gray theme and red text (Notion style)
     return (
       <code
-        className="px-1.5 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-red-600 dark:text-red-400 text-sm font-medium"
+        className="px-1.5 py-0.5 rounded bg-muted-15 border border-faint text-primary text-sm font-jetbrains-mono font-medium"
         {...props}
       >
         {children}
@@ -131,20 +130,20 @@ function Pre(props) {
     const codeHTML = highlight(code);
 
     return (
-      <div className="my-4 overflow-hidden rounded-lg border border-neutral-200 dark:border-neutral-900">
+      <div className="my-4 overflow-hidden rounded-lg border border-faint">
         {filename ? (
-          <div className="flex items-center justify-between px-3 py-2 text-xs bg-neutral-100 dark:bg-neutral-900/60 border-b border-neutral-200 dark:border-neutral-900">
-            <span className="font-medium text-neutral-700 dark:text-neutral-300 truncate">
+          <div className="flex items-center justify-between px-3 py-2 text-xs bg-muted-15 border-b border-faint">
+            <span className="font-medium text-muted font-jetbrains-mono truncate">
               {filename}
             </span>
             {language ? (
-              <span className="ml-2 uppercase text-[10px] text-neutral-500 dark:text-neutral-400">
+              <span className="ml-2 uppercase text-[10px] text-muted">
                 {language}
               </span>
             ) : null}
           </div>
         ) : null}
-        <pre className="bg-neutral-50 dark:bg-neutral-900 overflow-x-auto py-2 px-3 text-sm">
+        <pre className="bg-muted-5 overflow-x-auto py-2 px-3 text-sm">
           <code
             className={className}
             dangerouslySetInnerHTML={{ __html: codeHTML }}
@@ -176,9 +175,7 @@ function FileTreeNode({
         className={
           `flex items-center` +
           ` ${
-            isDirectory
-              ? "font-medium text-neutral-800 dark:text-neutral-200"
-              : "text-neutral-600 dark:text-neutral-400"
+            isDirectory ? "font-medium text-primary" : "text-muted"
           }`
         }
         style={{ paddingLeft: `${depth * 12}px` }}
@@ -203,7 +200,7 @@ function FileTreeNode({
 
 function FileTree({ tree }: { tree: FileTreeNodeType[] }) {
   return (
-    <div className="rounded-lg border border-neutral-200 dark:border-neutral-800 p-3 text-sm overflow-hidden">
+    <div className="rounded-lg border border-faint p-3 text-sm overflow-hidden">
       {tree.map((node, idx) => (
         <FileTreeNode key={`root-${idx}`} node={node} />
       ))}
@@ -227,7 +224,7 @@ function CodeWithTree({
         <FileTree tree={tree} />
       </div>
       <div className="md:col-span-3">
-        <pre className="bg-neutral-50 dark:bg-neutral-900 rounded-lg overflow-x-auto border border-neutral-200 dark:border-neutral-900 py-2 px-3 text-sm">
+        <pre className="bg-muted-5 rounded-lg overflow-x-auto border border-faint py-2 px-3 text-sm">
           <code
             className={`language-${language}`}
             dangerouslySetInnerHTML={{ __html: codeHTML }}
@@ -241,7 +238,7 @@ function CodeWithTree({
 function Blockquote({ children, ...props }) {
   return (
     <blockquote
-      className="border-l-4 border-neutral-300 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-800/50 pl-4 pr-4 py-2 my-4 italic text-neutral-700 dark:text-neutral-300"
+      className="border-l-4 border-faint bg-muted-5 pl-4 pr-4 py-2 my-4 italic text-muted"
       {...props}
     >
       {children}
@@ -286,7 +283,7 @@ function TableWrapper({ children, ...props }) {
   return (
     <div className="my-4 overflow-x-auto">
       <table
-        className="min-w-full border-collapse border border-neutral-300 dark:border-neutral-700"
+        className="min-w-full border-collapse border border-faint"
         {...props}
       >
         {children}
@@ -297,7 +294,7 @@ function TableWrapper({ children, ...props }) {
 
 function TableHead({ children, ...props }) {
   return (
-    <thead className="bg-neutral-100 dark:bg-neutral-800" {...props}>
+    <thead className="bg-muted-15" {...props}>
       {children}
     </thead>
   );
@@ -310,7 +307,7 @@ function TableBody({ children, ...props }) {
 function TableRow({ children, ...props }) {
   return (
     <tr
-      className="border-b border-neutral-200 dark:border-neutral-700"
+      className="border-b border-faint"
       {...props}
     >
       {children}
@@ -321,7 +318,7 @@ function TableRow({ children, ...props }) {
 function TableHeader({ children, ...props }) {
   return (
     <th
-      className="px-4 py-2 text-left font-semibold text-neutral-800 dark:text-neutral-200 border border-neutral-300 dark:border-neutral-700"
+      className="px-4 py-2 text-left font-semibold text-primary border border-faint"
       {...props}
     >
       {children}
@@ -332,7 +329,7 @@ function TableHeader({ children, ...props }) {
 function TableCell({ children, ...props }) {
   return (
     <td
-      className="px-4 py-2 text-neutral-700 dark:text-neutral-300 border border-neutral-300 dark:border-neutral-700"
+      className="px-4 py-2 text-muted border border-faint"
       {...props}
     >
       {children}

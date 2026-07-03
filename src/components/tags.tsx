@@ -29,8 +29,8 @@ export default function Tags({ selectedTag }: { selectedTag?: string }) {
           key={tag}
           href={selectedTag === tag ? `/` : `/tags/${encodeURIComponent(tag)}`}
           className={
-            `inline-block rounded-md bg-neutral-100 px-2 py-1 text-xs text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700` +
-            (selectedTag === tag ? " bg-neutral-200 dark:bg-neutral-700" : "")
+            `inline-block rounded-full border border-faint bg-muted-15 px-3 py-1 text-xs font-jetbrains-mono text-muted transition-colors duration-150 hover:border-accent hover:bg-hover` +
+            (selectedTag === tag ? " border-accent text-primary" : "")
           }
         >
           {tag} <span className="opacity-70">({count})</span>

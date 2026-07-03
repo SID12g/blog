@@ -99,7 +99,7 @@ export default async function Blog({ params }) {
         {post.metadata.title}
       </h1>
       <div className="flex justify-between items-center mt-2  text-sm">
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">
+        <p className="text-sm text-muted font-jetbrains-mono">
           {post.metadata.publishedAt}
         </p>
       </div>
@@ -110,7 +110,7 @@ export default async function Blog({ params }) {
               <a
                 key={t}
                 href={`tags/${encodeURIComponent(t)}`}
-                className="inline-block rounded-md bg-neutral-100 px-2 py-1 text-xs text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700"
+                className="inline-block rounded-full border border-faint bg-muted-15 px-3 py-1 text-xs font-jetbrains-mono text-muted transition-colors duration-150 hover:border-accent hover:bg-hover"
               >
                 {t}
               </a>
