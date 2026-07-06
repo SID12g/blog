@@ -1,11 +1,12 @@
 import "./global.css";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { Analytics } from "@vercel/analytics/react";
+import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Footer from "../components/footer";
 import { baseUrl } from "./sitemap";
 import { Navbar } from "@/components/nav";
+import Script from "next/script";
 
 const pretendard = localFont({
   src: "./fonts/PretendardVariable.woff2",
@@ -72,6 +73,19 @@ export default function RootLayout({
           <SpeedInsights />
         </main>
       </body>
+
+      <Script
+        async
+        src="https://www.googletagmanager.com/gtag/js?id=G-Q0QC9VFEYK"
+      />
+      <Script id="google-analytics">
+        {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-Q0QC9VFEYK');
+          `}
+      </Script>
     </html>
   );
 }
