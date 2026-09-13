@@ -1,0 +1,100 @@
+---
+title: React Native Expo 환경에서 인앱 구매 구현하기
+publishedAt: 2026-09-08
+summary: expo-iap를 이용한 인앱 구매 구현
+tag: React Native
+---
+
+Expo 환경에서 iap(인앱 결제)를 구현하기 위해서는 `react-native-purchases` 혹은 `expo-iap`를 이용해야한다.
+
+이번에는 그 중 `expo-iap`를 통해 인앱 결제를 구현해보겠다. [(Expo 참고)](https://docs.expo.dev/guides/in-app-purchases/)
+
+### 라이브러리 설치하기
+
+`expo-iap`를 사용하기 위해 `expo-build-properties`를 설치한다.
+
+```zsh
+pnpm dlx expo install expo-build-properties
+```
+
+이후 `expo-iap`를 설치한다.
+
+```zsh
+pnpm dlx expo install expo-iap
+```
+
+### iOS 설정
+
+iOS 16.4이상을 사용해야하며, 아래와 같이 iOS 설정을 추가해야한다.
+
+```json
+// app.json
+
+{
+  "expo": {
+    "ios": {
+      "deploymentTarget": "16.4"
+    }
+  }
+}
+```
+
+또한 iOS에서 Xcode에서 `Target > Signing & Capabilities > + Capability > In-App Purchase`에 들어가야한다.
+
+이를 위해 Expo 폴더 내에 ios 폴더를 Xcode를 통해 열어준다. 만약 ios 폴더가 생성되지 않았다면 빌드를 통해 생성한다.
+
+```zsh
+pnpm ios
+```
+
+![Xcode에서 Capability 클릭](posts/expo-iap/1.png)
+
+![In-App Purchase 추가](posts/expo-iap/2.png)
+
+> 만약 Apple Developer를 구매하지 않은 계정인 경우, In-App Purchase가 뜨지 않을 수 있다.
+
+이후 [App Store Connect](https://appstoreconnect.apple.com/apps)에 들어가 앱을 등록해준다.
+
+![신규 앱 클릭 후 번들 ID 선택](posts/expo-iap/3.png)
+
+앱을 생성했다면, 앱에 접속한 뒤, 앱 내 구입을 생성한다.
+
+![앱 내 구입 생성](posts/expo-iap/4.png)
+
+> 앱 내 구입의 경우 `심사에 추가`를 눌렀을 경우 오류가 나는 부분이 없도록 항목을 채워야 한다.
+
+이후에 상품에 대한 정보를 추가한다.
+
+![상품 정보 추가](posts/expo-iap/5.png)
+
+그리고 샌드박스 계정을 추가한다. 샌드박스 계정의 경우 실제 돈을 내지 않고 결제할 테스트 계정을 만드는 것으로, 애플 계정에 가입한 적이 없는 이메일을 사용한다.
+
+![샌드박스 계정 생성](posts/expo-iap/6.png)
+
+샌드박스 계정을 생성했다면, 이후 테스트할 아이폰에서 `설정 > 개발자 > 샌드박스 Apple 계정`에서 해당 계정으로 로그인한다.
+
+![샌드박스 계정 로그인](posts/expo-iap/7.png)
+
+### 안드로이드 설정
+
+공식문서에 따라 Expo SDK 57을 사용할 경우 `Kotlin 2.1.20`을 사용하기 위하여 이를 `app.json`에 명시한다. 이전 지원 Expo SDK의 경우, https://www.openiap.dev/docs/setup/expo 참고
+
+```json
+// app.json
+
+{
+  "expo": {
+    "plugins": [
+      "expo-iap",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "kotlinVersion": "2.1.20"
+          }
+        }
+      ]
+    ]
+  }
+}
+```
