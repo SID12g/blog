@@ -29,7 +29,7 @@ export default function CopyCurrentLink() {
       <button
         type="button"
         onClick={copy}
-        className="inline-flex items-center gap-2 rounded-md border border-faint px-3 py-1.5 text-sm text-primary transition-colors duration-150 hover:border-accent hover:bg-hover hover:cursor-pointer active:translate-y-[0.5px]"
+        className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-faint bg-background px-4 py-2.5 text-sm font-medium text-primary transition-colors duration-150 hover:bg-muted-15 active:translate-y-[0.5px]"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -52,7 +52,7 @@ export default function CopyCurrentLink() {
       <div
         role="status"
         aria-live="polite"
-        className={`pointer-events-none absolute left-0 top-full mt-2 flex items-center gap-2 rounded-md bg-primary px-3 py-1.5 text-xs text-background shadow transition-opacity duration-300 ${
+        className={`pointer-events-none absolute left-0 top-full mt-2 flex items-center gap-2 rounded-full bg-invert-bg px-3.5 py-2 text-xs font-medium text-invert-fg shadow-lg transition-opacity duration-300 ${
           visible ? "opacity-100" : "opacity-0"
         }`}
       >

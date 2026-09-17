@@ -1,10 +1,13 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
 import { CustomMDX } from "@/components/mdx";
 import { getBlogPosts } from "@/utils";
 import { baseUrl } from "@/app/sitemap";
-import Image from "next/image";
+import Divider from "@/components/divider";
 import CopyCurrentLink from "@/components/copy-link";
 import Comments from "@/components/comments";
+import { ArrowLeftIcon, CalendarIcon } from "@/components/icons";
 
 export async function generateStaticParams() {
   let posts = getBlogPosts();
@@ -21,13 +24,8 @@ export async function generateMetadata({ params }) {
     return;
   }
 
-  let {
-    title,
-    publishedAt: publishedTime,
-    summary: description,
-    image,
-  } = post.metadata;
-  let ogImage = image ? image : `${baseUrl}/background.webp`;
+  let { title, publishedAt: publishedTime, summary: description, image } = post.metadata;
+  let ogImage = image ? `${baseUrl}${image}` : `${baseUrl}/images/og-image.png`;
 
   return {
     title,
@@ -38,11 +36,7 @@ export async function generateMetadata({ params }) {
       type: "article",
       publishedTime,
       url: `${baseUrl}/${post.slug}`,
-      images: [
-        {
-          url: ogImage,
-        },
-      ],
+      images: [{ url: ogImage }],
     },
     twitter: {
       card: "summary_large_image",
@@ -62,7 +56,7 @@ export default async function Blog({ params }) {
   }
 
   return (
-    <section>
+    <div className="flex flex-col gap-8">
       <script
         type="application/ld+json"
         suppressHydrationWarning
@@ -76,7 +70,7 @@ export default async function Blog({ params }) {
             description: post.metadata.summary,
             image: post.metadata.image
               ? `${baseUrl}${post.metadata.image}`
-              : `${baseUrl}/background.webp`,
+              : undefined,
             url: `${baseUrl}/${post.slug}`,
             author: {
               "@type": "Person",
@@ -85,47 +79,66 @@ export default async function Blog({ params }) {
           }),
         }}
       />
+
+      <Link
+        href="/"
+        className="-my-2 flex w-fit items-center gap-2 py-2 pr-2 text-sm leading-none font-medium text-nav-inactive transition-colors duration-150 hover:text-primary"
+      >
+        <ArrowLeftIcon className="size-3.5" />
+        목록으로
+      </Link>
+
       {post.metadata.image && (
-        <Image
-          src={post.metadata.image}
-          alt={post.metadata.title}
-          width={800}
-          height={400}
-          sizes="(max-width: 640px) 100vw, 800px"
-          className="w-full h-auto rounded-md mb-4"
-        />
-      )}
-      <h1 className="title font-semibold text-2xl tracking-tighter">
-        {post.metadata.title}
-      </h1>
-      <div className="flex justify-between items-center mt-2  text-sm">
-        <p className="text-sm text-muted font-jetbrains-mono">
-          {post.metadata.publishedAt}
-        </p>
-      </div>
-      {post.metadata.tag && post.metadata.tag.length > 0 && (
-        <div className="mt-2 mb-8">
-          <div className="flex flex-wrap gap-2">
-            {post.metadata.tag.sort().map((t) => (
-              <a
-                key={t}
-                href={`tags/${encodeURIComponent(t)}`}
-                className="inline-block rounded-full border border-faint bg-muted-15 px-3 py-1 text-xs font-jetbrains-mono text-muted transition-colors duration-150 hover:border-accent hover:bg-hover"
-              >
-                {t}
-              </a>
-            ))}
-          </div>
+        <div className="aspect-video w-full overflow-hidden rounded-2xl border border-surface-border">
+          <Image
+            src={post.metadata.image}
+            alt={post.metadata.title}
+            width={1440}
+            height={810}
+            sizes="(min-width: 768px) 720px, 100vw"
+            className="size-full object-cover"
+          />
         </div>
       )}
+
+      <div className="flex flex-col gap-5">
+        <h1 className="title text-[32px] leading-tight font-bold">
+          {post.metadata.title}
+        </h1>
+
+        <div className="flex flex-wrap items-center justify-between gap-x-5 gap-y-3">
+          <span className="flex items-center gap-2 font-jetbrains-mono text-sm text-muted">
+            <CalendarIcon className="size-3.5" />
+            {post.metadata.publishedAt}
+          </span>
+
+          {post.metadata.tag && post.metadata.tag.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {post.metadata.tag.sort().map((t) => (
+                <Link
+                  key={t}
+                  href={`/?tag=${encodeURIComponent(t)}`}
+                  className="inline-block rounded-full border border-faint bg-background px-3 py-1 text-xs font-medium text-muted transition-colors duration-150 hover:bg-muted-15 hover:text-primary"
+                >
+                  {t}
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      <Divider />
+
       <article className="prose">
         <CustomMDX source={post.content} />
       </article>
-      <div className="mt-12" />
+
       <CopyCurrentLink />
-      <div className="h-[40px]" />
+
+      <Divider />
+
       <Comments />
-      <div className="mt-12" />
-    </section>
+    </div>
   );
 }

@@ -63,3 +63,20 @@ function getMDXData(dir) {
 export function getBlogPosts() {
   return getMDXData(path.join(process.cwd(), "posts"));
 }
+
+export function getTagCounts() {
+  let tagToCount: Record<string, number> = {};
+  for (let post of getBlogPosts()) {
+    for (let tag of post.metadata.tag || []) {
+      let key = tag.trim();
+      if (!key) continue;
+      tagToCount[key] = (tagToCount[key] || 0) + 1;
+    }
+  }
+  return Object.entries(tagToCount)
+    .sort((a, b) => {
+      if (b[1] !== a[1]) return b[1] - a[1];
+      return a[0].localeCompare(b[0]);
+    })
+    .map(([tag, count]) => ({ tag, count }));
+}

@@ -5,28 +5,6 @@ import { highlight } from "sugar-high";
 import React from "react";
 import remarkGfm from "remark-gfm";
 
-function Table({ data }) {
-  let headers = data.headers.map((header, index) => (
-    <th key={index}>{header}</th>
-  ));
-  let rows = data.rows.map((row, index) => (
-    <tr key={index}>
-      {row.map((cell, cellIndex) => (
-        <td key={cellIndex}>{cell}</td>
-      ))}
-    </tr>
-  ));
-
-  return (
-    <table>
-      <thead>
-        <tr>{headers}</tr>
-      </thead>
-      <tbody>{rows}</tbody>
-    </table>
-  );
-}
-
 function CustomLink(props) {
   let href = props.href;
 
@@ -50,7 +28,7 @@ function RoundedImage(props) {
   return (
     <figure className="my-4">
       <div className="flex justify-center">
-        <Image alt={props.alt} className="rounded-lg" {...props} />
+        <Image alt={props.alt} className="rounded-xl" {...props} />
       </div>
       {caption ? (
         <figcaption className="mt-2 text-center text-sm text-muted">
@@ -67,7 +45,7 @@ function MdxImage(props) {
   return (
     <span className="block my-4">
       <span className="flex justify-center block">
-        <img alt={props.alt} className="rounded-lg m-0" {...props} />
+        <img alt={props.alt} className="rounded-xl m-0" {...props} />
       </span>
       {caption ? (
         <span className="mt-2 block text-center text-sm text-muted">
@@ -85,7 +63,7 @@ function Code({ children, ...props }) {
   if (isInlineCode) {
     return (
       <code
-        className="px-1.5 py-0.5 rounded bg-muted-15 border border-faint text-primary text-sm font-jetbrains-mono font-medium"
+        className="px-1.5 py-0.5 rounded-md bg-muted-15 text-primary text-[0.875em] font-jetbrains-mono font-medium"
         {...props}
       >
         {children}
@@ -130,9 +108,9 @@ function Pre(props) {
     const codeHTML = highlight(code);
 
     return (
-      <div className="my-4 overflow-hidden rounded-lg border border-faint">
+      <div className="my-5 overflow-hidden rounded-xl border border-surface-border">
         {filename ? (
-          <div className="flex items-center justify-between px-3 py-2 text-xs bg-muted-15 border-b border-faint">
+          <div className="flex items-center justify-between px-4 py-2.5 text-xs bg-muted-5 border-b border-surface-border">
             <span className="font-medium text-muted font-jetbrains-mono truncate">
               {filename}
             </span>
@@ -143,7 +121,7 @@ function Pre(props) {
             ) : null}
           </div>
         ) : null}
-        <pre className="bg-muted-5 overflow-x-auto py-2 px-3 text-sm">
+        <pre className="bg-muted-5 overflow-x-auto py-4 px-4 text-sm leading-[1.7]">
           <code
             className={className}
             dangerouslySetInnerHTML={{ __html: codeHTML }}
@@ -155,90 +133,10 @@ function Pre(props) {
   return <pre {...props} />;
 }
 
-type FileTreeNodeType = {
-  name: string;
-  type: "file" | "dir";
-  children?: FileTreeNodeType[];
-};
-
-function FileTreeNode({
-  node,
-  depth = 0,
-}: {
-  node: FileTreeNodeType;
-  depth?: number;
-}) {
-  const isDirectory = node.type === "dir";
-  return (
-    <div className="leading-6">
-      <div
-        className={
-          `flex items-center` +
-          ` ${
-            isDirectory ? "font-medium text-primary" : "text-muted"
-          }`
-        }
-        style={{ paddingLeft: `${depth * 12}px` }}
-      >
-        <span className="mr-2 select-none">{isDirectory ? "📁" : "📄"}</span>
-        <span className="truncate">{node.name}</span>
-      </div>
-      {isDirectory && node.children && node.children.length > 0 ? (
-        <div className="mt-1">
-          {node.children.map((child, idx) => (
-            <FileTreeNode
-              key={`${node.name}-${idx}`}
-              node={child}
-              depth={depth + 1}
-            />
-          ))}
-        </div>
-      ) : null}
-    </div>
-  );
-}
-
-function FileTree({ tree }: { tree: FileTreeNodeType[] }) {
-  return (
-    <div className="rounded-lg border border-faint p-3 text-sm overflow-hidden">
-      {tree.map((node, idx) => (
-        <FileTreeNode key={`root-${idx}`} node={node} />
-      ))}
-    </div>
-  );
-}
-
-function CodeWithTree({
-  code,
-  language = "tsx",
-  tree,
-}: {
-  code: string;
-  language?: string;
-  tree: FileTreeNodeType[];
-}) {
-  const codeHTML = highlight(code);
-  return (
-    <div className="my-4 md:grid md:grid-cols-5 gap-4">
-      <div className="md:col-span-2 mb-4 md:mb-0">
-        <FileTree tree={tree} />
-      </div>
-      <div className="md:col-span-3">
-        <pre className="bg-muted-5 rounded-lg overflow-x-auto border border-faint py-2 px-3 text-sm">
-          <code
-            className={`language-${language}`}
-            dangerouslySetInnerHTML={{ __html: codeHTML }}
-          />
-        </pre>
-      </div>
-    </div>
-  );
-}
-
 function Blockquote({ children, ...props }) {
   return (
     <blockquote
-      className="border-l-4 border-faint bg-muted-5 pl-4 pr-4 py-2 my-4 italic text-muted"
+      className="rounded-xl border border-surface-border bg-muted-5 px-4 py-3.5 my-5 text-[0.9375rem] leading-[1.7] text-muted"
       {...props}
     >
       {children}
@@ -281,11 +179,8 @@ function createHeading(level) {
 
 function TableWrapper({ children, ...props }) {
   return (
-    <div className="my-4 overflow-x-auto">
-      <table
-        className="min-w-full border-collapse border border-faint"
-        {...props}
-      >
+    <div className="my-5 overflow-x-auto rounded-xl border border-surface-border">
+      <table className="w-full border-collapse text-sm leading-[1.6]" {...props}>
         {children}
       </table>
     </div>
@@ -294,7 +189,7 @@ function TableWrapper({ children, ...props }) {
 
 function TableHead({ children, ...props }) {
   return (
-    <thead className="bg-muted-15" {...props}>
+    <thead className="bg-muted-5" {...props}>
       {children}
     </thead>
   );
@@ -306,10 +201,7 @@ function TableBody({ children, ...props }) {
 
 function TableRow({ children, ...props }) {
   return (
-    <tr
-      className="border-b border-faint"
-      {...props}
-    >
+    <tr className="border-b border-surface-border last:border-b-0" {...props}>
       {children}
     </tr>
   );
@@ -318,7 +210,7 @@ function TableRow({ children, ...props }) {
 function TableHeader({ children, ...props }) {
   return (
     <th
-      className="px-4 py-2 text-left font-semibold text-primary border border-faint"
+      className="px-4 py-2.5 text-left font-semibold whitespace-nowrap text-primary"
       {...props}
     >
       {children}
@@ -328,10 +220,7 @@ function TableHeader({ children, ...props }) {
 
 function TableCell({ children, ...props }) {
   return (
-    <td
-      className="px-4 py-2 text-muted border border-faint"
-      {...props}
-    >
+    <td className="px-4 py-2.5 align-top text-muted" {...props}>
       {children}
     </td>
   );
@@ -350,9 +239,6 @@ let components = {
   code: Code,
   pre: Pre,
   blockquote: Blockquote,
-  FileTree,
-  CodeWithTree,
-  Table,
   table: TableWrapper,
   thead: TableHead,
   tbody: TableBody,

@@ -1,5 +1,5 @@
 import "./global.css";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -35,11 +35,11 @@ export const metadata: Metadata = {
     siteName: "sead post",
     locale: "ko_KR",
     type: "website",
-    images: ["https://blog.sid12g.dev/background.webp"],
+    images: ["/images/og-image.png"],
   },
   twitter: {
     card: "summary_large_image",
-    images: ["https://blog.sid12g.dev/background.webp"],
+    images: ["/images/og-image.png"],
   },
   robots: {
     index: true,
@@ -54,6 +54,13 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0d0d0d" },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -64,14 +71,16 @@ export default function RootLayout({
       lang="ko"
       className={`${pretendard.variable} ${jetBrainsMono.variable} antialiased`}
     >
-      <body className="max-w-xl mx-auto mt-8 px-4">
-        <main className="flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0">
+      <body>
+        <Analytics />
+        <SpeedInsights />
+        <div className="flex min-h-screen flex-col pt-6 sm:pt-[60px]">
           <Navbar />
-          {children}
+          <main className="mx-auto w-full max-w-[768px] flex-1 px-6">
+            {children}
+          </main>
           <Footer />
-          <Analytics />
-          <SpeedInsights />
-        </main>
+        </div>
       </body>
 
       <Script

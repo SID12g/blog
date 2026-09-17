@@ -1,34 +1,36 @@
 import Link from "next/link";
-
-const navItems = {
-  "/": {
-    name: "🐱",
-  },
-};
+import IconLink from "@/components/icon-link";
+import { ArrowUpRightIcon, GitHubIcon, RssIcon } from "@/components/icons";
 
 export function Navbar() {
   return (
-    <aside className="-ml-[8px] mb-6 tracking-tight">
-      <div className="lg:sticky lg:top-20">
-        <nav
-          className="flex flex-row items-start relative px-0 pb-0 fade md:overflow-auto scroll-pr-6 md:relative"
-          id="nav"
+    <header className="sticky top-4 z-50 mb-11 flex justify-center px-6 sm:mb-[60px]">
+      <nav className="flex w-full items-center justify-between gap-3 rounded-full border border-faint bg-background px-3 py-2 md:w-fit">
+        <Link
+          href="/"
+          className="shrink-0 py-2.5 pl-3 text-base leading-none font-semibold"
         >
-          <div className="flex flex-row space-x-0 pr-10">
-            {Object.entries(navItems).map(([path, { name }]) => {
-              return (
-                <Link
-                  key={path}
-                  href={path}
-                  className="text-xl transition-colors duration-150 hover:text-accent flex align-middle relative px-1"
-                >
-                  {name}
-                </Link>
-              );
-            })}
-          </div>
-        </nav>
-      </div>
-    </aside>
+          sead post
+        </Link>
+
+        <div className="flex shrink-0 items-center gap-1">
+          <IconLink href="/rss" label="RSS 구독">
+            <RssIcon className="size-[18px]" />
+          </IconLink>
+          <IconLink href="https://github.com/SID12g/blog" label="GitHub">
+            <GitHubIcon className="size-[18px]" />
+          </IconLink>
+          <Link
+            href="https://sid12g.dev"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group ml-1 flex items-center gap-2 rounded-full border border-invert-bg bg-invert-bg px-3 py-2.5 text-sm leading-none font-medium whitespace-nowrap text-invert-fg transition-colors duration-150 hover:border-invert-hover hover:bg-invert-hover"
+          >
+            Portfolio
+            <ArrowUpRightIcon className="size-3.5 transition-transform duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </Link>
+        </div>
+      </nav>
+    </header>
   );
 }

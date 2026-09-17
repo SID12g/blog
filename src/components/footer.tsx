@@ -1,61 +1,35 @@
-function ArrowIcon() {
-  return (
-    <svg
-      width="12"
-      height="12"
-      viewBox="0 0 12 12"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M2.07102 11.3494L0.963068 10.2415L9.2017 1.98864H2.83807L2.85227 0.454545H11.8438V9.46023H10.2955L10.3097 3.09659L2.07102 11.3494Z"
-        fill="currentColor"
-      />
-    </svg>
-  );
-}
+import Link from "next/link";
+import Divider from "@/components/divider";
+import IconLink from "@/components/icon-link";
+import { GitHubIcon, RssIcon } from "@/components/icons";
 
 export default function Footer() {
+  const year = new Date().getFullYear();
   return (
-    <footer className="mb-8">
-      <ul className="font-sm mt-8 flex flex-col space-x-0 space-y-2 text-muted md:flex-row md:space-x-4 md:space-y-0">
-        <li>
-          <a
-            className="flex items-center transition-colors duration-150 hover:text-accent"
-            rel="noopener noreferrer"
-            target="_blank"
-            href="/rss"
-          >
-            <ArrowIcon />
-            <p className="ml-2 h-7">rss</p>
-          </a>
-        </li>
-        <li>
-          <a
-            className="flex items-center transition-colors duration-150 hover:text-accent"
-            rel="noopener noreferrer"
-            target="_blank"
-            href="https://github.com/SID12g/blog"
-          >
-            <ArrowIcon />
-            <p className="ml-2 h-7">github</p>
-          </a>
-        </li>
-        <li>
-          <a
-            className="flex items-center transition-colors duration-150 hover:text-accent"
-            rel="noopener noreferrer"
-            target="_blank"
+    <footer className="mx-auto flex w-full max-w-[768px] flex-col gap-10 px-6 pt-11 pb-8">
+      <Divider />
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <p className="text-sm leading-none text-muted">
+          © {year}{" "}
+          <Link
             href="https://sid12g.dev"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="py-2 transition-colors duration-150 hover:text-primary"
           >
-            <ArrowIcon />
-            <p className="ml-2 h-7">about me</p>
-          </a>
-        </li>
-      </ul>
-      <p className="mt-4 text-muted font-jetbrains-mono text-sm">
-        © {new Date().getFullYear()} sid12g All rights reserved.
-      </p>
+            sid12g
+          </Link>{" "}
+          All rights reserved.
+        </p>
+        <div className="flex items-center gap-1">
+          <IconLink href="/rss" label="RSS 구독">
+            <RssIcon className="size-[18px]" />
+          </IconLink>
+          <IconLink href="https://github.com/SID12g/blog" label="GitHub">
+            <GitHubIcon className="size-[18px]" />
+          </IconLink>
+        </div>
+      </div>
     </footer>
   );
 }
