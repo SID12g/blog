@@ -18,26 +18,37 @@ function sortByDateDesc(posts: Post[]) {
 
 export function PostList({ posts }: { posts: Post[] }) {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-10">
       {sortByDateDesc(posts).map((post) => (
         <Link
           key={post.slug}
           href={`/${post.slug}`}
-          className="group flex flex-col gap-2 border-b border-divider py-6 first:pt-0 last:border-b-0"
+          className="group flex w-full flex-wrap items-start justify-between gap-x-5 gap-y-3"
         >
-          <div className="flex items-baseline justify-between gap-4">
-            <p className="text-[17px] leading-snug font-semibold tracking-tight transition-colors duration-150 group-hover:text-muted">
+          <div className="flex min-w-0 flex-1 flex-col gap-3">
+            <h3 className="-my-[0.15em] text-[17px] leading-[1.3] font-semibold transition-colors duration-150 group-hover:text-muted">
               {post.metadata.title}
-            </p>
-            <p className="shrink-0 font-jetbrains-mono text-xs text-nav-inactive tabular-nums">
-              {post.metadata.publishedAt}
-            </p>
+            </h3>
+            {post.metadata.summary ? (
+              <p className="line-clamp-2 text-sm leading-[1.5] font-medium text-muted">
+                {post.metadata.summary}
+              </p>
+            ) : null}
+            {post.metadata.tag?.length ? (
+              <p className="flex flex-wrap gap-x-3 gap-y-1 text-sm leading-none font-medium text-muted sm:hidden">
+                {post.metadata.tag.map((tag) => (
+                  <span key={tag}>{tag}</span>
+                ))}
+              </p>
+            ) : null}
           </div>
-          {post.metadata.summary ? (
-            <p className="line-clamp-2 text-sm leading-relaxed font-medium text-muted">
-              {post.metadata.summary}
-            </p>
-          ) : null}
+
+          <div className="flex shrink-0 flex-col items-end gap-3 text-sm leading-none font-normal whitespace-nowrap text-muted">
+            <span>{post.metadata.publishedAt}</span>
+            {post.metadata.tag?.[0] ? (
+              <span className="hidden sm:block">{post.metadata.tag[0]}</span>
+            ) : null}
+          </div>
         </Link>
       ))}
     </div>

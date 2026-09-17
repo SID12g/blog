@@ -5,7 +5,10 @@ import { ArrowUpRightIcon, GitHubIcon, RssIcon } from "@/components/icons";
 export function Navbar() {
   return (
     <header className="sticky top-4 z-50 mb-11 flex justify-center px-6 sm:mb-[60px]">
-      <nav className="flex w-full items-center justify-between gap-3 rounded-full border border-faint bg-background px-3 py-2 md:w-fit">
+      <nav
+        aria-label="주요 메뉴"
+        className="flex w-full items-center justify-between gap-4 rounded-full border border-faint bg-background px-3 py-2 md:w-[460px]"
+      >
         <Link
           href="/"
           className="shrink-0 py-2.5 pl-3 text-base leading-none font-semibold"
@@ -24,7 +27,7 @@ export function Navbar() {
             href="https://sid12g.dev"
             target="_blank"
             rel="noopener noreferrer"
-            className="group ml-1 flex items-center gap-2 rounded-full border border-invert-bg bg-invert-bg px-3 py-2.5 text-sm leading-none font-medium whitespace-nowrap text-invert-fg transition-colors duration-150 hover:border-invert-hover hover:bg-invert-hover"
+            className="group ml-1 flex shrink-0 items-center gap-2 rounded-full border border-invert-bg bg-invert-bg px-3 py-2.5 text-sm leading-none font-medium whitespace-nowrap text-invert-fg transition-colors duration-150 hover:border-invert-hover hover:bg-invert-hover"
           >
             Portfolio
             <ArrowUpRightIcon className="size-3.5 transition-transform duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
