@@ -17,7 +17,7 @@ export default function Footer() {
             rel="noopener noreferrer"
             className="py-2 transition-colors duration-150 hover:text-primary"
           >
-            sid12g
+            sid12g.
           </Link>{" "}
           All rights reserved.
         </p>
