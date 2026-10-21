@@ -159,6 +159,20 @@ html {
   color: var(--color-primary);
 }
 
+/* ---- Callouts (blockquote) ---- */
+.prose blockquote > :first-child {
+  margin-top: 0;
+}
+
+.prose blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+.prose blockquote p,
+.prose blockquote li {
+  color: inherit;
+}
+
 .prose strong {
   font-weight: 600;
   color: var(--color-primary);
