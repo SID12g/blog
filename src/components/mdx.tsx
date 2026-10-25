@@ -255,6 +255,8 @@ export function CustomMDX(props) {
     <MDXRemote
       {...props}
       options={{
+        // Allow JSX expression props (e.g. style={{ ... }}) in local posts
+        blockJS: false,
         ...existingOptions,
         mdxOptions: {
           ...existingOptions.mdxOptions,
