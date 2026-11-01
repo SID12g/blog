@@ -1,10 +1,11 @@
 import Link from "next/link";
+import AutoHideHeader from "@/components/auto-hide-header";
 import IconLink from "@/components/icon-link";
 import { ArrowUpRightIcon, GitHubIcon, RssIcon } from "@/components/icons";
 
 export function Navbar() {
   return (
-    <header className="sticky top-4 z-50 mb-11 flex justify-center px-6 sm:mb-[60px]">
+    <AutoHideHeader>
       <nav
         aria-label="주요 메뉴"
         className="flex w-full items-center justify-between gap-4 rounded-full border border-faint bg-background px-3 py-2 md:w-[460px]"
@@ -34,6 +35,6 @@ export function Navbar() {
           </Link>
         </div>
       </nav>
-    </header>
+    </AutoHideHeader>
   );
 }
