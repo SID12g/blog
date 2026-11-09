@@ -1,40 +1,43 @@
+import Image from "next/image";
 import Link from "next/link";
-import AutoHideHeader from "@/components/auto-hide-header";
-import IconLink from "@/components/icon-link";
-import { ArrowUpRightIcon, GitHubIcon, RssIcon } from "@/components/icons";
+
+const linkClass = "transition-colors duration-150 hover:text-primary";
 
 export function Navbar() {
   return (
-    <AutoHideHeader>
-      <nav
-        aria-label="주요 메뉴"
-        className="flex w-full items-center justify-between gap-4 rounded-full border border-faint bg-background px-3 py-2 md:w-[460px]"
-      >
+    // 화면 너비 전체에 걸쳐 상단에 고정되고, 내용은 본문과 같은 폭으로 정렬
+    <header className="site-header sticky top-0 z-40 border-b border-transparent bg-background/85 backdrop-blur-md">
+      <div className="mx-auto flex w-full max-w-[648px] flex-wrap items-center justify-between gap-x-4 gap-y-3 px-6 py-4">
         <Link
           href="/"
-          className="shrink-0 py-2.5 pl-3 text-base leading-none font-semibold"
+          className="flex shrink-0 items-center gap-2 font-mono text-sm leading-[1.2] font-semibold text-primary transition-colors duration-150 hover:text-secondary"
         >
+          <Image
+            src="https://avatars.githubusercontent.com/u/119688507?v=4"
+            alt=""
+            width={18}
+            height={18}
+            className="size-[18px] rounded-full object-cover"
+          />
           sead post
         </Link>
-
-        <div className="flex shrink-0 items-center gap-1">
-          <IconLink href="/rss" label="RSS 구독">
-            <RssIcon className="size-[18px]" />
-          </IconLink>
-          <IconLink href="https://github.com/SID12g/blog" label="GitHub">
-            <GitHubIcon className="size-[18px]" />
-          </IconLink>
-          <Link
+        <nav
+          aria-label="주요 메뉴"
+          className="flex items-center gap-4 font-mono text-sm leading-[1.2] font-medium whitespace-nowrap text-secondary sm:gap-7"
+        >
+          <a
             href="https://sid12g.dev"
             target="_blank"
             rel="noopener noreferrer"
-            className="group ml-1 flex shrink-0 items-center gap-2 rounded-full border border-invert-bg bg-invert-bg px-3 py-2.5 text-sm leading-none font-medium whitespace-nowrap text-invert-fg transition-colors duration-150 hover:border-invert-hover hover:bg-invert-hover"
+            className={linkClass}
           >
-            Portfolio
-            <ArrowUpRightIcon className="size-3.5 transition-transform duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </Link>
-        </div>
-      </nav>
-    </AutoHideHeader>
+            portfolio
+          </a>
+          <a href="mailto:i@sid12g.dev" className={linkClass}>
+            i@sid12g.dev
+          </a>
+        </nav>
+      </div>
+    </header>
   );
 }

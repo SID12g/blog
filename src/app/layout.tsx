@@ -3,9 +3,10 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import Footer from "../components/footer";
-import { baseUrl } from "./sitemap";
+import Cursor from "@/components/cursor";
+import Footer from "@/components/footer";
 import { Navbar } from "@/components/nav";
+import { baseUrl } from "./sitemap";
 import Script from "next/script";
 
 const pretendard = localFont({
@@ -17,10 +18,19 @@ const pretendard = localFont({
 });
 
 const jetBrainsMono = localFont({
-  src: "./fonts/JetBrainsMono-Medium.woff2",
+  src: [
+    {
+      path: "./fonts/JetBrainsMono-Medium.woff2",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "./fonts/JetBrainsMono-SemiBold.woff2",
+      weight: "600",
+      style: "normal",
+    },
+  ],
   variable: "--font-jetbrains-mono",
-  weight: "500",
-  style: "normal",
   display: "swap",
 });
 
@@ -56,8 +66,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0d0d0d" },
+    { media: "(prefers-color-scheme: light)", color: "#f7f7f7" },
+    { media: "(prefers-color-scheme: dark)", color: "#111111" },
   ],
 };
 
@@ -74,12 +84,14 @@ export default function RootLayout({
       <body>
         <Analytics />
         <SpeedInsights />
-        <div className="flex min-h-screen flex-col pt-6 sm:pt-[60px]">
+        <Cursor />
+        {/* 헤더 위 여백만큼 스크롤하면 헤더가 상단에 붙음 */}
+        <div className="flex min-h-screen flex-col pt-6 sm:pt-10">
           <Navbar />
-          <main className="mx-auto w-full max-w-[768px] flex-1 px-6">
-            {children}
-          </main>
-          <Footer />
+          <div className="mx-auto flex w-full max-w-[648px] flex-1 flex-col gap-[60px] px-6 pt-11 pb-14">
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </div>
         </div>
       </body>
 
