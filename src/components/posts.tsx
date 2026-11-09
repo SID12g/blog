@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { formatDate } from "@/date";
 
 export interface Post {
   slug: string;
@@ -18,37 +19,32 @@ function sortByDateDesc(posts: Post[]) {
 
 export function PostList({ posts }: { posts: Post[] }) {
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-5">
       {sortByDateDesc(posts).map((post) => (
         <Link
           key={post.slug}
           href={`/${post.slug}`}
-          className="group flex w-full flex-wrap items-start justify-between gap-x-5 gap-y-3"
+          data-cursor="lift"
+          // 떠오를 때 배경이 글자에 붙지 않도록 여백을 주고, 음수 margin으로 레이아웃 위치는 유지
+          className="-mx-3 -my-2.5 flex items-center justify-between gap-4 rounded-lg px-3 py-2.5 [--lift-scale:1.01] hover:bg-elevated"
         >
-          <div className="flex min-w-0 flex-1 flex-col gap-3">
-            <h3 className="-my-[0.15em] text-[17px] leading-[1.3] font-semibold transition-colors duration-150 group-hover:text-muted">
+          {/* 줄바꿈 시 줄 간격을 위해 leading 1.4를 주고, 음수 margin으로 한 줄일 때 높이는 leading 1.2와 같게 유지 */}
+          <span className="flex min-w-0 flex-col gap-1.5 text-sm leading-[1.4] break-keep *:-my-[0.1em]">
+            <span className="font-medium text-primary">
               {post.metadata.title}
-            </h3>
+            </span>
             {post.metadata.summary ? (
-              <p className="line-clamp-2 text-sm leading-[1.5] font-medium text-muted">
+              <span className="line-clamp-2 text-secondary">
                 {post.metadata.summary}
-              </p>
+              </span>
             ) : null}
-            {post.metadata.tag?.length ? (
-              <p className="flex flex-wrap gap-x-3 gap-y-1 text-sm leading-none font-medium text-muted sm:hidden">
-                {post.metadata.tag.map((tag) => (
-                  <span key={tag}>{tag}</span>
-                ))}
-              </p>
-            ) : null}
-          </div>
-
-          <div className="flex shrink-0 flex-col items-end gap-3 text-sm leading-none font-normal whitespace-nowrap text-muted">
-            <span>{post.metadata.publishedAt}</span>
-            {post.metadata.tag?.[0] ? (
-              <span className="hidden sm:block">{post.metadata.tag[0]}</span>
-            ) : null}
-          </div>
+          </span>
+          <time
+            dateTime={post.metadata.publishedAt}
+            className="shrink-0 text-right text-xs leading-[1.2] font-medium whitespace-nowrap text-tertiary"
+          >
+            {formatDate(post.metadata.publishedAt)}
+          </time>
         </Link>
       ))}
     </div>
