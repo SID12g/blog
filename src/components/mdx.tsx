@@ -26,12 +26,12 @@ function CustomLink(props) {
 function RoundedImage(props) {
   const caption = props.title || props.alt;
   return (
-    <figure className="my-4">
+    <figure className="mb-5">
       <div className="flex justify-center">
-        <Image alt={props.alt} className="rounded-xl" {...props} />
+        <Image alt={props.alt} className="rounded-lg" {...props} />
       </div>
       {caption ? (
-        <figcaption className="mt-2 text-center text-sm text-muted">
+        <figcaption className="mt-2 text-center text-xs text-tertiary">
           {caption}
         </figcaption>
       ) : null}
@@ -43,12 +43,12 @@ function MdxImage(props) {
   const caption = props.title || props.alt;
   // Use span wrappers to remain valid inside <p> that markdown often creates around images
   return (
-    <span className="block my-4">
-      <span className="flex justify-center block">
-        <img alt={props.alt} className="rounded-xl m-0" {...props} />
+    <span className="mb-5 block">
+      <span className="flex justify-center">
+        <img alt={props.alt} className="m-0 rounded-lg" {...props} />
       </span>
       {caption ? (
-        <span className="mt-2 block text-center text-sm text-muted">
+        <span className="mt-2 block text-center text-xs text-tertiary">
           {caption}
         </span>
       ) : null}
@@ -63,7 +63,7 @@ function Code({ children, ...props }) {
   if (isInlineCode) {
     return (
       <code
-        className="px-1.5 py-0.5 rounded-md bg-muted-15 text-primary text-[0.875em] font-jetbrains-mono font-medium"
+        className="rounded-md bg-surface-strong px-[0.4em] py-[0.15em] font-mono text-[0.875em] tracking-normal text-primary"
         {...props}
       >
         {children}
@@ -108,20 +108,20 @@ function Pre(props) {
     const codeHTML = highlight(code);
 
     return (
-      <div className="my-5 overflow-hidden rounded-xl border border-surface-border">
+      <div className="mb-5 overflow-hidden rounded-lg border border-line bg-surface">
         {filename ? (
-          <div className="flex items-center justify-between px-4 py-2.5 text-xs bg-muted-5 border-b border-surface-border">
-            <span className="font-medium text-muted font-jetbrains-mono truncate">
+          <div className="flex items-center justify-between border-b border-line px-5 py-2.5 text-xs leading-[1.2]">
+            <span className="truncate font-mono font-medium text-secondary">
               {filename}
             </span>
             {language ? (
-              <span className="ml-2 uppercase text-[10px] text-muted">
+              <span className="ml-2 font-mono text-[10px] text-tertiary uppercase">
                 {language}
               </span>
             ) : null}
           </div>
         ) : null}
-        <pre className="bg-muted-5 overflow-x-auto py-4 px-4 text-sm leading-[1.7]">
+        <pre className="overflow-x-auto px-5 py-4 font-mono text-[0.8125rem] leading-[1.7] tracking-normal break-normal">
           <code
             className={className}
             dangerouslySetInnerHTML={{ __html: codeHTML }}
@@ -136,7 +136,7 @@ function Pre(props) {
 function Blockquote({ children, ...props }) {
   return (
     <blockquote
-      className="rounded-xl border border-surface-border bg-muted-5 px-4 py-3.5 my-5 text-[0.9375rem] leading-[1.7] text-muted"
+      className="mb-5 rounded-lg border border-line bg-surface px-4 py-3"
       {...props}
     >
       {children}
@@ -179,8 +179,8 @@ function createHeading(level) {
 
 function TableWrapper({ children, ...props }) {
   return (
-    <div className="my-5 overflow-x-auto rounded-xl border border-surface-border">
-      <table className="w-full border-collapse text-sm leading-[1.6]" {...props}>
+    <div className="mb-5 overflow-x-auto rounded-lg border border-line">
+      <table className="w-full border-collapse text-[0.8125rem] leading-[1.6]" {...props}>
         {children}
       </table>
     </div>
@@ -189,7 +189,7 @@ function TableWrapper({ children, ...props }) {
 
 function TableHead({ children, ...props }) {
   return (
-    <thead className="bg-muted-5" {...props}>
+    <thead className="bg-surface" {...props}>
       {children}
     </thead>
   );
@@ -201,7 +201,7 @@ function TableBody({ children, ...props }) {
 
 function TableRow({ children, ...props }) {
   return (
-    <tr className="border-b border-surface-border last:border-b-0" {...props}>
+    <tr className="border-b border-line last:border-b-0" {...props}>
       {children}
     </tr>
   );
@@ -210,7 +210,7 @@ function TableRow({ children, ...props }) {
 function TableHeader({ children, ...props }) {
   return (
     <th
-      className="px-4 py-2.5 text-left font-semibold whitespace-nowrap text-primary"
+      className="border-l border-line px-3.5 py-2.5 text-left font-medium whitespace-nowrap text-primary first:border-l-0"
       {...props}
     >
       {children}
@@ -220,7 +220,7 @@ function TableHeader({ children, ...props }) {
 
 function TableCell({ children, ...props }) {
   return (
-    <td className="px-4 py-2.5 align-top text-muted" {...props}>
+    <td className="border-l border-line px-3.5 py-2.5 align-top text-secondary first:border-l-0 first:text-primary" {...props}>
       {children}
     </td>
   );

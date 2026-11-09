@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { chipClass } from "@/components/chip";
 
 export default function CopyCurrentLink() {
   let [visible, setVisible] = useState(false);
@@ -25,16 +26,17 @@ export default function CopyCurrentLink() {
   }, []);
 
   return (
-    <div className="relative mb-6">
+    <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
       <button
         type="button"
         onClick={copy}
-        className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-faint bg-background px-4 py-2.5 text-sm font-medium text-primary transition-colors duration-150 hover:bg-muted-15 active:translate-y-[0.5px]"
+        data-cursor="lift"
+        className={`${chipClass} inline-flex cursor-pointer items-center gap-1.5 bg-surface text-secondary transition-colors duration-150 [--lift-scale:1.05] hover:bg-surface-strong hover:text-primary`}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
+          width="12"
+          height="12"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -46,32 +48,18 @@ export default function CopyCurrentLink() {
           <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
           <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
         </svg>
-        공유
+        링크 복사
       </button>
 
-      <div
+      <p
         role="status"
         aria-live="polite"
-        className={`pointer-events-none absolute left-0 top-full mt-2 flex items-center gap-2 rounded-full bg-invert-bg px-3.5 py-2 text-xs font-medium text-invert-fg shadow-lg transition-opacity duration-300 ${
+        className={`text-xs leading-[1.2] font-medium text-tertiary transition-opacity duration-300 ${
           visible ? "opacity-100" : "opacity-0"
         }`}
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="14"
-          height="14"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="3"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden
-        >
-          <polyline points="20 6 9 17 4 12"></polyline>
-        </svg>
         링크가 복사되었습니다.
-      </div>
+      </p>
     </div>
   );
 }
