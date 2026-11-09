@@ -1,8 +1,7 @@
 import type { CSSProperties } from "react";
 
-// public/icons/*.svg is used as a CSS mask so the shape stays fixed while the
-// color follows currentColor (text color), keeping icons correct across
-// light/dark mode and hover states automatically.
+// public/icons/*.svg를 마스크로 사용해 모양은 원본 그대로, 색상은 currentColor(텍스트 색)를 따르게 해
+// 다크 모드와 호버 상태에서도 색이 자연스럽게 바뀌도록 합니다.
 interface IconProps {
   className?: string;
 }
@@ -17,22 +16,6 @@ function Icon({ src, className = "" }: IconProps & { src: string }) {
   );
 }
 
-export const ArrowUpRightIcon = ({ className }: IconProps) => (
-  <Icon src="/icons/arrow-up-right.svg" className={className} />
-);
-
 export const ArrowLeftIcon = ({ className }: IconProps) => (
   <Icon src="/icons/arrow-left.svg" className={className} />
-);
-
-export const CalendarIcon = ({ className }: IconProps) => (
-  <Icon src="/icons/calendar.svg" className={className} />
-);
-
-export const GitHubIcon = ({ className }: IconProps) => (
-  <Icon src="/icons/github.svg" className={className} />
-);
-
-export const RssIcon = ({ className }: IconProps) => (
-  <Icon src="/icons/rss.svg" className={className} />
 );
