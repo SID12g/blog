@@ -6,3 +6,7 @@ allowBuilds:
   "@vercel/speed-insights": true
   sharp: true
   unrs-resolver: true
+
+# next가 고정해 둔 취약 버전(postcss 8.4.31)을 패치된 버전으로 교체
+overrides:
+  "postcss@<8.5.23": "^8.5.32"
