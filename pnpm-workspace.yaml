@@ -8,5 +8,7 @@ allowBuilds:
   unrs-resolver: true
 
 # next가 고정해 둔 취약 버전(postcss 8.4.31)을 패치된 버전으로 교체
+# Vercel은 pnpm 9로 설치해 이 파일의 overrides를 읽지 못하므로
+# package.json의 pnpm.overrides에도 같은 값을 둠 (수정할 때는 두 곳을 같이 바꿀 것)
 overrides:
   "postcss@<8.5.23": "^8.5.32"
